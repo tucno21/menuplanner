@@ -12,10 +12,13 @@ const Modal = ({ isOpen, onClose, children }: ModalProps) => {
 
   return (
     <div
-      className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center px-3"
+      className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-3"
       onClick={onClose}
     >
-      <div onClick={(e) => e.stopPropagation()}>
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="w-[85vw] max-w-sm sm:max-w-lg md:max-w-xl lg:max-w-2xl"
+      >
         {children}
       </div>
     </div>

@@ -143,16 +143,16 @@ const CrearPlato = () => {
       </div>
 
       <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
-        <div className="bg-white px-4 py-6 w-full max-w-md max-h-[90vh] rounded-2xl flex flex-col overflow-hidden">
+        <div className="bg-white px-4 py-6 max-h-[90vh] rounded-2xl flex flex-col overflow-hidden">
           <input
             type="text"
             placeholder="Buscar ingredientes"
             value={searchIngredientes}
             onChange={(e) => setSearchIngredientes(e.target.value)}
-            className="bg-gray-100 text-lg mb-4 text-gray-800 p-3 rounded-lg border border-secondary-light w-full outline-none"
+            className="bg-gray-100 text-sm mb-3 text-gray-800 p-2 rounded-lg border border-secondary-light w-full outline-none"
           />
 
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 gap-2">
             {filteredIngredientes.map((ing) => {
               const id = ing.id!
               const selected = isIngredienteSelected(id)
@@ -160,11 +160,10 @@ const CrearPlato = () => {
                 <button
                   key={id}
                   onClick={() => toggleIngrediente(id, ing.nombre, ing.unidad)}
-                  className={`w-full p-3 mb-2 rounded-lg flex flex-row items-center ${
-                    selected
-                      ? 'bg-primary-light border border-primary'
-                      : 'bg-gray-100 border border-gray-300'
-                  }`}
+                  className={`w-full p-3 rounded-lg flex flex-row items-center ${selected
+                    ? 'bg-primary-light border border-primary'
+                    : 'bg-gray-100 border border-gray-300'
+                    }`}
                 >
                   <Salad size={20} className="text-gray-700" />
                   <span className="text-lg ml-3 text-gray-800">{ing.nombre}</span>
