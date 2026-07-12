@@ -4,7 +4,6 @@ export interface Plato {
   id?: number
   nombre: string
   descripcion: string
-  grupoId: number
 }
 
 export interface Ingrediente {
@@ -57,6 +56,14 @@ export class MenuPlannerDB extends Dexie {
     super('MenuPlannerDB')
     this.version(1).stores({
       platos: '++id, nombre, grupoId',
+      ingredientes: '++id, nombre',
+      platoIngredientes: '++id, platoId, ingredienteId',
+      planificaciones: '++id, platoId, fecha, estado',
+      compras: '++id, ingredienteId, numeroSemana, anio',
+      config: 'key',
+    })
+    this.version(2).stores({
+      platos: '++id, nombre',
       ingredientes: '++id, nombre',
       platoIngredientes: '++id, platoId, ingredienteId',
       planificaciones: '++id, platoId, fecha, estado',
@@ -124,5 +131,4 @@ const ingredientesSeed: { nombre: string; unidad: string }[] = [
 
 db.on('populate', async () => {
   await db.ingredientes.bulkAdd(ingredientesSeed)
-  await db.config.add({ key: 'grupoActivo', value: '1' })
 })

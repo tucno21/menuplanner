@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Outlet, NavLink } from 'react-router'
-import { Home as HomeIcon, Users, Settings as SettingsIcon } from 'lucide-react'
+import { Home as HomeIcon, UtensilsCrossed, Settings as SettingsIcon } from 'lucide-react'
 import { usePlanificacionStore } from '../store/planificacionStore'
 
 const MainLayout = () => {
@@ -26,13 +26,13 @@ const MainLayout = () => {
           <span className="text-xs font-medium">Inicio</span>
         </NavLink>
         <NavLink
-          to="/grupos"
+          to="/platos"
           className={({ isActive }) =>
             `flex flex-col items-center justify-center gap-1 flex-1 h-full cursor-pointer transition-colors ${isActive ? 'text-primary' : 'text-[#adb5bd]'}`
           }
         >
-          <Users size={24} />
-          <span className="text-xs font-medium">Grupos</span>
+          <UtensilsCrossed size={24} />
+          <span className="text-xs font-medium">Platos</span>
         </NavLink>
         <NavLink
           to="/settings"

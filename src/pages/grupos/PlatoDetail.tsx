@@ -75,7 +75,7 @@ const PlatoDetail = () => {
           Eliminar
         </button>
         <button
-          onClick={() => navigate(`/grupos/actualizar-plato/${platoIdNum}`)}
+          onClick={() => navigate(`/platos/actualizar-plato/${platoIdNum}`)}
           className="bg-success rounded-full py-3 px-6 flex-1 ml-2 text-light text-lg font-semibold"
         >
           Actualizar

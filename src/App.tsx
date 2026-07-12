@@ -7,13 +7,10 @@ import MainLayout from './pages/MainLayout'
 import Home from './pages/Home'
 import Dia from './pages/Dia'
 import Planificar from './pages/Planificar'
-import GroupList from './pages/grupos/GroupList'
-import GrupoDetail from './pages/grupos/GrupoDetail'
 import PlatosList from './pages/grupos/PlatosList'
 import PlatoDetail from './pages/grupos/PlatoDetail'
 import CrearPlato from './pages/grupos/CrearPlato'
 import ActualizarPlato from './pages/grupos/ActualizarPlato'
-import Integrantes from './pages/grupos/Integrantes'
 import Settings from './pages/Settings'
 import NotFound from './pages/NotFound'
 
@@ -56,14 +53,11 @@ const App = () => {
             <Route path="dia/:fecha" element={<Dia />} />
             <Route path="planificar/:fecha" element={<Planificar />} />
           </Route>
-          <Route path="/grupos" element={<ProtectedRoute />}>
-            <Route index element={<GroupList />} />
-            <Route path=":grupoId" element={<GrupoDetail />} />
-            <Route path="platos/:grupoId" element={<PlatosList />} />
+          <Route path="/platos" element={<ProtectedRoute />}>
+            <Route index element={<PlatosList />} />
             <Route path="plato/:platoId" element={<PlatoDetail />} />
             <Route path="crear-plato" element={<CrearPlato />} />
             <Route path="actualizar-plato/:platoId" element={<ActualizarPlato />} />
-            <Route path="integrantes/:grupoId" element={<Integrantes />} />
           </Route>
           <Route path="/settings" element={<ProtectedRoute />}>
             <Route index element={<Settings />} />

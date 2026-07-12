@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router'
+import { useNavigate } from 'react-router'
 import { UtensilsCrossed } from 'lucide-react'
 import { usePlanificacionStore } from '../../store/planificacionStore'
 
 const PlatosList = () => {
   const navigate = useNavigate()
-  const { grupoId } = useParams()
 
   const platos = usePlanificacionStore((s) => s.platos)
   const loadPlatos = usePlanificacionStore((s) => s.loadPlatos)
@@ -22,7 +21,7 @@ const PlatosList = () => {
 
   return (
     <div className="flex flex-col flex-1 px-5 pt-5 pb-5 bg-backdrop min-h-full">
-      <h1 className="text-2xl font-bold text-center text-primary mb-6">Los Platos del Grupo</h1>
+      <h1 className="text-2xl font-bold text-center text-primary mb-6">Mis Platos</h1>
 
       <input
         type="text"
@@ -39,7 +38,7 @@ const PlatosList = () => {
           filteredPlatos.map((p) => (
             <button
               key={p.id}
-              onClick={() => navigate(`/grupos/plato/${p.id}`)}
+              onClick={() => navigate(`/platos/plato/${p.id}`)}
               className="w-full p-4 mb-2 rounded-lg flex flex-row items-center bg-white border border-primary"
             >
               <div className="bg-primary rounded-full p-2">
@@ -52,7 +51,7 @@ const PlatosList = () => {
       </div>
 
       <button
-        onClick={() => navigate('/grupos/crear-plato')}
+        onClick={() => navigate('/platos/crear-plato')}
         className="bg-primary rounded-full py-3 px-6 text-light text-lg font-semibold shadow-card mt-4"
       >
         Agregar

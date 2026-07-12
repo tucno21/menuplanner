@@ -37,7 +37,6 @@ export interface ListaItem {
 
 interface PlanificacionState {
   planificacion: DataPlanificacion[]
-  grupoId: number
   platos: Plato[]
   ingredientes: Ingrediente[]
   compras: Compra[]
@@ -94,7 +93,6 @@ const construirPlanificacion = async (): Promise<DataPlanificacion[]> => {
 
 export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
   planificacion: [],
-  grupoId: 1,
   platos: [],
   ingredientes: [],
   compras: [],
@@ -210,7 +208,6 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
     const platoId = await db.platos.add({
       nombre: data.nombre,
       descripcion: data.descripcion,
-      grupoId: 1,
     })
 
     for (const ing of data.ingredientes) {
