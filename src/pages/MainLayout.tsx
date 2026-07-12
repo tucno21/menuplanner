@@ -12,7 +12,7 @@ const MainLayout = () => {
 
   return (
     <div className="w-full max-w-[480px] sm:max-w-lg md:max-w-2xl lg:max-w-4xl mx-auto min-h-dvh bg-backdrop shadow-2xl relative overflow-hidden flex flex-col">
-      <main className="flex-1 overflow-y-auto pb-20">
+      <main className="flex-1 overflow-y-auto pb-18">
         <Outlet />
       </main>
       <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] sm:max-w-lg md:max-w-2xl lg:max-w-4xl bg-secondary-dark flex justify-around items-center h-[60px] z-40 border-t border-secondary-dark">

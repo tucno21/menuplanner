@@ -108,31 +108,39 @@ const Home = () => {
         {listaCompras.length === 0 ? (
           <p className="text-center text-gray-500 py-8">No hay ingredientes para comprar</p>
         ) : (
-          listaCompras.map((item) => {
-            const compra = compras.find((c) => c.ingredienteId === item.id)
-            const isComprado = compra?.estado === 'comprado'
-            return (
-              <button
-                key={item.id}
-                onClick={() => toggleCompra(item.id, item.cantidad_total, numeroSemana, anio)}
-                className={`w-full flex flex-row justify-between items-center px-4 py-3 rounded-xl mb-2 transition-colors ${
-                  isComprado ? 'bg-success-light/50' : 'bg-backdrop'
-                }`}
-              >
-                <span className="text-lg text-gray-800">{item.ingrediente}</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-gray-600">
-                    {item.cantidad_total} {item.unidad}
-                  </span>
-                  {isComprado ? (
-                    <CheckCircle size={24} className="text-success-dark" />
-                  ) : (
-                    <Circle size={24} className="text-[#6B7280]" />
-                  )}
-                </div>
-              </button>
-            )
-          })
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            {(() => {
+              const comprados = new Set(compras.filter((c) => c.estado === 'comprado').map((c) => c.ingredienteId))
+              return [...listaCompras].sort((a, b) => {
+                const aDone = comprados.has(a.id)
+                const bDone = comprados.has(b.id)
+                return aDone === bDone ? 0 : aDone ? 1 : -1
+              }).map((item) => {
+              const compra = compras.find((c) => c.ingredienteId === item.id)
+              const isComprado = compra?.estado === 'comprado'
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => toggleCompra(item.id, item.cantidad_total, numeroSemana, anio)}
+                  className={`w-full flex flex-row justify-between items-center px-4 py-3 rounded-xl transition-colors ${isComprado ? 'bg-success-light/50' : 'bg-backdrop'
+                    }`}
+                >
+                  <span className="text-lg text-gray-800 truncate">{item.ingrediente}</span>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <span className="text-gray-600 text-sm whitespace-nowrap">
+                      {item.cantidad_total} {item.unidad}
+                    </span>
+                    {isComprado ? (
+                      <CheckCircle size={22} className="text-success-dark shrink-0" />
+                    ) : (
+                      <Circle size={22} className="text-[#6B7280] shrink-0" />
+                    )}
+                  </div>
+                </button>
+              )
+            })
+            })()}
+          </div>
         )}
       </BottomSheet>
 
@@ -158,11 +166,10 @@ const Home = () => {
                   >
                     <span className="text-lg text-black">{plato.nombre}</span>
                     <span
-                      className={`px-2 py-1 rounded-full font-semibold text-sm ${
-                        plato.estado === 'preparado'
+                      className={`px-2 py-1 rounded-full font-semibold text-sm ${plato.estado === 'preparado'
                           ? 'bg-success-light/30 text-success'
                           : 'bg-danger-light/30 text-danger'
-                      }`}
+                        }`}
                     >
                       {plato.estado === 'preparado' ? 'Preparado' : 'Pendiente'}
                     </span>

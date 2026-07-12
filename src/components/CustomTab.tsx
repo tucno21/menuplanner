@@ -19,11 +19,10 @@ const CustomTab = ({ tabs, activeTab, setActiveTab }: CustomTabProps) => {
           <button
             key={i}
             onClick={() => setActiveTab(i)}
-            className={`flex-1 py-5 text-center cursor-pointer transition-colors ${
-              activeTab === i
-                ? 'bg-secondary text-light text-lg font-semibold'
-                : 'bg-secondary-light text-light/70'
-            }`}
+            className={`flex-1 py-3.5 text-center cursor-pointer transition-colors ${activeTab === i
+              ? 'bg-secondary text-light text-lg font-semibold'
+              : 'bg-secondary-light text-light/70'
+              }`}
           >
             {tab.title}
           </button>
