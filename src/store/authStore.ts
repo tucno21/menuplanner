@@ -23,17 +23,21 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   initialize: async () => {
     const pinRecord = await db.config.get('pin')
-    set({ hasPin: !!pinRecord, loading: false })
+    const hasPin = !!pinRecord
+    const loggedOut = sessionStorage.getItem('mp_loggedOut') === 'true'
+    set({ hasPin, isAuthenticated: hasPin && !loggedOut, loading: false })
   },
 
   createPin: async (pin: string) => {
     await db.config.put({ key: 'pin', value: pin })
+    sessionStorage.removeItem('mp_loggedOut')
     set({ hasPin: true, isAuthenticated: true, error: null })
   },
 
   login: async (pin: string) => {
     const pinRecord = await db.config.get('pin')
     if (pinRecord && pinRecord.value === pin) {
+      sessionStorage.removeItem('mp_loggedOut')
       set({ isAuthenticated: true, error: null })
       return true
     }
@@ -41,7 +45,10 @@ export const useAuthStore = create<AuthState>((set) => ({
     return false
   },
 
-  logout: () => set({ isAuthenticated: false }),
+  logout: () => {
+    sessionStorage.setItem('mp_loggedOut', 'true')
+    set({ isAuthenticated: false })
+  },
 
   changePin: async (oldPin: string, newPin: string) => {
     const pinRecord = await db.config.get('pin')
