@@ -88,13 +88,13 @@ const PlatoDetail = () => {
       <div className="p-3 sm:p-4 flex flex-row gap-3">
         <button
           onClick={() => setOpenAlert(true)}
-          className="flex-1 bg-danger rounded-full py-3 text-light text-sm sm:text-base font-semibold active:scale-95 transition-all"
+          className="flex-1 bg-danger rounded-lg py-3 text-light text-sm sm:text-base font-semibold active:scale-95 transition-all"
         >
           Eliminar
         </button>
         <button
           onClick={() => navigate(`/platos/actualizar-plato/${platoIdNum}`)}
-          className="flex-1 bg-success rounded-full py-3 text-light text-sm sm:text-base font-semibold active:scale-95 transition-all"
+          className="flex-1 bg-success rounded-lg py-3 text-light text-sm sm:text-base font-semibold active:scale-95 transition-all"
         >
           Actualizar
         </button>

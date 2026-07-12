@@ -52,9 +52,9 @@ const PlatosList = () => {
 
       <button
         onClick={() => navigate('/platos/crear-plato')}
-        className="bg-primary rounded-full py-3 px-6 text-light text-lg font-semibold shadow-card mt-4"
+        className="w-full bg-primary rounded-lg py-3 text-light text-lg font-semibold shadow-card mt-4 active:scale-95 transition-all"
       >
-        Agregar
+        + Agregar Plato
       </button>
     </div>
   )

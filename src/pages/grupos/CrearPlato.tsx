@@ -151,7 +151,7 @@ const CrearPlato = () => {
       <div className="p-4">
         <button
           onClick={handleGuardar}
-          className="w-full bg-primary py-3 px-6 rounded-full text-light text-lg font-semibold"
+          className="w-full bg-primary py-3 rounded-lg text-light text-lg font-semibold active:scale-95 transition-all"
         >
           Guardar
         </button>
