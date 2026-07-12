@@ -69,25 +69,34 @@ const Ingredientes = () => {
   }
 
   return (
-    <div className="flex flex-col flex-1 px-5 pt-5 pb-5 bg-backdrop min-h-full">
-      <div className="flex flex-row items-center justify-between mb-6">
+    <div className="flex flex-col flex-1 px-5 pt-3 pb-3 bg-backdrop min-h-full">
+      <div className="flex flex-row items-center justify-between mb-3">
         <h1 className="text-2xl font-bold text-primary">Mis Ingredientes</h1>
         <button
           onClick={() => navigate('/ingredientes/unidades')}
-          className="flex items-center gap-1 bg-secondary px-3 py-2 rounded-full text-light text-sm font-medium"
+          className="flex items-center gap-1 bg-secondary px-3 py-2 rounded-lg text-light text-sm font-medium"
         >
           <Settings2 size={16} />
           Unidades
         </button>
       </div>
 
-      <input
-        type="text"
-        placeholder="Buscar ingredientes"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        className="bg-white text-lg text-black text-center p-3 rounded-lg border border-primary-light mb-4 outline-none"
-      />
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mb-3">
+        <input
+          type="text"
+          placeholder="Buscar ingredientes"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="flex-1 bg-white text-black text-center p-2 rounded-lg border border-primary-light outline-none"
+        />
+
+        <button
+          onClick={openCreate}
+          className="w-full sm:w-auto bg-primary rounded-lg py-2.5 px-5 text-light text-sm font-semibold active:scale-95 transition-all shrink-0"
+        >
+          + Agregar Ingrediente
+        </button>
+      </div>
 
       <div className="flex-1 overflow-y-auto">
         {filteredIngredientes.length === 0 ? (
@@ -106,16 +115,12 @@ const Ingredientes = () => {
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-sm text-gray-500 mr-2">{ing.unidad}</span>
-                <button
-                  onClick={() => openEdit(ing.id!, ing.nombre, ing.unidad)}
-                  className="bg-info/20 p-2 rounded-full"
-                >
+                <button onClick={() => openEdit(ing.id!, ing.nombre, ing.unidad)}
+                  className="bg-info/20 p-2 rounded-full">
                   <Pencil size={18} className="text-info" />
                 </button>
-                <button
-                  onClick={() => openDelete(ing.id!)}
-                  className="bg-danger/20 p-2 rounded-full"
-                >
+                <button onClick={() => openDelete(ing.id!)}
+                  className="bg-danger/20 p-2 rounded-full">
                   <Trash2 size={18} className="text-danger" />
                 </button>
               </div>
@@ -123,13 +128,6 @@ const Ingredientes = () => {
           ))
         )}
       </div>
-
-      <button
-        onClick={openCreate}
-        className="bg-primary rounded-full py-3 px-6 text-light text-lg font-semibold shadow-card mt-4"
-      >
-        Agregar Ingrediente
-      </button>
 
       <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
         <div className="bg-white rounded-2xl p-6 w-11/12 max-w-md">

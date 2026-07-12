@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router'
-import { ChevronLeft, Ruler, Pencil, Trash2 } from 'lucide-react'
+import { Ruler, Pencil, Trash2 } from 'lucide-react'
 import { usePlanificacionStore } from '../store/planificacionStore'
+import BackButton from '../components/ui/BackButton'
 import Modal from '../components/ui/Modal'
 import AlertCustom from '../components/ui/AlertCustom'
 
 const Unidades = () => {
-  const navigate = useNavigate()
 
   const unidades = usePlanificacionStore((s) => s.unidades)
   const loadUnidades = usePlanificacionStore((s) => s.loadUnidades)
@@ -65,21 +64,28 @@ const Unidades = () => {
   }
 
   return (
-    <div className="flex flex-col flex-1 px-5 pt-5 pb-5 bg-backdrop min-h-full">
-      <div className="flex flex-row items-center mb-6">
-        <button onClick={() => navigate(-1)} className="p-1">
-          <ChevronLeft size={28} className="text-secondary" />
-        </button>
-        <h1 className="flex-1 text-center text-2xl font-bold text-primary">Tipos de Unidades</h1>
+    <div className="flex flex-col flex-1 px-5 pt-3 pb-3 bg-backdrop min-h-full">
+      <div className="flex items-center gap-3 mb-4">
+        <BackButton />
+        <h1 className="text-xl sm:text-2xl font-bold text-primary">Tipos de Unidades</h1>
       </div>
 
-      <input
-        type="text"
-        placeholder="Buscar unidades"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        className="bg-white text-lg text-black text-center p-3 rounded-lg border border-primary-light mb-4 outline-none"
-      />
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mb-3">
+        <input
+          type="text"
+          placeholder="Buscar unidades"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="flex-1 bg-white text-black text-center p-2 rounded-lg border border-primary-light outline-none"
+        />
+
+        <button
+          onClick={openCreate}
+          className="w-full sm:w-auto bg-primary rounded-lg py-2.5 px-5 text-light text-sm font-semibold active:scale-95 transition-all shrink-0"
+        >
+          + Agregar Unidad
+        </button>
+      </div>
 
       <div className="flex-1 overflow-y-auto">
         {filteredUnidades.length === 0 ? (
@@ -97,16 +103,12 @@ const Unidades = () => {
                 <span className="text-lg text-dark font-medium">{u.nombre}</span>
               </div>
               <div className="flex items-center gap-2">
-                <button
-                  onClick={() => openEdit(u.id!, u.nombre)}
-                  className="bg-info/20 p-2 rounded-full"
-                >
+                <button onClick={() => openEdit(u.id!, u.nombre)}
+                  className="bg-info/20 p-2 rounded-full">
                   <Pencil size={18} className="text-info" />
                 </button>
-                <button
-                  onClick={() => openDelete(u.id!)}
-                  className="bg-danger/20 p-2 rounded-full"
-                >
+                <button onClick={() => openDelete(u.id!)}
+                  className="bg-danger/20 p-2 rounded-full">
                   <Trash2 size={18} className="text-danger" />
                 </button>
               </div>
@@ -114,13 +116,6 @@ const Unidades = () => {
           ))
         )}
       </div>
-
-      <button
-        onClick={openCreate}
-        className="bg-primary rounded-full py-3 px-6 text-light text-lg font-semibold shadow-card mt-4"
-      >
-        Agregar Unidad
-      </button>
 
       <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
         <div className="bg-white rounded-2xl p-6 w-11/12 max-w-md">
