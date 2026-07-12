@@ -50,7 +50,7 @@ const MainLayout = () => {
           }
         >
           <SettingsIcon size={24} />
-          <span className="text-xs font-medium">Configuraciones</span>
+          <span className="text-xs font-medium">Settings</span>
         </NavLink>
       </nav>
     </div>
