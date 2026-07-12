@@ -109,9 +109,9 @@ const CrearPlato = () => {
 
         <button
           onClick={() => setShowModal(true)}
-          className="bg-primary py-3 rounded-lg mb-3 w-full text-light text-lg font-semibold text-center"
+          className="border-2 border-primary text-primary py-2.5 rounded-lg mb-3 w-full text-lg font-semibold text-center hover:bg-primary/5 active:scale-95 transition-all"
         >
-          Agregar Ingredientes
+          + Agregar Ingredientes
         </button>
 
         <h2 className="text-xl font-bold mb-4 text-dark">Ingredientes seleccionados:</h2>
