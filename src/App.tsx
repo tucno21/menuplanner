@@ -15,6 +15,7 @@ import Ingredientes from './pages/Ingredientes'
 import Unidades from './pages/Unidades'
 import Settings from './pages/Settings'
 import NotFound from './pages/NotFound'
+import Toast from './components/ui/Toast'
 
 const ProtectedRoute = () => {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
@@ -65,6 +66,7 @@ const App = () => {
         </Route>
         <Route path="*" element={<div className="max-w-[480px] mx-auto min-h-dvh bg-backdrop shadow-2xl relative overflow-hidden"><NotFound /></div>} />
       </Routes>
+      <Toast />
     </BrowserRouter>
   )
 }
