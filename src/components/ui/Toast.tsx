@@ -37,7 +37,7 @@ const ToastItem = ({ toast }: ToastItemProps) => {
   const [remaining, setRemaining] = useState(toast.duration)
   const [paused, setPaused] = useState(false)
   const lastTickRef = useRef(Date.now())
-  const rafRef = useRef<number>()
+  const rafRef = useRef<number>(0)
 
   const tick = useCallback(() => {
     const now = Date.now()
