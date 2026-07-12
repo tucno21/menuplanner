@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { Trash2, Salad } from 'lucide-react'
 import { usePlanificacionStore } from '../../store/planificacionStore'
+import { useToastStore } from '../../store/toastStore'
+import BackButton from '../../components/ui/BackButton'
 import Modal from '../../components/ui/Modal'
 
 interface IngredienteSeleccionado {
@@ -19,6 +21,7 @@ const ActualizarPlato = () => {
   const loadIngredientes = usePlanificacionStore((s) => s.loadIngredientes)
   const getPlatoById = usePlanificacionStore((s) => s.getPlatoById)
   const updatePlato = usePlanificacionStore((s) => s.updatePlato)
+  const addToast = useToastStore((s) => s.addToast)
 
   const [nombre, setNombre] = useState('')
   const [descripcion, setDescripcion] = useState('')
@@ -77,21 +80,39 @@ const ActualizarPlato = () => {
   }
 
   const handleActualizar = async () => {
-    if (!nombre.trim() || !descripcion.trim() || selectedIngredientes.length === 0) return
-    if (selectedIngredientes.some((i) => !i.cantidad || Number(i.cantidad) <= 0)) return
+    if (!nombre.trim()) {
+      addToast('El nombre del plato es obligatorio', 'warning')
+      return
+    }
+    if (!descripcion.trim()) {
+      addToast('La descripcion del plato es obligatoria', 'warning')
+      return
+    }
+    if (selectedIngredientes.length === 0) {
+      addToast('Debe seleccionar al menos un ingrediente', 'warning')
+      return
+    }
+    if (selectedIngredientes.some((i) => !i.cantidad || Number(i.cantidad) <= 0)) {
+      addToast('Todos los ingredientes deben tener una cantidad valida', 'warning')
+      return
+    }
 
     await updatePlato(platoIdNum, {
       nombre,
       descripcion,
       ingredientes: selectedIngredientes.map((i) => ({ id: i.id, cantidad: Number(i.cantidad) })),
     })
+    addToast('Plato actualizado correctamente', 'success')
     navigate(-1)
   }
 
   return (
     <div className="flex flex-col flex-1 bg-backdrop min-h-full">
       <div className="flex-1 px-4 py-6">
-        <h1 className="text-center text-2xl font-bold text-primary mb-2">Actualizar Plato</h1>
+        <div className="flex items-center gap-3 mb-4">
+          <BackButton />
+          <h1 className="text-2xl font-bold text-primary">Actualizar Plato</h1>
+        </div>
 
         <input
           type="text"
@@ -139,9 +160,9 @@ const ActualizarPlato = () => {
                 <span className="text-gray-500 text-sm w-16">{ing.unidad}</span>
                 <button
                   onClick={() => removeIngrediente(ing.id)}
-                  className="bg-danger/20 p-2 rounded-full"
+                  className="bg-danger/20 p-1 rounded-full"
                 >
-                  <Trash2 size={24} className="text-danger" />
+                  <Trash2 size={18} className="text-danger" />
                 </button>
               </div>
             </div>
@@ -149,16 +170,10 @@ const ActualizarPlato = () => {
         )}
       </div>
 
-      <div className="p-4 flex flex-row justify-between">
-        <button
-          onClick={() => navigate(-1)}
-          className="bg-gray-300 py-3 px-6 rounded-full flex-1 mr-2 text-gray-700 text-lg font-semibold"
-        >
-          Cancelar
-        </button>
+      <div className="p-4">
         <button
           onClick={handleActualizar}
-          className="bg-primary py-3 px-6 rounded-full flex-1 ml-2 text-light text-lg font-semibold"
+          className="w-full bg-primary py-3 px-6 rounded-full text-light text-lg font-semibold"
         >
           Actualizar
         </button>
