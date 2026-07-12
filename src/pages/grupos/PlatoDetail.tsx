@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router'
-import { ChevronRight } from 'lucide-react'
 import { usePlanificacionStore } from '../../store/planificacionStore'
 import type { PlatoWithIngredientes } from '../../store/planificacionStore'
+import BackButton from '../../components/ui/BackButton'
 import AlertCustom from '../../components/ui/AlertCustom'
 
 const PlatoDetail = () => {
@@ -35,48 +35,66 @@ const PlatoDetail = () => {
 
   if (!plato) {
     return (
-      <div className="flex justify-center items-center min-h-full bg-backdrop">
-        <p className="text-gray-500">Cargando...</p>
+      <div className="flex flex-col justify-center items-center min-h-full bg-backdrop gap-3 px-4">
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+        <p className="text-gray-500 text-sm">Cargando plato...</p>
       </div>
     )
   }
 
   return (
     <div className="flex flex-col flex-1 bg-backdrop min-h-full">
-      <div className="flex-1 px-4 py-6 overflow-y-auto">
-        <div className="bg-white rounded-xl p-6 mb-6 shadow-card">
-          <h1 className="text-2xl font-bold text-primary mb-2">{plato.nombre}</h1>
-          <div className="h-0.5 bg-indigo-100 w-full mb-4" />
+      <div className="flex-1 px-3 sm:px-4 py-4 sm:py-6 overflow-y-auto">
+        <div className="flex items-center gap-3 mb-4">
+          <BackButton />
+          <h1 className="text-xl sm:text-2xl font-bold text-primary truncate">{plato.nombre}</h1>
+        </div>
 
-          <h2 className="text-xl font-semibold text-black mb-3">Ingredientes</h2>
+        <div className="bg-white rounded-xl p-4 sm:p-6 mb-4 shadow-card">
+          <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
+            <span className="w-1 h-5 bg-primary rounded-full inline-block" />
+            Ingredientes
+          </h2>
+
           {plato.ingredientes.length === 0 ? (
-            <p className="text-gray-500 mb-4">Sin ingredientes</p>
+            <p className="text-gray-400 text-sm py-2">Sin ingredientes</p>
           ) : (
-            plato.ingredientes.map((ing) => (
-              <div key={ing.id} className="flex items-center mb-2">
-                <ChevronRight size={18} className="text-primary" />
-                <span className="text-lg ml-3 text-gray-700">
-                  {ing.nombre} - {ing.cantidad} {ing.unidad}
-                </span>
-              </div>
-            ))
+            <ul className="space-y-1.5">
+              {plato.ingredientes.map((ing) => (
+                <li key={ing.id} className="flex items-baseline gap-2 text-sm sm:text-base text-gray-700">
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0 mt-2" />
+                  <span className="font-medium">{ing.nombre}</span>
+                  <span className="text-gray-400">—</span>
+                  <span className="text-gray-500">
+                    {ing.cantidad} {ing.unidad}
+                  </span>
+                </li>
+              ))}
+            </ul>
           )}
+        </div>
 
-          <h2 className="text-xl font-semibold text-black mb-3 mt-4">Procedimiento</h2>
-          <p className="text-lg text-gray-700 leading-relaxed">{plato.descripcion}</p>
+        <div className="bg-white rounded-xl p-4 sm:p-6 shadow-card">
+          <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
+            <span className="w-1 h-5 bg-primary rounded-full inline-block" />
+            Procedimiento
+          </h2>
+          <p className="text-sm sm:text-base text-gray-600 leading-relaxed whitespace-pre-line">
+            {plato.descripcion}
+          </p>
         </div>
       </div>
 
-      <div className="p-4 flex-row justify-around flex">
+      <div className="p-3 sm:p-4 flex flex-row gap-3">
         <button
           onClick={() => setOpenAlert(true)}
-          className="bg-danger rounded-full py-3 px-6 flex-1 mr-2 text-light text-lg font-semibold"
+          className="flex-1 bg-danger rounded-full py-3 text-light text-sm sm:text-base font-semibold active:scale-95 transition-all"
         >
           Eliminar
         </button>
         <button
           onClick={() => navigate(`/platos/actualizar-plato/${platoIdNum}`)}
-          className="bg-success rounded-full py-3 px-6 flex-1 ml-2 text-light text-lg font-semibold"
+          className="flex-1 bg-success rounded-full py-3 text-light text-sm sm:text-base font-semibold active:scale-95 transition-all"
         >
           Actualizar
         </button>

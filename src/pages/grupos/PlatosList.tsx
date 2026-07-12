@@ -20,8 +20,8 @@ const PlatosList = () => {
   )
 
   return (
-    <div className="flex flex-col flex-1 px-5 pt-5 pb-5 bg-backdrop min-h-full">
-      <h1 className="text-2xl font-bold text-center text-primary mb-6">Mis Platos</h1>
+    <div className="flex flex-col flex-1 px-5 pt-3 pb-5 bg-backdrop min-h-full">
+      <h1 className="text-2xl font-bold text-center text-primary mb-3">Mis Platos</h1>
 
       <input
         type="text"
