@@ -343,7 +343,7 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
 
         const key = `${pi.ingredienteId}-${ing.unidad}`
         const vecesEnSemana = allPlanificaciones.filter((p) => p.platoId === platoId).length
-        const cantidadTotal = pi.cantidad * vecesEnSemana
+        const cantidadTotal = Math.round((pi.cantidad * vecesEnSemana) * 100) / 100
 
         if (mapaIngredientes[key]) {
           mapaIngredientes[key].cantidad += cantidadTotal

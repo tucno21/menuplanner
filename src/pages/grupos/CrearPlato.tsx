@@ -44,6 +44,7 @@ const CrearPlato = () => {
   }
 
   const updateCantidad = (id: number, cantidad: string) => {
+    if (cantidad.startsWith('-')) return
     setSelectedIngredientes(
       selectedIngredientes.map((i) => (i.id === id ? { ...i, cantidad } : i))
     )
@@ -106,6 +107,8 @@ const CrearPlato = () => {
               <div className="flex items-center gap-2">
                 <input
                   type="number"
+                  min="0"
+                  step="0.2"
                   value={ing.cantidad}
                   onChange={(e) => updateCantidad(ing.id, e.target.value)}
                   className="bg-white text-center rounded border border-gray-400 w-20 p-1 outline-none"
