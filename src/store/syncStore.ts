@@ -6,15 +6,6 @@ const SYNC_INTERVAL = 120_000
 const GET_TIMEOUT = 60_000
 const POST_TIMEOUT = 120_000
 
-const MERGE_ORDER: SyncTable[] = [
-  'platos',
-  'ingredientes',
-  'unidades',
-  'platoIngredientes',
-  'planificaciones',
-  'compras',
-]
-
 interface SyncState {
   syncing: boolean
   lastSync: string | null
@@ -32,116 +23,166 @@ let intervalId: ReturnType<typeof setInterval> | null = null
 let onlineHandler: (() => void) | null = null
 let syncInProgress = false
 
-function stripId(record: Record<string, unknown>): Record<string, unknown> {
-  const { id: _id, ...rest } = record
-  return rest
-}
-
-async function resolveForeignKeys(
-  record: Record<string, unknown>
-): Promise<Record<string, unknown>> {
-  const resolved = { ...record }
-  delete resolved.id
-
-  if (resolved.platoSyncId) {
-    const plato = await db.platos
-      .where('syncId')
-      .equals(resolved.platoSyncId as string)
-      .first()
-    resolved.platoId = plato?.id ?? 0
-  }
-  if (resolved.ingredienteSyncId) {
-    const ing = await db.ingredientes
-      .where('syncId')
-      .equals(resolved.ingredienteSyncId as string)
-      .first()
-    resolved.ingredienteId = ing?.id ?? 0
-  }
-
-  return resolved
-}
-
 interface RemotePayload {
   data: Record<string, Record<string, unknown>[]>
   deletions: Record<string, unknown>[]
 }
+
+type FkMaps = { plato: Map<string, number>; ing: Map<string, number> }
 
 async function mergeRemoteData(remote: RemotePayload): Promise<void> {
   let added = 0
   let updated = 0
   let deleted = 0
 
+  const delByTable: Record<string, Map<string, number>> = {}
   for (const del of remote.deletions ?? []) {
-    const tableName = del.table as SyncTable
-    if (!SYNC_TABLES.includes(tableName)) continue
-
-    const table = db.table(tableName)
-    const localRec = (await table
-      .where('syncId')
-      .equals(del.syncId as string)
-      .first()) as { id?: number; updatedAt?: string } | undefined
-
-    if (localRec?.id) {
-      const deletedAt = new Date(del.deletedAt as string).getTime()
-      const updatedAt = localRec.updatedAt
-        ? new Date(localRec.updatedAt).getTime()
-        : 0
-      if (updatedAt <= deletedAt) {
-        await table.delete(localRec.id)
-        deleted++
-      }
-    }
+    const t = del.table as string
+    if (!delByTable[t]) delByTable[t] = new Map()
+    delByTable[t].set(
+      del.syncId as string,
+      new Date(del.deletedAt as string).getTime()
+    )
   }
 
-  for (const tableName of MERGE_ORDER) {
+  async function mergeTable(tableName: SyncTable, fkMaps?: FkMaps) {
     const remoteRecords = remote.data?.[tableName] ?? []
+    const tableDels = delByTable[tableName]
+
+    if (remoteRecords.length === 0 && !tableDels) return
+
     const table = db.table(tableName)
+    const allLocal = (await table.toArray()) as {
+      id?: number
+      syncId?: string
+      updatedAt?: string
+    }[]
 
+    const localMap = new Map<string, { id?: number; updatedAt?: string }>()
+    for (const rec of allLocal) {
+      if (rec.syncId)
+        localMap.set(rec.syncId, { id: rec.id, updatedAt: rec.updatedAt })
+    }
+
+    const idsToDelete: number[] = []
+    if (tableDels) {
+      for (const rec of allLocal) {
+        if (!rec.syncId || !rec.id) continue
+        const delTime = tableDels.get(rec.syncId)
+        if (delTime !== undefined) {
+          const recTime = rec.updatedAt
+            ? new Date(rec.updatedAt).getTime()
+            : 0
+          if (recTime <= delTime) {
+            idsToDelete.push(rec.id)
+            localMap.delete(rec.syncId)
+          }
+        }
+      }
+    }
+
+    const toPut: Record<string, unknown>[] = []
     for (const remoteRec of remoteRecords) {
-      if (!remoteRec.syncId) continue
+      const sid = remoteRec.syncId as string
+      if (!sid) continue
 
-      const localRec = (await table
-        .where('syncId')
-        .equals(remoteRec.syncId as string)
-        .first()) as { id?: number; updatedAt?: string } | undefined
+      if (tableDels?.has(sid)) {
+        const recTime = new Date(remoteRec.updatedAt as string).getTime()
+        if (recTime <= tableDels.get(sid)!) continue
+      }
 
-      const remoteUpdatedAt = new Date(
-        remoteRec.updatedAt as string
-      ).getTime()
+      const resolved: Record<string, unknown> = { ...remoteRec }
+      delete resolved.id
+      if (fkMaps && resolved.platoSyncId) {
+        resolved.platoId = fkMaps.plato.get(resolved.platoSyncId as string) ?? 0
+      }
+      if (fkMaps && resolved.ingredienteSyncId) {
+        resolved.ingredienteId =
+          fkMaps.ing.get(resolved.ingredienteSyncId as string) ?? 0
+      }
+
+      const localRec = localMap.get(sid)
+      const remoteMs = new Date(remoteRec.updatedAt as string).getTime()
 
       if (!localRec) {
-        const resolved = await resolveForeignKeys(remoteRec)
-        await table.add(resolved)
+        toPut.push(resolved)
         added++
-      } else if (
-        remoteUpdatedAt >
-        new Date(localRec.updatedAt ?? '').getTime()
-      ) {
-        const resolved = await resolveForeignKeys(remoteRec)
-        await table.update(localRec.id!, resolved)
+      } else if (remoteMs > new Date(localRec.updatedAt ?? '').getTime()) {
+        if (localRec.id) resolved.id = localRec.id
+        toPut.push(resolved)
         updated++
       }
     }
+
+    if (idsToDelete.length > 0) {
+      await table.bulkDelete(idsToDelete)
+      deleted += idsToDelete.length
+    }
+    if (toPut.length > 0) {
+      await table.bulkPut(toPut)
+    }
   }
+
+  await mergeTable('platos')
+  await mergeTable('ingredientes')
+
+  const fkMaps: FkMaps = {
+    plato: new Map(
+      (await db.platos.toArray()).map(
+        (p) => [p.syncId, p.id!] as [string, number]
+      )
+    ),
+    ing: new Map(
+      (await db.ingredientes.toArray()).map(
+        (i) => [i.syncId, i.id!] as [string, number]
+      )
+    ),
+  }
+
+  await mergeTable('unidades')
+  await mergeTable('platoIngredientes', fkMaps)
+  await mergeTable('planificaciones', fkMaps)
+  await mergeTable('compras', fkMaps)
 
   console.log('[Sync] Merge:', { added, updated, deleted })
 }
 
-async function gatherLocalData(): Promise<{
-  data: Record<string, Record<string, unknown>[]>
-  deletions: Record<string, unknown>[]
-}> {
+async function gatherLocalData(
+  sinceTs?: string
+): Promise<RemotePayload> {
+  const sinceMs = sinceTs ? new Date(sinceTs).getTime() : 0
+
   const data: Record<string, Record<string, unknown>[]> = {}
   for (const table of SYNC_TABLES) {
-    const rows = await db.table(table).toArray()
-    data[table] = rows.map((r) =>
-      stripId(r as Record<string, unknown>)
-    )
+    const rows = (await db.table(table).toArray()) as Record<
+      string,
+      unknown
+    >[]
+    data[table] = rows
+      .filter((r) => {
+        if (!sinceMs) return true
+        const u = r.updatedAt as string | undefined
+        return u ? new Date(u).getTime() > sinceMs : false
+      })
+      .map((r) => {
+        const { id: _id, ...rest } = r
+        return rest
+      })
   }
-  const deletions = (await db.deletions.toArray()).map((d) => {
-    const { id: _id, ...rest } = d
-    return rest
-  })
+
+  const dels = (await db.deletions.toArray()) as {
+    id?: number
+    syncId: string
+    table: string
+    deletedAt: string
+  }[]
+  const deletions = dels
+    .filter((d) => !sinceMs || new Date(d.deletedAt).getTime() > sinceMs)
+    .map((d) => {
+      const { id: _id, ...rest } = d
+      return rest
+    })
+
   return { data, deletions }
 }
 
@@ -171,10 +212,16 @@ export const useSyncStore = create<SyncState>((set, get) => ({
     try {
       console.log('[Sync] === Iniciando ciclo ===')
 
+      const lastPushConfig = await db.config.get('lastSyncPushTs')
+      const sinceTs = lastPushConfig?.value
+
       // ── STEP 1: GET (pull) ──────────────────────────────
       console.log('[Sync] GET (pull)...')
       const getController = new AbortController()
-      const getTimeoutId = setTimeout(() => getController.abort(), GET_TIMEOUT)
+      const getTimeoutId = setTimeout(
+        () => getController.abort(),
+        GET_TIMEOUT
+      )
       const res = await fetch(url, { signal: getController.signal })
       clearTimeout(getTimeoutId)
 
@@ -196,10 +243,19 @@ export const useSyncStore = create<SyncState>((set, get) => ({
       await usePlanificacionStore.getState().initialize()
       console.log('[Sync] Pull + merge OK')
 
-      // ── STEP 3: POST (push, fire-and-forget) ────────────
-      const local = await gatherLocalData()
+      // ── STEP 3: POST (delta push) ───────────────────────
+      const pushTs = new Date().toISOString()
+      const local = await gatherLocalData(sinceTs)
+
+      const pushCounts: Record<string, number> = {}
+      for (const k of Object.keys(local.data))
+        pushCounts[k] = local.data[k].length
+      pushCounts['deletions'] = local.deletions.length
+
       const payload = JSON.stringify(local)
       console.log('[Sync] POST (push)...', {
+        mode: sinceTs ? 'delta' : 'full',
+        counts: pushCounts,
         payloadKB: Math.round(payload.length / 1024),
       })
 
@@ -217,11 +273,9 @@ export const useSyncStore = create<SyncState>((set, get) => ({
       clearTimeout(postTimeoutId)
       console.log('[Sync] Push OK')
 
-      // ── Done ────────────────────────────────────────────
-      set({
-        lastSync: new Date().toISOString(),
-        syncing: false,
-      })
+      await db.config.put({ key: 'lastSyncPushTs', value: pushTs })
+
+      set({ lastSync: pushTs, syncing: false })
       console.log('[Sync] === Ciclo completado ===')
     } catch (err) {
       console.error('[Sync] Error:', err)
