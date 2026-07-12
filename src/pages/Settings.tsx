@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
-import { LogOut, Trash2 } from 'lucide-react'
+import { LogOut, Trash2, Lock } from 'lucide-react'
 import { useAuthStore } from '../store/authStore'
 import { db, ingredientesSeed, unidadesSeed } from '../db/dexie'
+import Modal from '../components/ui/Modal'
 import AlertCustom from '../components/ui/AlertCustom'
 
 const Settings = () => {
@@ -14,9 +15,18 @@ const Settings = () => {
   const [newPin, setNewPin] = useState('')
   const [confirmPin, setConfirmPin] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const [showPinModal, setShowPinModal] = useState(false)
   const [showResetAlert, setShowResetAlert] = useState(false)
 
   const filterPin = (value: string) => value.replace(/[^0-9]/g, '').slice(0, 4)
+
+  const openPinModal = () => {
+    setOldPin('')
+    setNewPin('')
+    setConfirmPin('')
+    setError(null)
+    setShowPinModal(true)
+  }
 
   const handleChangePin = async () => {
     setError(null)
@@ -37,6 +47,7 @@ const Settings = () => {
       return
     }
 
+    setShowPinModal(false)
     setOldPin('')
     setNewPin('')
     setConfirmPin('')
@@ -68,12 +79,48 @@ const Settings = () => {
   }
 
   return (
-    <div className="flex flex-col flex-1 justify-between items-center px-5 py-5 bg-backdrop min-h-full relative">
-      <div className="w-full">
-        <h1 className="text-xl font-bold mb-4">Configuracion</h1>
+    <div className="flex flex-col flex-1 px-5 py-5 bg-backdrop min-h-full">
+      <div className="flex justify-end mb-6">
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-2 bg-danger/10 border border-danger/30 py-2 px-4 rounded-lg text-danger text-sm font-medium hover:bg-danger/20 active:scale-95 transition-all"
+        >
+          <LogOut size={16} />
+          Cerrar Sesion
+        </button>
+      </div>
 
-        <div className="bg-white rounded-2xl p-6 w-full shadow-card mb-6">
-          <h2 className="text-lg font-semibold text-dark mb-4">Cambiar PIN</h2>
+      <div className="space-y-3">
+        <button
+          onClick={openPinModal}
+          className="w-full flex items-center gap-3 bg-white border border-gray-200 rounded-xl p-4 shadow-card hover:shadow-medium active:scale-[0.99] transition-all"
+        >
+          <div className="bg-primary/10 p-2.5 rounded-lg">
+            <Lock size={20} className="text-primary" />
+          </div>
+          <div className="text-left flex-1">
+            <p className="text-dark font-semibold">Cambiar PIN</p>
+            <p className="text-gray-400 text-sm">Actualiza tu PIN de acceso</p>
+          </div>
+        </button>
+
+        <button
+          onClick={() => setShowResetAlert(true)}
+          className="w-full flex items-center gap-3 bg-white border border-gray-200 rounded-xl p-4 shadow-card hover:shadow-medium active:scale-[0.99] transition-all"
+        >
+          <div className="bg-danger/10 p-2.5 rounded-lg">
+            <Trash2 size={20} className="text-danger" />
+          </div>
+          <div className="text-left flex-1">
+            <p className="text-dark font-semibold">Restablecer datos</p>
+            <p className="text-gray-400 text-sm">Borra todo y vuelve al inicio</p>
+          </div>
+        </button>
+      </div>
+
+      <Modal isOpen={showPinModal} onClose={() => setShowPinModal(false)}>
+        <div className="bg-white rounded-2xl p-6 w-11/12 max-w-sm">
+          <h2 className="text-xl font-bold text-primary mb-4 text-center">Cambiar PIN</h2>
 
           <input
             type="password"
@@ -108,31 +155,24 @@ const Settings = () => {
             className="bg-gray-100 rounded-lg px-4 py-3 w-full mb-3 border border-gray-300 outline-none text-dark"
           />
 
-          <button
-            onClick={handleChangePin}
-            className="bg-primary py-3 rounded-full w-full text-light font-semibold"
-          >
-            Cambiar
-          </button>
+          {error && <p className="text-danger text-sm text-center mb-3">{error}</p>}
 
-          {error && <p className="text-danger text-sm text-center mt-2">{error}</p>}
+          <div className="flex flex-row gap-3">
+            <button
+              onClick={() => setShowPinModal(false)}
+              className="flex-1 bg-gray-200 py-3 rounded-lg text-gray-700 font-semibold active:scale-95 transition-all"
+            >
+              Cancelar
+            </button>
+            <button
+              onClick={handleChangePin}
+              className="flex-1 bg-primary py-3 rounded-lg text-light font-semibold active:scale-95 transition-all"
+            >
+              Cambiar
+            </button>
+          </div>
         </div>
-
-        <button
-          onClick={() => setShowResetAlert(true)}
-          className="w-full flex items-center justify-center gap-2 bg-danger/10 border border-danger/30 py-3 rounded-xl text-danger font-semibold"
-        >
-          <Trash2 size={20} />
-          Restablecer datos de fabrica
-        </button>
-      </div>
-
-      <button
-        onClick={handleLogout}
-        className="absolute bottom-5 right-5 bg-danger p-4 rounded-full"
-      >
-        <LogOut size={24} className="text-white" />
-      </button>
+      </Modal>
 
       <AlertCustom
         isAlert={showResetAlert}
