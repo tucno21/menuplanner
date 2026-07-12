@@ -11,7 +11,7 @@ const MainLayout = () => {
   }, [initialize])
 
   return (
-    <div className="flex flex-col min-h-screen bg-backdrop">
+    <div className="max-w-[480px] mx-auto min-h-dvh bg-backdrop shadow-2xl relative overflow-hidden flex flex-col">
       <main className="flex-1 overflow-y-auto pb-20">
         <Outlet />
       </main>

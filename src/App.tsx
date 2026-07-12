@@ -39,35 +39,33 @@ const App = () => {
 
   if (loading) {
     return (
-      <div className="max-w-[480px] mx-auto min-h-screen bg-backdrop shadow-2xl relative overflow-hidden flex justify-center items-center">
+      <div className="min-h-dvh w-full flex items-center justify-center bg-backdrop">
         <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
 
   return (
-    <div className="max-w-[480px] mx-auto min-h-screen bg-backdrop shadow-2xl relative overflow-hidden">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route element={<ProtectedRoute />}>
-            <Route element={<MainLayout />}>
-              <Route path="/home" element={<Home />} />
-              <Route path="/home/dia/:fecha" element={<Dia />} />
-              <Route path="/home/planificar/:fecha" element={<Planificar />} />
-              <Route path="/platos" element={<PlatosList />} />
-              <Route path="/platos/plato/:platoId" element={<PlatoDetail />} />
-              <Route path="/platos/crear-plato" element={<CrearPlato />} />
-              <Route path="/platos/actualizar-plato/:platoId" element={<ActualizarPlato />} />
-              <Route path="/ingredientes" element={<Ingredientes />} />
-              <Route path="/ingredientes/unidades" element={<Unidades />} />
-              <Route path="/settings" element={<Settings />} />
-            </Route>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route element={<ProtectedRoute />}>
+          <Route element={<MainLayout />}>
+            <Route path="/home" element={<Home />} />
+            <Route path="/home/dia/:fecha" element={<Dia />} />
+            <Route path="/home/planificar/:fecha" element={<Planificar />} />
+            <Route path="/platos" element={<PlatosList />} />
+            <Route path="/platos/plato/:platoId" element={<PlatoDetail />} />
+            <Route path="/platos/crear-plato" element={<CrearPlato />} />
+            <Route path="/platos/actualizar-plato/:platoId" element={<ActualizarPlato />} />
+            <Route path="/ingredientes" element={<Ingredientes />} />
+            <Route path="/ingredientes/unidades" element={<Unidades />} />
+            <Route path="/settings" element={<Settings />} />
           </Route>
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </div>
+        </Route>
+        <Route path="*" element={<div className="max-w-[480px] mx-auto min-h-dvh bg-backdrop shadow-2xl relative overflow-hidden"><NotFound /></div>} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
