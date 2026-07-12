@@ -1,0 +1,128 @@
+import Dexie, { type Table } from 'dexie'
+
+export interface Plato {
+  id?: number
+  nombre: string
+  descripcion: string
+  grupoId: number
+}
+
+export interface Ingrediente {
+  id?: number
+  nombre: string
+  unidad: string
+}
+
+export interface PlatoIngrediente {
+  id?: number
+  platoId: number
+  ingredienteId: number
+  cantidad: number
+}
+
+export type EstadoPlato = 'pendiente' | 'preparado'
+
+export interface Planificacion {
+  id?: number
+  platoId: number
+  fecha: string
+  estado: EstadoPlato
+}
+
+export type EstadoCompra = 'comprado' | 'pendiente'
+
+export interface Compra {
+  id?: number
+  ingredienteId: number
+  cantidad: string
+  estado: EstadoCompra
+  numeroSemana: number
+  anio: number
+}
+
+export interface Config {
+  key: string
+  value: string
+}
+
+export class MenuPlannerDB extends Dexie {
+  platos!: Table<Plato, number>
+  ingredientes!: Table<Ingrediente, number>
+  platoIngredientes!: Table<PlatoIngrediente, number>
+  planificaciones!: Table<Planificacion, number>
+  compras!: Table<Compra, number>
+  config!: Table<Config, string>
+
+  constructor() {
+    super('MenuPlannerDB')
+    this.version(1).stores({
+      platos: '++id, nombre, grupoId',
+      ingredientes: '++id, nombre',
+      platoIngredientes: '++id, platoId, ingredienteId',
+      planificaciones: '++id, platoId, fecha, estado',
+      compras: '++id, ingredienteId, numeroSemana, anio',
+      config: 'key',
+    })
+  }
+}
+
+export const db = new MenuPlannerDB()
+
+const ingredientesSeed: { nombre: string; unidad: string }[] = [
+  { nombre: 'Arroz', unidad: 'gr' },
+  { nombre: 'Fideos', unidad: 'gr' },
+  { nombre: 'Pan', unidad: 'unidad' },
+  { nombre: 'Harina', unidad: 'gr' },
+  { nombre: 'Azucar', unidad: 'gr' },
+  { nombre: 'Sal', unidad: 'gr' },
+  { nombre: 'Pimienta', unidad: 'gr' },
+  { nombre: 'Aceite', unidad: 'ml' },
+  { nombre: 'Mantequilla', unidad: 'gr' },
+  { nombre: 'Leche', unidad: 'ml' },
+  { nombre: 'Huevos', unidad: 'unidad' },
+  { nombre: 'Pollo', unidad: 'gr' },
+  { nombre: 'Carne molida', unidad: 'gr' },
+  { nombre: 'Res', unidad: 'gr' },
+  { nombre: 'Cerdo', unidad: 'gr' },
+  { nombre: 'Pescado', unidad: 'gr' },
+  { nombre: 'Camarones', unidad: 'gr' },
+  { nombre: 'Papa', unidad: 'gr' },
+  { nombre: 'Tomate', unidad: 'unidad' },
+  { nombre: 'Cebolla', unidad: 'unidad' },
+  { nombre: 'Ajo', unidad: 'diente' },
+  { nombre: 'Zanahoria', unidad: 'unidad' },
+  { nombre: 'Lechuga', unidad: 'unidad' },
+  { nombre: 'Espinaca', unidad: 'gr' },
+  { nombre: 'Brocoli', unidad: 'gr' },
+  { nombre: 'Queso', unidad: 'gr' },
+  { nombre: 'Crema de leche', unidad: 'ml' },
+  { nombre: 'Salsa de tomate', unidad: 'ml' },
+  { nombre: 'Mostaza', unidad: 'ml' },
+  { nombre: 'Mayonesa', unidad: 'ml' },
+  { nombre: 'Limon', unidad: 'unidad' },
+  { nombre: 'Naranja', unidad: 'unidad' },
+  { nombre: 'Platano', unidad: 'unidad' },
+  { nombre: 'Manzana', unidad: 'unidad' },
+  { nombre: 'Frijoles', unidad: 'gr' },
+  { nombre: 'Lentejas', unidad: 'gr' },
+  { nombre: 'Garbanzos', unidad: 'gr' },
+  { nombre: 'Maiz', unidad: 'gr' },
+  { nombre: 'Choclo', unidad: 'unidad' },
+  { nombre: 'Palta', unidad: 'unidad' },
+  { nombre: 'Cilantro', unidad: 'ramillete' },
+  { nombre: 'Perejil', unidad: 'ramillete' },
+  { nombre: 'Comino', unidad: 'gr' },
+  { nombre: 'Oregano', unidad: 'gr' },
+  { nombre: 'Laurel', unidad: 'hoja' },
+  { nombre: 'Canela', unidad: 'gr' },
+  { nombre: 'Vainilla', unidad: 'ml' },
+  { nombre: 'Polvo de hornear', unidad: 'gr' },
+  { nombre: 'Levadura', unidad: 'gr' },
+  { nombre: 'Choclo dulce', unidad: 'lata' },
+  { nombre: 'Atun', unidad: 'lata' },
+]
+
+db.on('populate', async () => {
+  await db.ingredientes.bulkAdd(ingredientesSeed)
+  await db.config.add({ key: 'grupoActivo', value: '1' })
+})
