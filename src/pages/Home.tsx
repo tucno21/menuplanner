@@ -84,15 +84,15 @@ const Home = () => {
         <CustomTab tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
 
-      <div className="flex flex-row py-4 px-5 w-full justify-between bg-backdrop border-t border-gray-300">
+      <div className="flex flex-row gap-3 py-3 px-4 w-full bg-backdrop border-t border-gray-300">
         <button
-          className="bg-primary py-2 px-4 rounded-full shadow-soft text-light"
+          className="flex-1 bg-primary py-2.5 rounded-lg text-light text-sm sm:text-base font-semibold active:scale-95 transition-all"
           onClick={handleListaComprasModal}
         >
           Ver Compras
         </button>
         <button
-          className="bg-secondary py-2 px-4 rounded-full shadow-soft text-light"
+          className="flex-1 bg-secondary py-2.5 rounded-lg text-light text-sm sm:text-base font-semibold active:scale-95 transition-all"
           onClick={openModalPlanificacion}
         >
           Ver Planificacion

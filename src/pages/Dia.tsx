@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router'
 import { Circle, CheckCircle2, UtensilsCrossed, Eye, Trash2, ChevronRight } from 'lucide-react'
+import BackButton from '../components/ui/BackButton'
 import { usePlanificacionStore } from '../store/planificacionStore'
 import type { PlatoWithIngredientes } from '../store/planificacionStore'
 import Modal from '../components/ui/Modal'
@@ -51,8 +52,11 @@ const Dia = () => {
 
   return (
     <div className="flex flex-col p-5 bg-backdrop min-h-full">
-      <p className="text-xl font-semibold text-dark text-center">Dia: {fechaStr}</p>
-      <h1 className="text-2xl font-bold text-primary uppercase text-center mt-2 mb-6">Platos del dia</h1>
+      <div className="flex items-center gap-3 mb-6">
+        <BackButton />
+        <p className="text-xl font-semibold text-dark">Dia: {fechaStr}</p>
+      </div>
+      <h1 className="text-2xl font-bold text-primary uppercase text-center mb-6">Platos del dia</h1>
 
       {platos.length === 0 ? (
         <p className="text-center text-gray-500 py-8">No hay platos planificados para este dia</p>
@@ -106,7 +110,7 @@ const Dia = () => {
 
       <button
         onClick={() => navigate(`/home/planificar/${fechaStr}`)}
-        className="bg-primary px-6 py-3 rounded-full text-light text-lg font-semibold mt-4 self-center"
+        className="bg-primary px-6 py-3 rounded-lg text-light text-lg font-semibold active:scale-95 transition-all mt-4 self-center"
       >
         Planificar
       </button>
@@ -131,7 +135,7 @@ const Dia = () => {
 
             <button
               onClick={() => setOpenModal(false)}
-              className="bg-danger px-6 py-3 rounded-full text-white font-semibold mt-6"
+              className="bg-danger px-6 py-3 rounded-lg text-white font-semibold active:scale-95 transition-all mt-6"
             >
               Cerrar
             </button>

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router'
 import { UtensilsCrossed, CheckCircle2 } from 'lucide-react'
 import { usePlanificacionStore } from '../store/planificacionStore'
-
+import BackButton from '../components/ui/BackButton'
 const Planificar = () => {
   const { fecha } = useParams()
   const navigate = useNavigate()
@@ -44,10 +44,13 @@ const Planificar = () => {
   }
 
   return (
-    <div className="flex flex-col flex-1 px-5 pb-6 bg-backdrop min-h-full">
-      <h1 className="text-2xl font-bold text-center text-primary mb-6">Seleccione los Platos</h1>
+    <div className="flex flex-col flex-1 px-5 pt-3 pb-6 bg-backdrop min-h-full">
+      <div className="flex items-center gap-3 mb-3">
+        <BackButton />
+        <h1 className="text-2xl font-bold text-primary">Seleccione los Platos</h1>
+      </div>
 
-      <div className="bg-white text-lg text-gray-700 text-center p-3 rounded-lg border border-primary-light mb-4">
+      <div className="bg-white text-gray-700 text-center p-2 rounded-lg border border-primary-light mb-4">
         {fechaStr}
       </div>
 
@@ -56,7 +59,7 @@ const Planificar = () => {
         placeholder="Buscar platos"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        className="bg-white text-lg text-gray-700 p-3 rounded-lg border border-primary-light mb-4 outline-none"
+        className="bg-white text-gray-700 p-2 rounded-lg border border-primary-light mb-4 outline-none"
       />
 
       <div className="flex-1">
@@ -70,11 +73,10 @@ const Planificar = () => {
               <button
                 key={id}
                 onClick={() => togglePlatoSelection(id)}
-                className={`w-full p-4 mb-2 rounded-lg flex flex-row items-center transition-colors ${
-                  isSelected
-                    ? 'bg-success-light/20 border border-primary'
-                    : 'bg-white border border-primary'
-                }`}
+                className={`w-full p-4 mb-2 rounded-lg flex flex-row items-center transition-colors ${isSelected
+                  ? 'bg-success-light/20 border border-primary'
+                  : 'bg-white border border-primary'
+                  }`}
               >
                 <div className={`rounded-full p-2 ${isSelected ? 'bg-primary-dark' : 'bg-primary'}`}>
                   <UtensilsCrossed size={20} color="white" />
@@ -90,7 +92,7 @@ const Planificar = () => {
       <button
         onClick={handleRegistrar}
         disabled={selectedPlatos.size === 0}
-        className="bg-primary rounded-full py-3 px-6 text-light text-lg font-semibold w-full mt-4 disabled:opacity-50"
+        className="bg-primary rounded-lg py-3 px-6 text-light text-lg font-semibold w-full mt-4 disabled:opacity-50 active:scale-95 transition-all"
       >
         Registrar
       </button>
