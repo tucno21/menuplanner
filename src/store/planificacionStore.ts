@@ -6,6 +6,7 @@ import {
   type Compra,
   type EstadoPlato,
   type Planificacion,
+  type Unidad,
 } from '../db/dexie'
 
 export interface PlatoPlanificacion {
@@ -39,6 +40,7 @@ interface PlanificacionState {
   planificacion: DataPlanificacion[]
   platos: Plato[]
   ingredientes: Ingrediente[]
+  unidades: Unidad[]
   compras: Compra[]
   loading: boolean
 
@@ -57,6 +59,14 @@ interface PlanificacionState {
   getPlatoById: (id: number) => Promise<PlatoWithIngredientes | null>
 
   loadIngredientes: () => Promise<void>
+  createIngrediente: (data: { nombre: string; unidad: string }) => Promise<void>
+  updateIngrediente: (id: number, data: { nombre: string; unidad: string }) => Promise<void>
+  deleteIngrediente: (id: number) => Promise<void>
+
+  loadUnidades: () => Promise<void>
+  createUnidad: (data: { nombre: string }) => Promise<void>
+  updateUnidad: (id: number, data: { nombre: string }) => Promise<void>
+  deleteUnidad: (id: number) => Promise<void>
 
   calcularListaCompras: (fechaInicio: string, fechaFin: string) => Promise<ListaItem[]>
   loadCompras: (numeroSemana: number, anio: number) => Promise<void>
@@ -95,16 +105,18 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
   planificacion: [],
   platos: [],
   ingredientes: [],
+  unidades: [],
   compras: [],
   loading: true,
 
   initialize: async () => {
-    const [planificacion, platos, ingredientes] = await Promise.all([
+    const [planificacion, platos, ingredientes, unidades] = await Promise.all([
       construirPlanificacion(),
       db.platos.toArray(),
       db.ingredientes.toArray(),
+      db.unidades.toArray(),
     ])
-    set({ planificacion, platos, ingredientes, loading: false })
+    set({ planificacion, platos, ingredientes, unidades, loading: false })
   },
 
   getPlatosFecha: (fecha: string) => {
@@ -274,6 +286,42 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
   loadIngredientes: async () => {
     const ingredientes = await db.ingredientes.toArray()
     set({ ingredientes })
+  },
+
+  createIngrediente: async (data) => {
+    await db.ingredientes.add({ nombre: data.nombre, unidad: data.unidad })
+    await get().loadIngredientes()
+  },
+
+  updateIngrediente: async (id, data) => {
+    await db.ingredientes.update(id, { nombre: data.nombre, unidad: data.unidad })
+    await get().loadIngredientes()
+  },
+
+  deleteIngrediente: async (id) => {
+    await db.ingredientes.delete(id)
+    await db.platoIngredientes.where('ingredienteId').equals(id).delete()
+    await get().loadIngredientes()
+  },
+
+  loadUnidades: async () => {
+    const unidades = await db.unidades.toArray()
+    set({ unidades })
+  },
+
+  createUnidad: async (data) => {
+    await db.unidades.add({ nombre: data.nombre })
+    await get().loadUnidades()
+  },
+
+  updateUnidad: async (id, data) => {
+    await db.unidades.update(id, { nombre: data.nombre })
+    await get().loadUnidades()
+  },
+
+  deleteUnidad: async (id) => {
+    await db.unidades.delete(id)
+    await get().loadUnidades()
   },
 
   calcularListaCompras: async (fechaInicio: string, fechaFin: string) => {

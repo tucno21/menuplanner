@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router'
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router'
 import { useAuthStore } from './store/authStore'
 import { usePlanificacionStore } from './store/planificacionStore'
 import Login from './pages/Login'
@@ -11,6 +11,8 @@ import PlatosList from './pages/grupos/PlatosList'
 import PlatoDetail from './pages/grupos/PlatoDetail'
 import CrearPlato from './pages/grupos/CrearPlato'
 import ActualizarPlato from './pages/grupos/ActualizarPlato'
+import Ingredientes from './pages/Ingredientes'
+import Unidades from './pages/Unidades'
 import Settings from './pages/Settings'
 import NotFound from './pages/NotFound'
 
@@ -24,7 +26,7 @@ const ProtectedRoute = () => {
 
   if (!isAuthenticated) return <Navigate to="/" replace />
 
-  return <MainLayout />
+  return <Outlet />
 }
 
 const App = () => {
@@ -48,19 +50,19 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/home" element={<ProtectedRoute />}>
-            <Route index element={<Home />} />
-            <Route path="dia/:fecha" element={<Dia />} />
-            <Route path="planificar/:fecha" element={<Planificar />} />
-          </Route>
-          <Route path="/platos" element={<ProtectedRoute />}>
-            <Route index element={<PlatosList />} />
-            <Route path="plato/:platoId" element={<PlatoDetail />} />
-            <Route path="crear-plato" element={<CrearPlato />} />
-            <Route path="actualizar-plato/:platoId" element={<ActualizarPlato />} />
-          </Route>
-          <Route path="/settings" element={<ProtectedRoute />}>
-            <Route index element={<Settings />} />
+          <Route element={<ProtectedRoute />}>
+            <Route element={<MainLayout />}>
+              <Route path="/home" element={<Home />} />
+              <Route path="/home/dia/:fecha" element={<Dia />} />
+              <Route path="/home/planificar/:fecha" element={<Planificar />} />
+              <Route path="/platos" element={<PlatosList />} />
+              <Route path="/platos/plato/:platoId" element={<PlatoDetail />} />
+              <Route path="/platos/crear-plato" element={<CrearPlato />} />
+              <Route path="/platos/actualizar-plato/:platoId" element={<ActualizarPlato />} />
+              <Route path="/ingredientes" element={<Ingredientes />} />
+              <Route path="/ingredientes/unidades" element={<Unidades />} />
+              <Route path="/settings" element={<Settings />} />
+            </Route>
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

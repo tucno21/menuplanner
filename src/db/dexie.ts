@@ -44,6 +44,27 @@ export interface Config {
   value: string
 }
 
+export interface Unidad {
+  id?: number
+  nombre: string
+}
+
+const unidadesSeed: { nombre: string }[] = [
+  { nombre: 'gr' },
+  { nombre: 'kg' },
+  { nombre: 'ml' },
+  { nombre: 'L' },
+  { nombre: 'unidad' },
+  { nombre: 'lata' },
+  { nombre: 'diente' },
+  { nombre: 'ramillete' },
+  { nombre: 'hoja' },
+  { nombre: 'cucharada' },
+  { nombre: 'cucharadita' },
+  { nombre: 'taza' },
+  { nombre: 'paquete' },
+]
+
 export class MenuPlannerDB extends Dexie {
   platos!: Table<Plato, number>
   ingredientes!: Table<Ingrediente, number>
@@ -51,6 +72,7 @@ export class MenuPlannerDB extends Dexie {
   planificaciones!: Table<Planificacion, number>
   compras!: Table<Compra, number>
   config!: Table<Config, string>
+  unidades!: Table<Unidad, number>
 
   constructor() {
     super('MenuPlannerDB')
@@ -69,6 +91,20 @@ export class MenuPlannerDB extends Dexie {
       planificaciones: '++id, platoId, fecha, estado',
       compras: '++id, ingredienteId, numeroSemana, anio',
       config: 'key',
+    })
+    this.version(3).stores({
+      platos: '++id, nombre',
+      ingredientes: '++id, nombre',
+      platoIngredientes: '++id, platoId, ingredienteId',
+      planificaciones: '++id, platoId, fecha, estado',
+      compras: '++id, ingredienteId, numeroSemana, anio',
+      config: 'key',
+      unidades: '++id, nombre',
+    }).upgrade(async (trans) => {
+      const count = await trans.table('unidades').count()
+      if (count === 0) {
+        await trans.table('unidades').bulkAdd(unidadesSeed)
+      }
     })
   }
 }
@@ -131,4 +167,5 @@ const ingredientesSeed: { nombre: string; unidad: string }[] = [
 
 db.on('populate', async () => {
   await db.ingredientes.bulkAdd(ingredientesSeed)
+  await db.unidades.bulkAdd(unidadesSeed)
 })
