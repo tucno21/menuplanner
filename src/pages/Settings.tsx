@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
-import { LogOut, Trash2, Lock, RefreshCw, Cloud } from 'lucide-react'
+import { LogOut, Trash2, Lock, RefreshCw, Cloud, RotateCcw } from 'lucide-react'
 import { useAuthStore } from '../store/authStore'
 import { useSyncStore } from '../store/syncStore'
 import { db, ingredientesSeed, unidadesSeed, withSync } from '../db/dexie'
@@ -26,6 +26,7 @@ const Settings = () => {
   const [error, setError] = useState<string | null>(null)
   const [showPinModal, setShowPinModal] = useState(false)
   const [showResetAlert, setShowResetAlert] = useState(false)
+  const [showUpdateAlert, setShowUpdateAlert] = useState(false)
   const [syncUrlInput, setSyncUrlInput] = useState('')
 
   const filterPin = (value: string) => value.replace(/[^0-9]/g, '').slice(0, 4)
@@ -104,6 +105,22 @@ const Settings = () => {
     setShowResetAlert(false)
     logout()
     navigate('/')
+  }
+
+  const handleForceUpdate = async () => {
+    if ('serviceWorker' in navigator) {
+      const registrations = await navigator.serviceWorker.getRegistrations()
+      for (const reg of registrations) {
+        await reg.unregister()
+      }
+    }
+    if ('caches' in window) {
+      const keys = await caches.keys()
+      for (const key of keys) {
+        await caches.delete(key)
+      }
+    }
+    window.location.reload()
   }
 
   return (
@@ -190,6 +207,19 @@ const Settings = () => {
             <p className="text-gray-400 text-sm">Borra todo y vuelve al inicio</p>
           </div>
         </button>
+
+        <button
+          onClick={() => setShowUpdateAlert(true)}
+          className="w-full flex items-center gap-3 bg-white border border-gray-200 rounded-xl p-4 shadow-card hover:shadow-medium active:scale-[0.99] transition-all"
+        >
+          <div className="bg-primary/10 p-2.5 rounded-lg">
+            <RotateCcw size={20} className="text-primary" />
+          </div>
+          <div className="text-left flex-1">
+            <p className="text-dark font-semibold">Actualizar aplicacion</p>
+            <p className="text-gray-400 text-sm">Descarga la ultima version sin perder datos</p>
+          </div>
+        </button>
       </div>
 
       <Modal isOpen={showPinModal} onClose={() => setShowPinModal(false)}>
@@ -253,6 +283,13 @@ const Settings = () => {
         title="¿Eliminar todos los datos? Esta accion no se puede deshacer."
         onConfirm={handleResetData}
         onClose={() => setShowResetAlert(false)}
+      />
+
+      <AlertCustom
+        isAlert={showUpdateAlert}
+        title="¿Actualizar la aplicacion? Se descargara la ultima version. Tus datos no se perderan."
+        onConfirm={handleForceUpdate}
+        onClose={() => setShowUpdateAlert(false)}
       />
     </div>
   )
