@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
-import { LogOut, Trash2, Lock } from 'lucide-react'
+import { LogOut, Trash2, Lock, RefreshCw, Cloud } from 'lucide-react'
 import { useAuthStore } from '../store/authStore'
-import { db, ingredientesSeed, unidadesSeed } from '../db/dexie'
+import { useSyncStore } from '../store/syncStore'
+import { db, ingredientesSeed, unidadesSeed, withSync } from '../db/dexie'
 import Modal from '../components/ui/Modal'
 import AlertCustom from '../components/ui/AlertCustom'
 
@@ -11,14 +12,31 @@ const Settings = () => {
   const changePin = useAuthStore((s) => s.changePin)
   const logout = useAuthStore((s) => s.logout)
 
+  const sync = useSyncStore((s) => s.sync)
+  const syncing = useSyncStore((s) => s.syncing)
+  const lastSync = useSyncStore((s) => s.lastSync)
+  const syncError = useSyncStore((s) => s.error)
+  const appsScriptUrl = useSyncStore((s) => s.appsScriptUrl)
+  const loadUrl = useSyncStore((s) => s.loadUrl)
+  const saveUrl = useSyncStore((s) => s.saveUrl)
+
   const [oldPin, setOldPin] = useState('')
   const [newPin, setNewPin] = useState('')
   const [confirmPin, setConfirmPin] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [showPinModal, setShowPinModal] = useState(false)
   const [showResetAlert, setShowResetAlert] = useState(false)
+  const [syncUrlInput, setSyncUrlInput] = useState('')
 
   const filterPin = (value: string) => value.replace(/[^0-9]/g, '').slice(0, 4)
+
+  useEffect(() => {
+    loadUrl()
+  }, [loadUrl])
+
+  useEffect(() => {
+    setSyncUrlInput(appsScriptUrl)
+  }, [appsScriptUrl])
 
   const openPinModal = () => {
     setOldPin('')
@@ -59,6 +77,15 @@ const Settings = () => {
     navigate('/')
   }
 
+  const handleSaveUrl = async () => {
+    await saveUrl(syncUrlInput.trim())
+  }
+
+  const handleSync = async () => {
+    await saveUrl(syncUrlInput.trim())
+    await sync()
+  }
+
   const handleResetData = async () => {
     await Promise.all([
       db.platos.clear(),
@@ -68,10 +95,11 @@ const Settings = () => {
       db.compras.clear(),
       db.config.clear(),
       db.unidades.clear(),
+      db.deletions.clear(),
     ])
     await Promise.all([
-      db.unidades.bulkAdd(unidadesSeed),
-      db.ingredientes.bulkAdd(ingredientesSeed),
+      db.unidades.bulkAdd(withSync(unidadesSeed)),
+      db.ingredientes.bulkAdd(withSync(ingredientesSeed)),
     ])
     setShowResetAlert(false)
     logout()
@@ -91,6 +119,52 @@ const Settings = () => {
       </div>
 
       <div className="space-y-3">
+        <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-card">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="bg-primary/10 p-2.5 rounded-lg">
+              <Cloud size={20} className="text-primary" />
+            </div>
+            <div>
+              <p className="text-dark font-semibold">Sincronizacion</p>
+              <p className="text-gray-400 text-sm">Google Sheets</p>
+            </div>
+          </div>
+
+          <input
+            type="url"
+            placeholder="URL de Google Apps Script"
+            value={syncUrlInput}
+            onChange={(e) => setSyncUrlInput(e.target.value)}
+            className="bg-gray-100 rounded-lg px-4 py-2.5 w-full mb-2 border border-gray-300 outline-none text-dark text-sm"
+          />
+
+          <div className="flex gap-2">
+            <button
+              onClick={handleSaveUrl}
+              className="flex-1 bg-gray-200 py-2.5 rounded-lg text-gray-700 font-semibold text-sm active:scale-95 transition-all"
+            >
+              Guardar
+            </button>
+            <button
+              onClick={handleSync}
+              disabled={syncing || !syncUrlInput.trim()}
+              className="flex-1 flex items-center justify-center gap-2 bg-primary py-2.5 rounded-lg text-light font-semibold text-sm active:scale-95 transition-all disabled:opacity-50"
+            >
+              <RefreshCw size={16} className={syncing ? 'animate-spin' : ''} />
+              {syncing ? 'Sincronizando...' : 'Sincronizar'}
+            </button>
+          </div>
+
+          {lastSync && (
+            <p className="text-gray-400 text-xs mt-2">
+              Ultima sincronizacion: {new Date(lastSync).toLocaleString('es')}
+            </p>
+          )}
+          {syncError && (
+            <p className="text-danger text-xs mt-2">{syncError}</p>
+          )}
+        </div>
+
         <button
           onClick={openPinModal}
           className="w-full flex items-center gap-3 bg-white border border-gray-200 rounded-xl p-4 shadow-card hover:shadow-medium active:scale-[0.99] transition-all"

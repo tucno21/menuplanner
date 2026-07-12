@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router'
 import { useAuthStore } from './store/authStore'
 import { usePlanificacionStore } from './store/planificacionStore'
+import { useSyncStore } from './store/syncStore'
 import Login from './pages/Login'
 import MainLayout from './pages/MainLayout'
 import Home from './pages/Home'
@@ -20,10 +21,14 @@ import Toast from './components/ui/Toast'
 const ProtectedRoute = () => {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
   const initialize = usePlanificacionStore((s) => s.initialize)
+  const startAutoSync = useSyncStore((s) => s.startAutoSync)
+  const stopAutoSync = useSyncStore((s) => s.stopAutoSync)
 
   useEffect(() => {
     initialize()
-  }, [initialize])
+    startAutoSync()
+    return () => stopAutoSync()
+  }, [initialize, startAutoSync, stopAutoSync])
 
   if (!isAuthenticated) return <Navigate to="/" replace />
 

@@ -9,6 +9,9 @@ import {
   type Unidad,
 } from '../db/dexie'
 
+const nowISO = () => new Date().toISOString()
+const newSyncId = () => crypto.randomUUID()
+
 export interface PlatoPlanificacion {
   planificacionId: number
   platoId: number
@@ -101,6 +104,16 @@ const construirPlanificacion = async (): Promise<DataPlanificacion[]> => {
   return Object.values(mapa)
 }
 
+async function trackDeletion(syncId: string, table: string) {
+  await db.deletions.add({ syncId, table, deletedAt: nowISO() })
+}
+
+async function deleteTracked(table: 'platos' | 'ingredientes' | 'platoIngredientes' | 'planificaciones' | 'compras' | 'unidades', id: number) {
+  const record = await db[table].get(id) as { syncId?: string } | undefined
+  if (record?.syncId) await trackDeletion(record.syncId, table)
+  await db[table].delete(id)
+}
+
 export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
   planificacion: [],
   platos: [],
@@ -128,7 +141,15 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
     const plato = await db.platos.get(platoId)
     if (!plato) return false
 
-    const newId = await db.planificaciones.add({ platoId, fecha, estado })
+    const ts = nowISO()
+    const newId = await db.planificaciones.add({
+      syncId: newSyncId(),
+      platoId,
+      platoSyncId: plato.syncId,
+      fecha,
+      estado,
+      updatedAt: ts,
+    })
     const planificacionId = newId as number
 
     const { planificacion } = get()
@@ -174,7 +195,7 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
     if (!plan) return
 
     const nuevoEstado: EstadoPlato = plan.estado === 'pendiente' ? 'preparado' : 'pendiente'
-    await db.planificaciones.update(planificacionId, { estado: nuevoEstado })
+    await db.planificaciones.update(planificacionId, { estado: nuevoEstado, updatedAt: nowISO() })
 
     const { planificacion } = get()
     const updated = planificacion.map((p) => ({
@@ -187,7 +208,7 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
   },
 
   removePlanificacion: async (planificacionId: number) => {
-    await db.planificaciones.delete(planificacionId)
+    await deleteTracked('planificaciones', planificacionId)
 
     const { planificacion } = get()
     const updated = planificacion
@@ -217,16 +238,25 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
   },
 
   createPlato: async (data) => {
+    const ts = nowISO()
+    const platoSyncId = newSyncId()
     const platoId = await db.platos.add({
+      syncId: platoSyncId,
       nombre: data.nombre,
       descripcion: data.descripcion,
+      updatedAt: ts,
     })
 
     for (const ing of data.ingredientes) {
+      const ingrediente = await db.ingredientes.get(ing.id)
       await db.platoIngredientes.add({
+        syncId: newSyncId(),
         platoId: platoId as number,
+        platoSyncId,
         ingredienteId: ing.id,
+        ingredienteSyncId: ingrediente?.syncId ?? '',
         cantidad: ing.cantidad,
+        updatedAt: ts,
       })
     }
 
@@ -234,14 +264,27 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
   },
 
   updatePlato: async (id: number, data) => {
-    await db.platos.update(id, { nombre: data.nombre, descripcion: data.descripcion })
+    const ts = nowISO()
+    const plato = await db.platos.get(id)
+    const platoSyncId = plato?.syncId ?? newSyncId()
 
-    await db.platoIngredientes.where('platoId').equals(id).delete()
+    await db.platos.update(id, { nombre: data.nombre, descripcion: data.descripcion, updatedAt: ts })
+
+    const oldIngredientes = await db.platoIngredientes.where('platoId').equals(id).toArray()
+    for (const old of oldIngredientes) {
+      if (old.id) await deleteTracked('platoIngredientes', old.id)
+    }
+
     for (const ing of data.ingredientes) {
+      const ingrediente = await db.ingredientes.get(ing.id)
       await db.platoIngredientes.add({
+        syncId: newSyncId(),
         platoId: id,
+        platoSyncId,
         ingredienteId: ing.id,
+        ingredienteSyncId: ingrediente?.syncId ?? '',
         cantidad: ing.cantidad,
+        updatedAt: ts,
       })
     }
 
@@ -250,9 +293,15 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
   },
 
   deletePlato: async (id: number) => {
-    await db.platos.delete(id)
-    await db.platoIngredientes.where('platoId').equals(id).delete()
-    await db.planificaciones.where('platoId').equals(id).delete()
+    const platoIngredientes = await db.platoIngredientes.where('platoId').equals(id).toArray()
+    for (const pi of platoIngredientes) {
+      if (pi.id) await deleteTracked('platoIngredientes', pi.id)
+    }
+    const planificaciones = await db.planificaciones.where('platoId').equals(id).toArray()
+    for (const plan of planificaciones) {
+      if (plan.id) await deleteTracked('planificaciones', plan.id)
+    }
+    await deleteTracked('platos', id)
 
     await get().initialize()
   },
@@ -289,18 +338,26 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
   },
 
   createIngrediente: async (data) => {
-    await db.ingredientes.add({ nombre: data.nombre, unidad: data.unidad })
+    await db.ingredientes.add({
+      syncId: newSyncId(),
+      nombre: data.nombre,
+      unidad: data.unidad,
+      updatedAt: nowISO(),
+    })
     await get().loadIngredientes()
   },
 
   updateIngrediente: async (id, data) => {
-    await db.ingredientes.update(id, { nombre: data.nombre, unidad: data.unidad })
+    await db.ingredientes.update(id, { nombre: data.nombre, unidad: data.unidad, updatedAt: nowISO() })
     await get().loadIngredientes()
   },
 
   deleteIngrediente: async (id) => {
-    await db.ingredientes.delete(id)
-    await db.platoIngredientes.where('ingredienteId').equals(id).delete()
+    const platoIngredientes = await db.platoIngredientes.where('ingredienteId').equals(id).toArray()
+    for (const pi of platoIngredientes) {
+      if (pi.id) await deleteTracked('platoIngredientes', pi.id)
+    }
+    await deleteTracked('ingredientes', id)
     await get().loadIngredientes()
   },
 
@@ -310,17 +367,21 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
   },
 
   createUnidad: async (data) => {
-    await db.unidades.add({ nombre: data.nombre })
+    await db.unidades.add({
+      syncId: newSyncId(),
+      nombre: data.nombre,
+      updatedAt: nowISO(),
+    })
     await get().loadUnidades()
   },
 
   updateUnidad: async (id, data) => {
-    await db.unidades.update(id, { nombre: data.nombre })
+    await db.unidades.update(id, { nombre: data.nombre, updatedAt: nowISO() })
     await get().loadUnidades()
   },
 
   deleteUnidad: async (id) => {
-    await db.unidades.delete(id)
+    await deleteTracked('unidades', id)
     await get().loadUnidades()
   },
 
@@ -380,14 +441,18 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
 
     if (existing && existing.id) {
       const nuevoEstado = existing.estado === 'comprado' ? 'pendiente' : 'comprado'
-      await db.compras.update(existing.id, { estado: nuevoEstado })
+      await db.compras.update(existing.id, { estado: nuevoEstado, updatedAt: nowISO() })
     } else {
+      const ingrediente = await db.ingredientes.get(ingredienteId)
       await db.compras.add({
+        syncId: newSyncId(),
         ingredienteId,
+        ingredienteSyncId: ingrediente?.syncId ?? '',
         cantidad,
         estado: 'comprado',
         numeroSemana,
         anio,
+        updatedAt: nowISO(),
       })
     }
 
