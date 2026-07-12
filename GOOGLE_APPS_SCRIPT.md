@@ -1,157 +1,65 @@
 # Google Apps Script — MenuPlanner Sync
 
-This document contains the Google Apps Script Web App code for bidirectional sync between MenuPlanner devices via Google Sheets.
-
 ## Setup
 
-1. Go to [script.google.com](https://script.google.com) and create a **New Project**
-2. Delete the default code and paste the code below
-3. Click **Deploy → New deployment**
-4. Select type **Web app**
-5. Set **Execute as**: *Me*
-6. Set **Who has access**: *Anyone*
-7. Click **Deploy** and authorize the permissions
-8. Copy the **Web app URL** (ends with `/exec`)
-9. Open MenuPlanner → Settings → paste the URL in the Sync section → **Guardar**
-10. Click **Sincronizar** to test
+1. **Crea un Google Sheet nuevo** (en blanco) desde [sheets.google.com](https://sheets.google.com)
+2. Dentro del sheet, ve a **Extensiones → Apps Script**
+3. Borra el codigo por defecto y pega el codigo de abajo
+4. Haz clic en **Deploy → New deployment**
+5. Selecciona tipo **Web app**
+6. **Execute as**: *Me*
+7. **Who has access**: *Anyone*
+8. Haz clic en **Deploy** y autoriza los permisos
+9. Copia la **URL del Web app** (termina en `/exec`)
+10. En MenuPlanner → Settings → pega la URL → **Guardar** → **Sincronizar**
 
-The script auto-creates a Google Spreadsheet called `MenuPlannerSync` in your Google Drive on first run.
+> El script usa el Google Sheet donde lo creaste (container-bound). Las hojas se crean automaticamente en el primer sync.
 
-## Apps Script Code
+## Codigo
 
 ```javascript
-/**
- * MenuPlanner Sync — Google Apps Script Web App
- * Bidirectional sync via Google Sheets
- */
-
-const TABLE_FIELDS = {
+var TABLE_FIELDS = {
   platos:            ['syncId', 'nombre', 'descripcion', 'updatedAt'],
   ingredientes:      ['syncId', 'nombre', 'unidad', 'updatedAt'],
   platoIngredientes: ['syncId', 'platoSyncId', 'platoId', 'ingredienteSyncId', 'ingredienteId', 'cantidad', 'updatedAt'],
   planificaciones:   ['syncId', 'platoSyncId', 'platoId', 'fecha', 'estado', 'updatedAt'],
   compras:           ['syncId', 'ingredienteSyncId', 'ingredienteId', 'cantidad', 'estado', 'numeroSemana', 'anio', 'updatedAt'],
-  unidades:          ['syncId', 'nombre', 'updatedAt'],
-  deletions:         ['syncId', 'table', 'deletedAt'],
+  unidades:          ['syncId', 'nombre', 'updatedAt']
 }
 
-// ─── Spreadsheet helpers ───────────────────────────────────────────
-
-function getSpreadsheet() {
-  const props = PropertiesService.getScriptProperties()
-  let ssId = props.getProperty('SPREADSHEET_ID')
-  if (!ssId) {
-    const ss = SpreadsheetApp.create('MenuPlannerSync')
-    ssId = ss.getId()
-    props.setProperty('SPREADSHEET_ID', ssId)
-  }
-  return SpreadsheetApp.openById(ssId)
-}
+var DEL_FIELDS = ['syncId', 'table', 'deletedAt']
 
 function ensureSheets() {
-  const ss = getSpreadsheet()
-  for (const table of Object.keys(TABLE_FIELDS)) {
-    let sheet = ss.getSheetByName(table)
-    if (!sheet) {
-      sheet = ss.insertSheet(table)
-    }
-    if (sheet.getLastRow() === 0) {
-      sheet.appendRow(TABLE_FIELDS[table])
-    }
+  var ss = SpreadsheetApp.getActiveSpreadsheet()
+  for (var table in TABLE_FIELDS) {
+    var sheet = ss.getSheetByName(table)
+    if (!sheet) sheet = ss.insertSheet(table)
+    if (sheet.getLastRow() === 0) sheet.appendRow(TABLE_FIELDS[table])
   }
+  var del = ss.getSheetByName('deletions')
+  if (!del) del = ss.insertSheet('deletions')
+  if (del.getLastRow() === 0) del.appendRow(DEL_FIELDS)
 }
 
-function readSheet(tableName) {
-  const ss = getSpreadsheet()
-  const sheet = ss.getSheetByName(tableName)
+function readSheet(name) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet()
+  var sheet = ss.getSheetByName(name)
+  var fields = name === 'deletions' ? DEL_FIELDS : TABLE_FIELDS[name]
   if (!sheet || sheet.getLastRow() < 2) return []
-  const fields = TABLE_FIELDS[tableName]
-  const lastColumn = Math.max(fields.length, sheet.getLastColumn())
-  const values = sheet.getRange(2, 1, sheet.getLastRow() - 1, lastColumn).getValues()
-  return values.map(function (row) {
-    const obj = {}
-    fields.forEach(function (field, i) {
-      obj[field] = row[i]
-    })
-    return obj
+  var cols = Math.max(fields.length, sheet.getLastColumn())
+  var rows = sheet.getRange(2, 1, sheet.getLastRow() - 1, cols).getValues()
+  return rows.map(function (r) {
+    var o = {}
+    fields.forEach(function (f, i) { o[f] = r[i] })
+    return o
   })
 }
-
-function appendRow(tableName, record) {
-  const sheet = getSpreadsheet().getSheetByName(tableName)
-  const fields = TABLE_FIELDS[tableName]
-  const row = fields.map(function (f) {
-    return record[f] !== undefined ? record[f] : ''
-  })
-  sheet.appendRow(row)
-}
-
-function findRowIndex(tableName, syncId) {
-  const sheet = getSpreadsheet().getSheetByName(tableName)
-  if (!sheet || sheet.getLastRow() < 2) return -1
-  const fields = TABLE_FIELDS[tableName]
-  const data = sheet.getRange(2, 1, sheet.getLastRow() - 1, fields.length).getValues()
-  const syncIdIndex = fields.indexOf('syncId')
-  for (let i = 0; i < data.length; i++) {
-    if (data[i][syncIdIndex] === syncId) return i + 2 // +2 because rows start at 2
-  }
-  return -1
-}
-
-function deleteBySyncId(tableName, syncId, deletedAt) {
-  const sheet = getSpreadsheet().getSheetByName(tableName)
-  if (!sheet || sheet.getLastRow() < 2) return
-  const fields = TABLE_FIELDS[tableName]
-  const data = sheet.getRange(2, 1, sheet.getLastRow() - 1, fields.length).getValues()
-  const syncIdIndex = fields.indexOf('syncId')
-  const updatedAtIndex = fields.indexOf('updatedAt')
-  const delTime = new Date(deletedAt).getTime()
-
-  for (let i = data.length - 1; i >= 0; i--) {
-    if (data[i][syncIdIndex] === syncId) {
-      if (updatedAtIndex >= 0) {
-        const recTime = new Date(data[i][updatedAtIndex]).getTime()
-        if (recTime > delTime) continue // record was modified after deletion — keep it
-      }
-      sheet.deleteRow(i + 2)
-    }
-  }
-}
-
-function mergeRecord(tableName, record) {
-  const fields = TABLE_FIELDS[tableName]
-  const updatedAtIndex = fields.indexOf('updatedAt')
-  const rowIndex = findRowIndex(tableName, record.syncId)
-
-  if (rowIndex === -1) {
-    appendRow(tableName, record)
-    return
-  }
-
-  // Compare timestamps
-  const sheet = getSpreadsheet().getSheetByName(tableName)
-  const existing = sheet.getRange(rowIndex, 1, 1, fields.length).getValues()[0]
-  const existingUpdatedAt = new Date(existing[updatedAtIndex]).getTime()
-  const newUpdatedAt = new Date(record.updatedAt).getTime()
-
-  if (newUpdatedAt > existingUpdatedAt) {
-    const row = fields.map(function (f) {
-      return record[f] !== undefined ? record[f] : ''
-    })
-    sheet.getRange(rowIndex, 1, 1, fields.length).setValues([row])
-  }
-}
-
-// ─── Web App endpoints ─────────────────────────────────────────────
 
 function doGet() {
   ensureSheets()
-  const data = {}
-  for (const table of Object.keys(TABLE_FIELDS)) {
-    if (table === 'deletions') continue
-    data[table] = readSheet(table)
-  }
-  const deletions = readSheet('deletions')
+  var data = {}
+  for (var table in TABLE_FIELDS) data[table] = readSheet(table)
+  var deletions = readSheet('deletions')
   return ContentService
     .createTextOutput(JSON.stringify({ data: data, deletions: deletions }))
     .setMimeType(ContentService.MimeType.JSON)
@@ -159,62 +67,151 @@ function doGet() {
 
 function doPost(e) {
   ensureSheets()
+  var ss = SpreadsheetApp.getActiveSpreadsheet()
 
-  const body = JSON.parse(e.postData.contents)
+  var raw = (e && e.postData && e.postData.contents) || '{}'
+  var body = typeof raw === 'string' ? JSON.parse(raw) : raw
 
-  // Apply client deletions
+  // ── Merge deletions (batch) ──────────────────────────
+  var delSheet = ss.getSheetByName('deletions')
+  var delRows = []
+  if (delSheet.getLastRow() >= 2) {
+    delRows = delSheet.getRange(2, 1, delSheet.getLastRow() - 1, 3).getValues()
+  }
+  var delMap = {}
+  delRows.forEach(function (r) { if (r[0]) delMap[r[0]] = r })
   if (body.deletions) {
-    for (const del of body.deletions) {
-      // Add to deletions sheet (dedup by syncId)
-      if (findRowIndex('deletions', del.syncId) === -1) {
-        appendRow('deletions', del)
+    body.deletions.forEach(function (d) {
+      if (d.syncId && !delMap[d.syncId]) {
+        delMap[d.syncId] = [d.syncId, d.table, d.deletedAt]
       }
-      // Apply deletion to target table (with timestamp check)
-      if (TABLE_FIELDS[del.table]) {
-        deleteBySyncId(del.table, del.syncId, del.deletedAt)
+    })
+  }
+  var allDelRows = Object.keys(delMap).map(function (k) { return delMap[k] })
+
+  if (allDelRows.length > 0) {
+    delSheet.getRange(2, 1, allDelRows.length, 3).setValues(allDelRows)
+  } else {
+    delSheet.getRange(2, 1, Math.max(delSheet.getLastRow() - 1, 1), 3).clearContent()
+  }
+
+  // Build per-table deletion lookup: { tableName: { syncId: deletedAtMs } }
+  var delByTable = {}
+  allDelRows.forEach(function (r) {
+    var t = r[1]
+    if (!delByTable[t]) delByTable[t] = {}
+    delByTable[t][r[0]] = new Date(r[2]).getTime()
+  })
+
+  // ── Merge data tables (batch read, in-memory merge, batch write) ──
+  for (var tableName in TABLE_FIELDS) {
+    var fields = TABLE_FIELDS[tableName]
+    var sheet = ss.getSheetByName(tableName)
+    var syncIdIdx = 0
+    var updatedIdx = fields.indexOf('updatedAt')
+
+    // Read existing rows into memory
+    var existing = []
+    var lastRow = sheet.getLastRow()
+    if (lastRow >= 2) {
+      existing = sheet.getRange(2, 1, lastRow - 1, fields.length).getValues()
+    }
+
+    var tableDels = delByTable[tableName] || {}
+
+    // Remove rows where a deletion exists and is newer than the record
+    var survivors = existing.filter(function (row) {
+      var sid = row[syncIdIdx]
+      if (sid && tableDels[sid]) {
+        var recTime = updatedIdx >= 0 ? new Date(row[updatedIdx]).getTime() : 0
+        return recTime > tableDels[sid]
       }
+      return true
+    })
+
+    // Index survivors by syncId for fast lookup
+    var survMap = {}
+    survivors.forEach(function (row, i) {
+      var sid = row[syncIdIdx]
+      if (sid) survMap[sid] = i
+    })
+
+    // Merge incoming records
+    var incoming = (body.data && body.data[tableName]) || []
+    incoming.forEach(function (rec) {
+      var sid = rec.syncId
+      if (!sid) return
+
+      // Skip if record was deleted after this update
+      if (tableDels[sid]) {
+        var recTime = new Date(rec.updatedAt).getTime()
+        if (recTime <= tableDels[sid]) return
+      }
+
+      var newRow = fields.map(function (f) {
+        return rec[f] !== undefined ? rec[f] : ''
+      })
+
+      if (survMap.hasOwnProperty(sid)) {
+        var idx = survMap[sid]
+        var existMs = updatedIdx >= 0 ? new Date(survivors[idx][updatedIdx]).getTime() : 0
+        var newMs = new Date(rec.updatedAt).getTime()
+        if (newMs > existMs) {
+          survivors[idx] = newRow
+        }
+      } else {
+        survMap[sid] = survivors.length
+        survivors.push(newRow)
+      }
+    })
+
+    // Batch write: clear old data, write survivors
+    var currentLastRow = sheet.getLastRow()
+    if (survivors.length > 0) {
+      sheet.getRange(2, 1, survivors.length, fields.length).setValues(survivors)
+      // Clear leftover rows beyond survivors
+      if (currentLastRow > survivors.length + 1) {
+        sheet.getRange(survivors.length + 2, 1, currentLastRow - survivors.length - 1, fields.length).clearContent()
+      }
+    } else if (currentLastRow >= 2) {
+      sheet.getRange(2, 1, currentLastRow - 1, fields.length).clearContent()
     }
   }
 
-  // Merge client data
-  if (body.data) {
-    for (const tableName in body.data) {
-      if (!TABLE_FIELDS[tableName]) continue
-      const records = body.data[tableName]
-      for (let i = 0; i < records.length; i++) {
-        mergeRecord(tableName, records[i])
-      }
-    }
-  }
-
-  // Return full merged state
-  const data = {}
-  for (const table of Object.keys(TABLE_FIELDS)) {
-    if (table === 'deletions') continue
-    data[table] = readSheet(table)
-  }
-  const deletions = readSheet('deletions')
-
+  // ── Return full merged state ─────────────────────────
+  var data = {}
+  for (var t in TABLE_FIELDS) data[t] = readSheet(t)
+  var deletions = readSheet('deletions')
   return ContentService
     .createTextOutput(JSON.stringify({ data: data, deletions: deletions }))
     .setMimeType(ContentService.MimeType.JSON)
 }
 ```
 
-## How Sync Works
+## Como funciona la sincronizacion
 
-1. **Client sends** all local data (6 tables) + all local deletions via POST
-2. **Server merges**:
-   - Applies deletions (skips if record was modified after deletion timestamp)
-   - Merges records by `syncId` (latest `updatedAt` wins)
-3. **Server returns** the full merged state
-4. **Client merges** the response using the same logic
-5. Both sides converge to the same state
+### Flujo del cliente (cada 2 min, al recuperar conexion, o manual)
 
-## Notes
+1. **GET (pull)**: descarga todos los datos del servidor
+2. **Merge**: compara con local por `syncId` — aniade nuevos, actualiza si el remoto es mas nuevo (`updatedAt`), elimina si hay un deletion mas reciente
+3. **POST (push)**: envia todos los datos locales al servidor (fire-and-forget)
 
-- Sync runs automatically every 2 minutes when the app is open
-- Sync also triggers when the device comes back online
-- Manual sync available in Settings
-- The Google Spreadsheet `MenuPlannerSync` can be viewed/edited directly in Google Drive
-- Do NOT manually edit the `syncId` or `updatedAt` columns in the spreadsheet — this can break sync
+### Flujo del servidor (doPost)
+
+1. Lee cada hoja completa en memoria (**1 llamada API por tabla**)
+2. Aplica eliminaciones (filtra registros donde el deletion es mas reciente)
+3. Mezcla los registros entrantes (aniade nuevos, actualiza si es mas nuevo)
+4. Escribe toda la hoja de vuelta (**1 llamada API por tabla**)
+5. Retorna el estado completo mergeado
+
+### Resolucion de conflictos
+
+- **Last write wins**: si el mismo registro fue modificado en dos dispositivos, gana el que tenga el `updatedAt` mas reciente
+- **Deletions**: si un registro fue eliminado (tombstone), se elimina del servidor y de todos los dispositivos, a menos que haya sido modificado despues de la eliminacion
+
+### Notas
+
+- El sync es automatico y transparente, no requiere confirmacion del usuario
+- Si hay un fallo de red, el proximo ciclo reintenta automaticamente
+- Logs disponibles en la consola del navegador (`[Sync]`)
+- NO editar manualmente las columnas `syncId` o `updatedAt` en el spreadsheet

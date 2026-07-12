@@ -1,11 +1,159 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
-import { LogOut, Trash2, Lock, RefreshCw, Cloud, RotateCcw } from 'lucide-react'
+import { LogOut, Trash2, Lock, RefreshCw, Cloud, RotateCcw, HelpCircle, Check, Copy } from 'lucide-react'
 import { useAuthStore } from '../store/authStore'
 import { useSyncStore } from '../store/syncStore'
 import { db, ingredientesSeed, unidadesSeed, withSync } from '../db/dexie'
 import Modal from '../components/ui/Modal'
 import AlertCustom from '../components/ui/AlertCustom'
+
+const APPS_SCRIPT_CODE = `var TABLE_FIELDS = {
+  platos:            ['syncId', 'nombre', 'descripcion', 'updatedAt'],
+  ingredientes:      ['syncId', 'nombre', 'unidad', 'updatedAt'],
+  platoIngredientes: ['syncId', 'platoSyncId', 'platoId', 'ingredienteSyncId', 'ingredienteId', 'cantidad', 'updatedAt'],
+  planificaciones:   ['syncId', 'platoSyncId', 'platoId', 'fecha', 'estado', 'updatedAt'],
+  compras:           ['syncId', 'ingredienteSyncId', 'ingredienteId', 'cantidad', 'estado', 'numeroSemana', 'anio', 'updatedAt'],
+  unidades:          ['syncId', 'nombre', 'updatedAt']
+}
+
+var DEL_FIELDS = ['syncId', 'table', 'deletedAt']
+
+function ensureSheets() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet()
+  for (var table in TABLE_FIELDS) {
+    var sheet = ss.getSheetByName(table)
+    if (!sheet) sheet = ss.insertSheet(table)
+    if (sheet.getLastRow() === 0) sheet.appendRow(TABLE_FIELDS[table])
+  }
+  var del = ss.getSheetByName('deletions')
+  if (!del) del = ss.insertSheet('deletions')
+  if (del.getLastRow() === 0) del.appendRow(DEL_FIELDS)
+}
+
+function readSheet(name) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet()
+  var sheet = ss.getSheetByName(name)
+  var fields = name === 'deletions' ? DEL_FIELDS : TABLE_FIELDS[name]
+  if (!sheet || sheet.getLastRow() < 2) return []
+  var cols = Math.max(fields.length, sheet.getLastColumn())
+  var rows = sheet.getRange(2, 1, sheet.getLastRow() - 1, cols).getValues()
+  return rows.map(function (r) {
+    var o = {}
+    fields.forEach(function (f, i) { o[f] = r[i] })
+    return o
+  })
+}
+
+function doGet() {
+  ensureSheets()
+  var data = {}
+  for (var table in TABLE_FIELDS) data[table] = readSheet(table)
+  var deletions = readSheet('deletions')
+  return ContentService
+    .createTextOutput(JSON.stringify({ data: data, deletions: deletions }))
+    .setMimeType(ContentService.MimeType.JSON)
+}
+
+function doPost(e) {
+  ensureSheets()
+  var ss = SpreadsheetApp.getActiveSpreadsheet()
+  var raw = (e && e.postData && e.postData.contents) || '{}'
+  var body = typeof raw === 'string' ? JSON.parse(raw) : raw
+
+  var delSheet = ss.getSheetByName('deletions')
+  var delRows = []
+  if (delSheet.getLastRow() >= 2) {
+    delRows = delSheet.getRange(2, 1, delSheet.getLastRow() - 1, 3).getValues()
+  }
+  var delMap = {}
+  delRows.forEach(function (r) { if (r[0]) delMap[r[0]] = r })
+  if (body.deletions) {
+    body.deletions.forEach(function (d) {
+      if (d.syncId && !delMap[d.syncId]) {
+        delMap[d.syncId] = [d.syncId, d.table, d.deletedAt]
+      }
+    })
+  }
+  var allDelRows = Object.keys(delMap).map(function (k) { return delMap[k] })
+  if (allDelRows.length > 0) {
+    delSheet.getRange(2, 1, allDelRows.length, 3).setValues(allDelRows)
+  }
+
+  var delByTable = {}
+  allDelRows.forEach(function (r) {
+    var t = r[1]
+    if (!delByTable[t]) delByTable[t] = {}
+    delByTable[t][r[0]] = new Date(r[2]).getTime()
+  })
+
+  for (var tableName in TABLE_FIELDS) {
+    var fields = TABLE_FIELDS[tableName]
+    var sheet = ss.getSheetByName(tableName)
+    var updatedIdx = fields.indexOf('updatedAt')
+
+    var existing = []
+    var lastRow = sheet.getLastRow()
+    if (lastRow >= 2) {
+      existing = sheet.getRange(2, 1, lastRow - 1, fields.length).getValues()
+    }
+
+    var tableDels = delByTable[tableName] || {}
+
+    var survivors = existing.filter(function (row) {
+      var sid = row[0]
+      if (sid && tableDels[sid]) {
+        var recTime = updatedIdx >= 0 ? new Date(row[updatedIdx]).getTime() : 0
+        return recTime > tableDels[sid]
+      }
+      return true
+    })
+
+    var survMap = {}
+    survivors.forEach(function (row, i) {
+      var sid = row[0]
+      if (sid) survMap[sid] = i
+    })
+
+    var incoming = (body.data && body.data[tableName]) || []
+    incoming.forEach(function (rec) {
+      var sid = rec.syncId
+      if (!sid) return
+      if (tableDels[sid]) {
+        var recTime = new Date(rec.updatedAt).getTime()
+        if (recTime <= tableDels[sid]) return
+      }
+      var newRow = fields.map(function (f) {
+        return rec[f] !== undefined ? rec[f] : ''
+      })
+      if (survMap.hasOwnProperty(sid)) {
+        var idx = survMap[sid]
+        var existMs = updatedIdx >= 0 ? new Date(survivors[idx][updatedIdx]).getTime() : 0
+        var newMs = new Date(rec.updatedAt).getTime()
+        if (newMs > existMs) survivors[idx] = newRow
+      } else {
+        survMap[sid] = survivors.length
+        survivors.push(newRow)
+      }
+    })
+
+    var currentLastRow = sheet.getLastRow()
+    if (survivors.length > 0) {
+      sheet.getRange(2, 1, survivors.length, fields.length).setValues(survivors)
+      if (currentLastRow > survivors.length + 1) {
+        sheet.getRange(survivors.length + 2, 1, currentLastRow - survivors.length - 1, fields.length).clearContent()
+      }
+    } else if (currentLastRow >= 2) {
+      sheet.getRange(2, 1, currentLastRow - 1, fields.length).clearContent()
+    }
+  }
+
+  var data = {}
+  for (var t in TABLE_FIELDS) data[t] = readSheet(t)
+  var deletions = readSheet('deletions')
+  return ContentService
+    .createTextOutput(JSON.stringify({ data: data, deletions: deletions }))
+    .setMimeType(ContentService.MimeType.JSON)
+}`
 
 const Settings = () => {
   const navigate = useNavigate()
@@ -27,6 +175,8 @@ const Settings = () => {
   const [showPinModal, setShowPinModal] = useState(false)
   const [showResetAlert, setShowResetAlert] = useState(false)
   const [showUpdateAlert, setShowUpdateAlert] = useState(false)
+  const [showInstructionsModal, setShowInstructionsModal] = useState(false)
+  const [copiedCode, setCopiedCode] = useState(false)
   const [syncUrlInput, setSyncUrlInput] = useState('')
 
   const filterPin = (value: string) => value.replace(/[^0-9]/g, '').slice(0, 4)
@@ -80,6 +230,12 @@ const Settings = () => {
 
   const handleSaveUrl = async () => {
     await saveUrl(syncUrlInput.trim())
+  }
+
+  const handleCopyCode = async () => {
+    await navigator.clipboard.writeText(APPS_SCRIPT_CODE)
+    setCopiedCode(true)
+    setTimeout(() => setCopiedCode(false), 2000)
   }
 
   const handleSync = async () => {
@@ -145,6 +301,12 @@ const Settings = () => {
               <p className="text-dark font-semibold">Sincronizacion</p>
               <p className="text-gray-400 text-sm">Google Sheets</p>
             </div>
+            <button
+              onClick={() => setShowInstructionsModal(true)}
+              className="ml-auto p-2 text-gray-400 hover:text-primary transition-colors"
+            >
+              <HelpCircle size={20} />
+            </button>
           </div>
 
           <input
@@ -291,6 +453,50 @@ const Settings = () => {
         onConfirm={handleForceUpdate}
         onClose={() => setShowUpdateAlert(false)}
       />
+
+      <Modal isOpen={showInstructionsModal} onClose={() => setShowInstructionsModal(false)}>
+        <div className="bg-white rounded-2xl p-5 w-[95vw] max-w-lg max-h-[85vh] flex flex-col">
+          <h2 className="text-lg font-bold text-primary mb-3">Configurar sincronizacion</h2>
+
+          <div className="overflow-y-auto flex-1 space-y-3 mb-4">
+            <ol className="text-sm text-gray-600 space-y-1.5 list-decimal list-inside">
+              <li>Crea un <strong>Google Sheet nuevo</strong> en <a href="https://sheets.google.com" target="_blank" rel="noopener noreferrer" className="text-primary underline">sheets.google.com</a></li>
+              <li>Dentro del sheet, ve a <strong>Extensiones → Apps Script</strong></li>
+              <li>Borra el codigo por defecto y pega el codigo de abajo</li>
+              <li>Haz clic en <strong>Deploy</strong> → <strong>New deployment</strong></li>
+              <li>Selecciona el tipo <strong>Web app</strong></li>
+              <li>En <strong>Execute as</strong>: selecciona <em>Me</em></li>
+              <li>En <strong>Who has access</strong>: selecciona <em>Anyone</em></li>
+              <li>Haz clic en <strong>Deploy</strong> y autoriza los permisos</li>
+              <li>Copia la <strong>URL del Web app</strong> (termina en <code className="bg-gray-100 px-1 rounded text-xs">/exec</code>)</li>
+              <li>Pega la URL en el campo de arriba y haz clic en <strong>Guardar</strong></li>
+            </ol>
+
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <p className="text-xs font-semibold text-gray-500">Codigo de Apps Script</p>
+                <button
+                  onClick={handleCopyCode}
+                  className="flex items-center gap-1 text-xs font-medium text-primary active:scale-95 transition-all"
+                >
+                  {copiedCode ? <Check size={14} /> : <Copy size={14} />}
+                  {copiedCode ? 'Copiado' : 'Copiar'}
+                </button>
+              </div>
+              <pre className="bg-gray-900 text-gray-100 text-xs rounded-lg p-3 overflow-auto max-h-[35vh] whitespace-pre">
+{APPS_SCRIPT_CODE}
+              </pre>
+            </div>
+          </div>
+
+          <button
+            onClick={() => setShowInstructionsModal(false)}
+            className="w-full bg-primary py-2.5 rounded-lg text-light font-semibold text-sm active:scale-95 transition-all"
+          >
+            Cerrar
+          </button>
+        </div>
+      </Modal>
     </div>
   )
 }
