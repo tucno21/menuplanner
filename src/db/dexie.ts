@@ -49,7 +49,7 @@ export interface Unidad {
   nombre: string
 }
 
-const unidadesSeed: { nombre: string }[] = [
+export const unidadesSeed: { nombre: string }[] = [
   { nombre: 'gr' },
   { nombre: 'kg' },
   { nombre: 'ml' },
@@ -123,7 +123,7 @@ export class MenuPlannerDB extends Dexie {
 
 export const db = new MenuPlannerDB()
 
-const ingredientesSeed: { nombre: string; unidad: string }[] = [
+export const ingredientesSeed: { nombre: string; unidad: string }[] = [
   { nombre: 'Arroz', unidad: 'gr' },
   { nombre: 'Fideos', unidad: 'gr' },
   { nombre: 'Pan', unidad: 'unidad' },

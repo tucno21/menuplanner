@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
-import { LogOut } from 'lucide-react'
+import { LogOut, Trash2 } from 'lucide-react'
 import { useAuthStore } from '../store/authStore'
+import { db, ingredientesSeed, unidadesSeed } from '../db/dexie'
+import AlertCustom from '../components/ui/AlertCustom'
 
 const Settings = () => {
   const navigate = useNavigate()
@@ -12,6 +14,7 @@ const Settings = () => {
   const [newPin, setNewPin] = useState('')
   const [confirmPin, setConfirmPin] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const [showResetAlert, setShowResetAlert] = useState(false)
 
   const filterPin = (value: string) => value.replace(/[^0-9]/g, '').slice(0, 4)
 
@@ -41,6 +44,25 @@ const Settings = () => {
   }
 
   const handleLogout = () => {
+    logout()
+    navigate('/')
+  }
+
+  const handleResetData = async () => {
+    await Promise.all([
+      db.platos.clear(),
+      db.ingredientes.clear(),
+      db.platoIngredientes.clear(),
+      db.planificaciones.clear(),
+      db.compras.clear(),
+      db.config.clear(),
+      db.unidades.clear(),
+    ])
+    await Promise.all([
+      db.unidades.bulkAdd(unidadesSeed),
+      db.ingredientes.bulkAdd(ingredientesSeed),
+    ])
+    setShowResetAlert(false)
     logout()
     navigate('/')
   }
@@ -95,6 +117,14 @@ const Settings = () => {
 
           {error && <p className="text-danger text-sm text-center mt-2">{error}</p>}
         </div>
+
+        <button
+          onClick={() => setShowResetAlert(true)}
+          className="w-full flex items-center justify-center gap-2 bg-danger/10 border border-danger/30 py-3 rounded-xl text-danger font-semibold"
+        >
+          <Trash2 size={20} />
+          Restablecer datos de fabrica
+        </button>
       </div>
 
       <button
@@ -103,6 +133,13 @@ const Settings = () => {
       >
         <LogOut size={24} className="text-white" />
       </button>
+
+      <AlertCustom
+        isAlert={showResetAlert}
+        title="¿Eliminar todos los datos? Esta accion no se puede deshacer."
+        onConfirm={handleResetData}
+        onClose={() => setShowResetAlert(false)}
+      />
     </div>
   )
 }
