@@ -68,7 +68,7 @@ const CrearPlato = () => {
 
   return (
     <div className="flex flex-col flex-1 bg-backdrop min-h-full">
-      <div className="flex-1 px-4 py-6">
+      <div className="flex-1 px-4 py-2">
         <h1 className="text-center text-2xl font-bold text-primary mb-2">Agregar Un plato</h1>
 
         <input
