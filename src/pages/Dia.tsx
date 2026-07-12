@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router'
 import { Circle, CheckCircle2, UtensilsCrossed, Eye, Trash2, ChevronRight } from 'lucide-react'
 import BackButton from '../components/ui/BackButton'
+import SwipeReveal from '../components/ui/SwipeReveal'
 import { usePlanificacionStore } from '../store/planificacionStore'
 import type { PlatoWithIngredientes } from '../store/planificacionStore'
 import Modal from '../components/ui/Modal'
@@ -68,30 +69,19 @@ const Dia = () => {
                 ? 'linear-gradient(to right, #fd9e02, #ffb703)'
                 : 'linear-gradient(to right, #4ade80, #22c55e)'
             return (
-              <div
-                key={plato.planificacionId}
-                className="group relative mb-4 rounded-lg overflow-hidden shadow-card"
+              <SwipeReveal
+                className="mb-4 shadow-card"
+                actions={[
+                  { icon: <Eye size={20} color="white" />, onClick: () => verDetalle(plato.platoId), className: 'bg-info' },
+                  { icon: <Trash2 size={20} color="white" />, onClick: () => abrirAlert(plato.planificacionId), className: 'bg-danger' },
+                ]}
               >
-                <div className="absolute right-0 top-0 h-full flex items-center gap-2 pr-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
-                  <button
-                    onClick={() => verDetalle(plato.platoId)}
-                    className="bg-info p-2 rounded-lg"
-                  >
-                    <Eye size={20} color="white" />
-                  </button>
-                  <button
-                    onClick={() => abrirAlert(plato.planificacionId)}
-                    className="bg-danger p-2 rounded-lg"
-                  >
-                    <Trash2 size={20} color="white" />
-                  </button>
-                </div>
                 <div
+                  className="flex flex-row justify-between items-center p-4"
                   style={{ background: gradiente }}
-                  className="flex flex-row justify-between items-center p-4 rounded-lg transition-transform group-hover:translate-x-[-60px]"
                 >
                   <div className="flex flex-row items-center gap-4">
-                    <button onClick={() => toggleEstado(plato.planificacionId)}>
+                    <button onClick={(e) => { e.stopPropagation(); toggleEstado(plato.planificacionId) }}>
                       {plato.estado === 'pendiente' ? (
                         <Circle size={24} color="white" />
                       ) : (
@@ -102,7 +92,7 @@ const Dia = () => {
                   </div>
                   <UtensilsCrossed size={24} className="text-white" />
                 </div>
-              </div>
+              </SwipeReveal>
             )
           })}
         </div>
