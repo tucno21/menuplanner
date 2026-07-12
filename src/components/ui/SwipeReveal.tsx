@@ -11,16 +11,25 @@ interface SwipeRevealProps {
   actions: SwipeAction[]
   threshold?: number
   className?: string
+  isOpen?: boolean
+  onOpenChange?: (open: boolean) => void
 }
 
 const ITEM_WIDTH = 64
 
-const SwipeReveal = ({ children, actions, threshold = 45, className = '' }: SwipeRevealProps) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const isOpenRef = useRef(false)
+const SwipeReveal = ({ children, actions, threshold = 45, className = '', isOpen: controlled, onOpenChange }: SwipeRevealProps) => {
+  const [internalOpen, setInternalOpen] = useState(false)
+  const isControlled = controlled !== undefined
+  const isOpenState = isControlled ? controlled : internalOpen
+  const isOpenRef = useRef(isOpenState)
   const trackingRef = useRef<{ startX: number } | null>(null)
   const contentRef = useRef<HTMLDivElement>(null)
   const actionsRef = useRef<HTMLDivElement>(null)
+  const prevControlled = useRef(controlled)
+  const onOpenChangeRef = useRef(onOpenChange)
+  const isControlledRef = useRef(isControlled)
+  onOpenChangeRef.current = onOpenChange
+  isControlledRef.current = isControlled
 
   const actionsWidth = actions.length * ITEM_WIDTH
 
@@ -50,17 +59,32 @@ const SwipeReveal = ({ children, actions, threshold = 45, className = '' }: Swip
 
   const open = () => {
     isOpenRef.current = true
-    setIsOpen(true)
+    if (!isControlledRef.current) setInternalOpen(true)
+    else if (onOpenChangeRef.current) onOpenChangeRef.current(true)
     setTransform(1, true)
     setTimeout(resetTransition, 200)
   }
 
   const close = () => {
     isOpenRef.current = false
-    setIsOpen(false)
+    if (!isControlledRef.current) setInternalOpen(false)
+    else if (onOpenChangeRef.current) onOpenChangeRef.current(false)
     setTransform(0, true)
     setTimeout(resetTransition, 200)
   }
+
+  useEffect(() => {
+    isOpenRef.current = isOpenState
+  }, [isOpenState])
+
+  useEffect(() => {
+    if (!isControlled) return
+    if (controlled === prevControlled.current) return
+    prevControlled.current = controlled
+    isOpenRef.current = controlled
+    setTransform(controlled ? 1 : 0, true)
+    setTimeout(resetTransition, 200)
+  }, [controlled]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const onMove = (e: PointerEvent) => {
@@ -103,7 +127,7 @@ const SwipeReveal = ({ children, actions, threshold = 45, className = '' }: Swip
       window.removeEventListener('pointerup', onUp)
       window.removeEventListener('pointercancel', onCancel)
     }
-  }, [actionsWidth, threshold])
+  }, [actionsWidth, threshold]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handlePointerDown = (e: React.PointerEvent) => {
     trackingRef.current = { startX: e.clientX }
@@ -118,9 +142,9 @@ const SwipeReveal = ({ children, actions, threshold = 45, className = '' }: Swip
         style={{
           width: `${actionsWidth}px`,
           transformOrigin: 'right center',
-          transform: `scaleX(${isOpen ? 1 : 0})`,
+          transform: `scaleX(${isOpenState ? 1 : 0})`,
           transition: 'transform 0.2s ease',
-          pointerEvents: isOpen ? 'auto' : 'none',
+          pointerEvents: isOpenState ? 'auto' : 'none',
         }}
       >
         {actions.map((action, i) => (
@@ -140,7 +164,7 @@ const SwipeReveal = ({ children, actions, threshold = 45, className = '' }: Swip
         data-swipe-content
         className="select-none"
         style={{
-          transform: `translateX(${-(isOpen ? actionsWidth : 0)}px)`,
+          transform: `translateX(${-(isOpenState ? actionsWidth : 0)}px)`,
           transition: 'transform 0.2s ease',
           userSelect: 'none',
           WebkitUserSelect: 'none',

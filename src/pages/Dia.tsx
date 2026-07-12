@@ -21,6 +21,7 @@ const Dia = () => {
   const [platoDetalle, setPlatoDetalle] = useState<PlatoWithIngredientes | null>(null)
   const [planificacionIdSeleccionada, setPlanificacionIdSeleccionada] = useState<number | null>(null)
   const [openAlert, setOpenAlert] = useState(false)
+  const [swipedOpenId, setSwipedOpenId] = useState<number | null>(null)
 
   const fechaStr = fecha ?? ''
   const diaData = planificacion.find((p) => p.fecha === fechaStr)
@@ -71,6 +72,8 @@ const Dia = () => {
             return (
               <SwipeReveal
                 className="mb-4 shadow-card"
+                isOpen={swipedOpenId === plato.planificacionId}
+                onOpenChange={(open) => setSwipedOpenId(open ? plato.planificacionId : null)}
                 actions={[
                   { icon: <Eye size={20} color="white" />, onClick: () => verDetalle(plato.platoId), className: 'bg-info' },
                   { icon: <Trash2 size={20} color="white" />, onClick: () => abrirAlert(plato.planificacionId), className: 'bg-danger' },
