@@ -63,6 +63,18 @@ const unidadesSeed: { nombre: string }[] = [
   { nombre: 'cucharadita' },
   { nombre: 'taza' },
   { nombre: 'paquete' },
+  { nombre: 'atado' },      // brócoli, espinaca, perejil, cebollita china
+  { nombre: 'pizca' },
+  { nombre: 'sobre' },       // gelatina, sazonador
+  { nombre: 'rodaja' },
+  { nombre: 'rama' },        // apio, canela en rama
+  { nombre: 'cabeza' },      // ajo (cabeza completa vs diente)
+  { nombre: 'bolsa' },
+  { nombre: 'frasco' },
+  { nombre: 'botella' },
+  { nombre: 'trozo' },
+  { nombre: 'onza' },
+  { nombre: 'libra' },
 ]
 
 export class MenuPlannerDB extends Dexie {
@@ -133,7 +145,7 @@ const ingredientesSeed: { nombre: string; unidad: string }[] = [
   { nombre: 'Tomate', unidad: 'unidad' },
   { nombre: 'Cebolla', unidad: 'unidad' },
   { nombre: 'Ajo', unidad: 'diente' },
-  { nombre: 'Zanahoria', unidad: 'unidad' },
+  { nombre: 'Zanahoria', unidad: 'gr' },
   { nombre: 'Lechuga', unidad: 'unidad' },
   { nombre: 'Espinaca', unidad: 'gr' },
   { nombre: 'Brocoli', unidad: 'gr' },
@@ -161,8 +173,27 @@ const ingredientesSeed: { nombre: string; unidad: string }[] = [
   { nombre: 'Vainilla', unidad: 'ml' },
   { nombre: 'Polvo de hornear', unidad: 'gr' },
   { nombre: 'Levadura', unidad: 'gr' },
-  { nombre: 'Choclo dulce', unidad: 'lata' },
+  { nombre: 'Choclo dulce', unidad: 'unidad' },
   { nombre: 'Atun', unidad: 'lata' },
+  { nombre: 'Cebollita china', unidad: 'atado' },
+  { nombre: 'Apio', unidad: 'atado' },
+  { nombre: 'Culantro', unidad: 'ramillete' },
+  { nombre: 'Kion', unidad: 'gr' },
+  { nombre: 'Pepino', unidad: 'unidad' },
+  { nombre: 'Pimiento', unidad: 'unidad' },
+  { nombre: 'Aji amarillo', unidad: 'unidad' },
+  { nombre: 'Aji panca', unidad: 'gr' },
+  { nombre: 'Rocoto', unidad: 'unidad' },
+  { nombre: 'Sillao', unidad: 'ml' },
+  { nombre: 'Vinagre', unidad: 'ml' },
+  { nombre: 'Ajinomoto', unidad: 'gr' },
+  { nombre: 'Avena', unidad: 'gr' },
+  { nombre: 'Quinua', unidad: 'gr' },
+  { nombre: 'Yuca', unidad: 'gr' },
+  { nombre: 'Camote', unidad: 'unidad' },
+  { nombre: 'Aceituna', unidad: 'gr' },
+  { nombre: 'Pasas', unidad: 'gr' },
+  { nombre: 'Coco rallado', unidad: 'gr' },
 ]
 
 db.on('populate', async () => {
