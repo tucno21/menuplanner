@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router'
-import { Circle, CheckCircle2, UtensilsCrossed, Eye, Trash2, ChevronRight } from 'lucide-react'
+import { Circle, CheckCircle2, UtensilsCrossed, Eye, Trash2, X } from 'lucide-react'
 import BackButton from '../components/ui/BackButton'
 import SwipeReveal from '../components/ui/SwipeReveal'
 import { usePlanificacionStore } from '../store/planificacionStore'
@@ -54,11 +54,11 @@ const Dia = () => {
 
   return (
     <div className="flex flex-col p-5 bg-backdrop min-h-full">
-      <div className="flex items-center gap-3 mb-6">
+      <div className="flex items-center gap-3 mb-1">
         <BackButton />
         <p className="text-xl font-semibold text-dark">Dia: {fechaStr}</p>
       </div>
-      <h1 className="text-2xl font-bold text-primary uppercase text-center mb-6">Platos del dia</h1>
+      <h1 className="text-2xl font-bold text-primary uppercase text-center mb-4">Platos del dia</h1>
 
       {platos.length === 0 ? (
         <p className="text-center text-gray-500 py-8">No hay platos planificados para este dia</p>
@@ -110,28 +110,51 @@ const Dia = () => {
 
       <Modal isOpen={openModal} onClose={() => setOpenModal(false)}>
         {platoDetalle && (
-          <div className="bg-white rounded-2xl p-6 w-11/12 max-w-md">
-            <h2 className="text-2xl font-bold text-primary mb-4">{platoDetalle.nombre}</h2>
+          <div className="bg-white rounded-2xl overflow-hidden shadow-xl">
+            <div className="relative bg-gradient-to-r from-primary to-primary-dark px-5 py-4">
+              <h2 className="text-xl font-bold text-white pr-8">{platoDetalle.nombre}</h2>
+              <button
+                onClick={() => setOpenModal(false)}
+                className="absolute top-3 right-3 p-1.5 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+              >
+                <X size={18} className="text-white" />
+              </button>
+            </div>
 
-            <h3 className="text-xl font-semibold text-dark mb-2">Ingredientes</h3>
-            {platoDetalle.ingredientes.map((ing) => (
-              <div key={ing.id} className="flex items-center gap-1 mb-1">
-                <ChevronRight size={16} className="text-gray-400" />
-                <span className="text-gray-700">
-                  {ing.nombre} {ing.cantidad} {ing.unidad}
-                </span>
+            <div className="p-5 space-y-5">
+              <div>
+                <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                  <span className="w-1 h-4 bg-primary rounded-full" />
+                  Ingredientes
+                </h3>
+                {platoDetalle.ingredientes.length === 0 ? (
+                  <p className="text-gray-400 text-sm italic">Sin ingredientes</p>
+                ) : (
+                  <ul className="space-y-1.5 list-disc list-inside">
+                    {platoDetalle.ingredientes.map((ing) => (
+                      <li key={ing.id} className="text-gray-800">
+                        {ing.nombre}
+                        <span className="text-gray-500 text-sm ml-1.5">
+                          {ing.cantidad} {ing.unidad}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
-            ))}
 
-            <h3 className="text-xl font-semibold text-dark mb-2 mt-4">Procedimiento</h3>
-            <p className="text-gray-600">{platoDetalle.descripcion}</p>
+              <div className="border-t border-gray-100" />
 
-            <button
-              onClick={() => setOpenModal(false)}
-              className="bg-danger px-6 py-3 rounded-lg text-white font-semibold active:scale-95 transition-all mt-6"
-            >
-              Cerrar
-            </button>
+              <div>
+                <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-2">
+                  <span className="w-1 h-4 bg-primary rounded-full" />
+                  Procedimiento
+                </h3>
+                <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                  {platoDetalle.descripcion || 'Sin procedimiento'}
+                </p>
+              </div>
+            </div>
           </div>
         )}
       </Modal>
