@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
-import { Trash2, Salad } from 'lucide-react'
+import { Trash2, Salad, X } from 'lucide-react'
 import { usePlanificacionStore } from '../../store/planificacionStore'
 import { useToastStore } from '../../store/toastStore'
 import BackButton from '../../components/ui/BackButton'
@@ -157,15 +157,25 @@ const CrearPlato = () => {
         </button>
       </div>
 
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+      <Modal isOpen={showModal} onClose={() => { setShowModal(false); setSearchIngredientes('') }}>
         <div className="bg-white px-4 py-6 max-h-[90vh] rounded-2xl flex flex-col overflow-hidden">
-          <input
-            type="text"
-            placeholder="Buscar ingredientes"
-            value={searchIngredientes}
-            onChange={(e) => setSearchIngredientes(e.target.value)}
-            className="bg-gray-100 text-sm mb-3 text-gray-800 p-2 rounded-lg border border-secondary-light w-full outline-none"
-          />
+          <div className="relative mb-3">
+            <input
+              type="text"
+              placeholder="Buscar ingredientes"
+              value={searchIngredientes}
+              onChange={(e) => setSearchIngredientes(e.target.value)}
+              className="bg-gray-100 text-sm text-gray-800 p-2 rounded-lg border border-secondary-light w-full outline-none pr-8"
+            />
+            {searchIngredientes && (
+              <button
+                onClick={() => setSearchIngredientes('')}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              >
+                <X size={16} />
+              </button>
+            )}
+          </div>
 
           <div className="flex-1 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 gap-2">
             {filteredIngredientes.map((ing) => {
@@ -188,7 +198,7 @@ const CrearPlato = () => {
           </div>
 
           <button
-            onClick={() => setShowModal(false)}
+            onClick={() => { setShowModal(false); setSearchIngredientes('') }}
             className="bg-gray-300 py-3 rounded-lg w-full text-gray-700 text-lg font-semibold mt-4"
           >
             Cerrar

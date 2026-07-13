@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
-import { UtensilsCrossed } from 'lucide-react'
+import { UtensilsCrossed, X } from 'lucide-react'
 import { usePlanificacionStore } from '../../store/planificacionStore'
 
 const PlatosList = () => {
@@ -23,13 +23,23 @@ const PlatosList = () => {
     <div className="flex flex-col flex-1 px-5 pt-3 pb-5 bg-backdrop min-h-full">
       <h1 className="text-2xl font-bold text-center text-primary mb-3">Mis Platos</h1>
 
-      <input
-        type="text"
-        placeholder="Buscar platos"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        className="bg-white text-lg text-black text-center p-3 rounded-lg border border-primary-light mb-4 outline-none"
-      />
+      <div className="relative mb-4">
+        <input
+          type="text"
+          placeholder="Buscar platos"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="bg-white text-lg text-black text-center p-3 rounded-lg border border-primary-light w-full outline-none pr-10"
+        />
+        {searchQuery && (
+          <button
+            onClick={() => setSearchQuery('')}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+          >
+            <X size={18} />
+          </button>
+        )}
+      </div>
 
       <div className="flex-1">
         {filteredPlatos.length === 0 ? (
