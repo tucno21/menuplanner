@@ -37,9 +37,19 @@ function readSheet(name) {
   if (!sheet || sheet.getLastRow() < 2) return []
   var cols = Math.max(fields.length, sheet.getLastColumn())
   var rows = sheet.getRange(2, 1, sheet.getLastRow() - 1, cols).getValues()
+  var tz = ss.getSpreadsheetTimeZone()
   return rows.map(function (r) {
     var o = {}
-    fields.forEach(function (f, i) { o[f] = r[i] })
+    fields.forEach(function (f, i) {
+      var val = r[i]
+      if (val instanceof Date) {
+        o[f] = (f === 'fecha')
+          ? Utilities.formatDate(val, tz, 'yyyy-MM-dd')
+          : val.toISOString()
+      } else {
+        o[f] = val
+      }
+    })
     return o
   })
 }
@@ -138,7 +148,9 @@ function doPost(e) {
 
     var currentLastRow = sheet.getLastRow()
     if (survivors.length > 0) {
-      sheet.getRange(2, 1, survivors.length, fields.length).setValues(survivors)
+      var writeRange = sheet.getRange(2, 1, survivors.length, fields.length)
+      writeRange.setNumberFormat('@')
+      writeRange.setValues(survivors)
       if (currentLastRow > survivors.length + 1) {
         sheet.getRange(survivors.length + 2, 1, currentLastRow - survivors.length - 1, fields.length).clearContent()
       }
@@ -282,7 +294,7 @@ const Settings = () => {
   return (
     <div className="flex flex-col flex-1 px-5 py-5 bg-backdrop min-h-full">
       <div className="flex justify-between items-center mb-6">
-        <span className="text-gray-400 text-xs font-medium">V 1.7</span>
+        <span className="text-gray-400 text-xs font-medium">V 1.8</span>
         <button
           onClick={handleLogout}
           className="flex items-center gap-2 bg-danger/10 border border-danger/30 py-2 px-4 rounded-lg text-danger text-sm font-medium hover:bg-danger/20 active:scale-95 transition-all"

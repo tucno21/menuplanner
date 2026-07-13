@@ -48,9 +48,19 @@ function readSheet(name) {
   if (!sheet || sheet.getLastRow() < 2) return []
   var cols = Math.max(fields.length, sheet.getLastColumn())
   var rows = sheet.getRange(2, 1, sheet.getLastRow() - 1, cols).getValues()
+  var tz = ss.getSpreadsheetTimeZone()
   return rows.map(function (r) {
     var o = {}
-    fields.forEach(function (f, i) { o[f] = r[i] })
+    fields.forEach(function (f, i) {
+      var val = r[i]
+      if (val instanceof Date) {
+        o[f] = (f === 'fecha')
+          ? Utilities.formatDate(val, tz, 'yyyy-MM-dd')
+          : val.toISOString()
+      } else {
+        o[f] = val
+      }
+    })
     return o
   })
 }
@@ -168,7 +178,9 @@ function doPost(e) {
     // Batch write: clear old data, write survivors
     var currentLastRow = sheet.getLastRow()
     if (survivors.length > 0) {
-      sheet.getRange(2, 1, survivors.length, fields.length).setValues(survivors)
+      var writeRange = sheet.getRange(2, 1, survivors.length, fields.length)
+      writeRange.setNumberFormat('@')
+      writeRange.setValues(survivors)
       // Clear leftover rows beyond survivors
       if (currentLastRow > survivors.length + 1) {
         sheet.getRange(survivors.length + 2, 1, currentLastRow - survivors.length - 1, fields.length).clearContent()

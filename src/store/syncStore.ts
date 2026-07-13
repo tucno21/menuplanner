@@ -101,6 +101,14 @@ async function mergeRemoteData(remote: RemotePayload): Promise<void> {
           fkMaps.ing.get(resolved.ingredienteSyncId as string) ?? 0
       }
 
+      if (tableName === 'planificaciones' && typeof resolved.fecha === 'string') {
+        const f = resolved.fecha as string
+        if (f.length > 10) {
+          console.warn('[Sync] fecha normalized: "' + f + '" -> "' + f.slice(0, 10) + '"')
+          resolved.fecha = f.slice(0, 10)
+        }
+      }
+
       const localRec = localMap.get(sid)
       const remoteMs = new Date(remoteRec.updatedAt as string).getTime()
 
@@ -121,6 +129,7 @@ async function mergeRemoteData(remote: RemotePayload): Promise<void> {
     if (toPut.length > 0) {
       await table.bulkPut(toPut)
     }
+    console.log('[Sync] mergeTable(' + tableName + '): remote=' + remoteRecords.length + ' put=' + toPut.length + ' deleted=' + idsToDelete.length)
   }
 
   await mergeTable('platos')
@@ -141,7 +150,24 @@ async function mergeRemoteData(remote: RemotePayload): Promise<void> {
 
   await mergeTable('unidades')
   await mergeTable('platoIngredientes', fkMaps)
+
+  const remotePlanif = remote.data?.['planificaciones'] ?? []
+  if (remotePlanif.length > 0) {
+    console.log('[Sync] Planificaciones from server:', remotePlanif.map((p: Record<string, unknown>) => ({
+      fecha: p.fecha,
+      estado: p.estado,
+      platoSyncId: p.platoSyncId,
+      updatedAt: p.updatedAt,
+    })))
+  }
+
   await mergeTable('planificaciones', fkMaps)
+
+  const localPlanif = await db.planificaciones.toArray()
+  console.log('[Sync] Planificaciones in IndexedDB:', localPlanif.map((p) => ({
+    id: p.id, fecha: p.fecha, estado: p.estado, platoId: p.platoId, platoSyncId: p.platoSyncId,
+  })))
+
   await mergeTable('compras', fkMaps)
 
   console.log('[Sync] Merge:', { added, updated, deleted })
