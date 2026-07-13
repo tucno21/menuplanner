@@ -282,7 +282,7 @@ const Settings = () => {
   return (
     <div className="flex flex-col flex-1 px-5 py-5 bg-backdrop min-h-full">
       <div className="flex justify-between items-center mb-6">
-        <span className="text-gray-400 text-xs font-medium">V 1.5</span>
+        <span className="text-gray-400 text-xs font-medium">V 1.7</span>
         <button
           onClick={handleLogout}
           className="flex items-center gap-2 bg-danger/10 border border-danger/30 py-2 px-4 rounded-lg text-danger text-sm font-medium hover:bg-danger/20 active:scale-95 transition-all"
@@ -485,7 +485,7 @@ const Settings = () => {
                 </button>
               </div>
               <pre className="bg-gray-900 text-gray-100 text-xs rounded-lg p-3 overflow-auto max-h-[35vh] whitespace-pre">
-{APPS_SCRIPT_CODE}
+                {APPS_SCRIPT_CODE}
               </pre>
             </div>
           </div>
