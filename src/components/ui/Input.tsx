@@ -23,7 +23,7 @@ const Input = ({
   inputMode,
   pattern,
 }: InputProps) => {
-  const baseClasses = `w-full px-6 py-2 border text-xl rounded-full bg-white/20 text-white placeholder:text-white/70 outline-none transition-colors ${error ? 'border-danger' : 'border-gray-600'}`
+  const baseClasses = `w-full px-6 py-2 border text-xl rounded-lg bg-white/20 text-white placeholder:text-white/70 outline-none transition-colors ${error ? 'border-danger' : 'border-gray-600'}`
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange?.(e.target.value)

@@ -130,7 +130,7 @@ const Ingredientes = () => {
       </div>
 
       <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
-        <div className="bg-white rounded-2xl p-6 w-11/12 max-w-md">
+        <div className="bg-white rounded-2xl p-6 w-11/12 max-w-md mx-auto">
           <h2 className="text-xl font-bold text-primary mb-4 text-center">
             {editingId !== null ? 'Editar Ingrediente' : 'Nuevo Ingrediente'}
           </h2>
@@ -157,13 +157,13 @@ const Ingredientes = () => {
           <div className="flex flex-row gap-3">
             <button
               onClick={() => setShowModal(false)}
-              className="flex-1 bg-gray-300 py-3 rounded-full text-gray-700 font-semibold"
+              className="flex-1 bg-gray-300 py-3 rounded-lg text-gray-700 font-semibold"
             >
               Cancelar
             </button>
             <button
               onClick={handleSave}
-              className="flex-1 bg-primary py-3 rounded-full text-light font-semibold"
+              className="flex-1 bg-primary py-3 rounded-lg text-light font-semibold"
             >
               Guardar
             </button>
