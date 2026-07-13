@@ -85,7 +85,10 @@ const construirPlanificacion = async (): Promise<DataPlanificacion[]> => {
   for (const plan of allPlanificaciones) {
     if (!plan.id) continue
     const fecha = plan.fecha
-    const plato = allPlatos.find((p) => p.id === plan.platoId)
+    let plato = allPlatos.find((p) => p.id === plan.platoId)
+    if (!plato && plan.platoSyncId) {
+      plato = allPlatos.find((p) => p.syncId === plan.platoSyncId)
+    }
     if (!plato) continue
 
     if (!mapa[fecha]) {

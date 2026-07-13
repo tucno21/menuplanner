@@ -267,7 +267,7 @@ export const useSyncStore = create<SyncState>((set, get) => ({
       await fetch(url, {
         method: 'POST',
         body: payload,
-        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
         signal: postController.signal,
       })
       clearTimeout(postTimeoutId)
