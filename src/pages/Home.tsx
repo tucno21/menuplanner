@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { CheckCircle, Circle } from 'lucide-react'
 import { usePlanificacionStore } from '../store/planificacionStore'
 import type { ListaItem, PlatoPlanificacion } from '../store/planificacionStore'
-import { obtenerSemanaActual, obtenerProximaSemana, obtenerNumeroSemana } from '../utils/obtenerSemana'
+import { obtenerSemanaActual, obtenerProximaSemana, obtenerNumeroSemana, parseFechaLocal } from '../utils/obtenerSemana'
 import { obtenerNombreDia } from '../utils/obtenerNombreDia'
 import CustomTab from '../components/CustomTab'
 import DiasSemana from '../components/DiasSemana'
@@ -36,8 +36,8 @@ const Home = () => {
     const semana = activeTab === 0 ? semanaActual : proximaSemana
     const fechaInicio = semana[0].fecha
     const fechaFin = semana[6].fecha
-    const numSemana = obtenerNumeroSemana(new Date(fechaInicio))
-    const year = new Date(fechaInicio).getFullYear()
+    const numSemana = obtenerNumeroSemana(parseFechaLocal(fechaInicio))
+    const year = parseFechaLocal(fechaInicio).getFullYear()
     const lista = await calcularListaCompras(fechaInicio, fechaFin)
     await loadCompras(numSemana, year)
     setListaCompras(lista)
@@ -48,11 +48,11 @@ const Home = () => {
 
   const openModalPlanificacion = () => {
     const semana = activeTab === 0 ? semanaActual : proximaSemana
-    const fechaInicio = new Date(semana[0].fecha)
-    const fechaFin = new Date(semana[6].fecha)
+    const fechaInicio = semana[0].fecha
+    const fechaFin = semana[6].fecha
     const result = getPlanificacionBetweenDates(fechaInicio, fechaFin)
     const mapped = result.map((data) => ({
-      dia: obtenerNombreDia(new Date(data.fecha)),
+      dia: obtenerNombreDia(data.fecha),
       platos: data.platos,
     }))
     setPlanificacionSemanal(mapped)

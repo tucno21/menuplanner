@@ -10,7 +10,15 @@ export interface DiaSemana {
 const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado']
 
 const formatearFecha = (fecha: Date): string => {
-  return fecha.toISOString().split('T')[0]
+  const year = fecha.getFullYear()
+  const month = String(fecha.getMonth() + 1).padStart(2, '0')
+  const day = String(fecha.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+export const parseFechaLocal = (fechaStr: string): Date => {
+  const [y, m, d] = fechaStr.split('-').map(Number)
+  return new Date(y, m - 1, d)
 }
 
 const construirSemana = (lunes: Date, planificacion: DataPlanificacion[]): DiaSemana[] => {

@@ -53,7 +53,7 @@ interface PlanificacionState {
   addPlatoToFecha: (platoId: number, fecha: string, estado: EstadoPlato) => Promise<boolean>
   setModificarEstado: (planificacionId: number) => Promise<void>
   removePlanificacion: (planificacionId: number) => Promise<boolean>
-  getPlanificacionBetweenDates: (fechaInicio: Date, fechaFin: Date) => DataPlanificacion[]
+  getPlanificacionBetweenDates: (fechaInicio: string, fechaFin: string) => DataPlanificacion[]
 
   loadPlatos: () => Promise<void>
   createPlato: (data: { nombre: string; descripcion: string; ingredientes: { id: number; cantidad: number }[] }) => Promise<void>
@@ -222,14 +222,9 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
     return true
   },
 
-  getPlanificacionBetweenDates: (fechaInicio: Date, fechaFin: Date) => {
+  getPlanificacionBetweenDates: (fechaInicio: string, fechaFin: string) => {
     const { planificacion } = get()
-    const inicio = new Date(fechaInicio.toISOString().split('T')[0])
-    const fin = new Date(fechaFin.toISOString().split('T')[0])
-    return planificacion.filter((p) => {
-      const fecha = new Date(p.fecha)
-      return fecha >= inicio && fecha <= fin
-    })
+    return planificacion.filter((p) => p.fecha >= fechaInicio && p.fecha <= fechaFin)
   },
 
   loadPlatos: async () => {

@@ -35,7 +35,7 @@ const DiasSemana = ({ semana }: DiasSemanaProps) => {
                 </span>
               </div>
               <div className="flex flex-row items-center gap-2">
-                <span className="text-white text-sm">{dia.fecha}</span>
+                <span className="text-white text-sm">{dia.fecha.split('-').reverse().join('-')}</span>
                 {dia.data === 'si' ? (
                   <CheckCircle size={24} className="text-white" />
                 ) : (
