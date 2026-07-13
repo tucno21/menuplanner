@@ -178,6 +178,99 @@ export class MenuPlannerDB extends Dexie {
         }
       }
     })
+
+    this.version(5).stores({
+      platos: '++id, syncId, nombre',
+      ingredientes: '++id, syncId, nombre',
+      platoIngredientes: '++id, syncId, platoId, ingredienteId, platoSyncId, ingredienteSyncId',
+      planificaciones: '++id, syncId, platoId, fecha, estado, platoSyncId',
+      compras: '++id, syncId, ingredienteId, numeroSemana, anio, ingredienteSyncId',
+      config: 'key',
+      unidades: '++id, syncId, nombre',
+      deletions: '++id, syncId, table, deletedAt',
+    }).upgrade(async (trans) => {
+      const now = new Date().toISOString()
+
+      // ── Ingredientes: random syncId → deterministic ──
+      const allIng = await trans.table('ingredientes').toArray()
+      const ingByName = new Map<string, Record<string, unknown>>()
+      const ingByDet = new Map<string, Record<string, unknown>>()
+      for (const ing of allIng) {
+        if (ing.nombre) ingByName.set(ing.nombre as string, ing)
+        const det = seedSyncId('ingredientes', ing.nombre as string)
+        if (ing.syncId === det) ingByDet.set(ing.nombre as string, ing)
+      }
+
+      for (const seed of ingredientesSeed) {
+        const detId = seedSyncId('ingredientes', seed.nombre)
+        const byName = ingByName.get(seed.nombre)
+        const byDet = ingByDet.get(seed.nombre)
+
+        if (!byName) continue
+        if (byDet && byName.id === byDet.id) continue
+
+        if (byDet && byName.id !== byDet.id) {
+          await trans.table('platoIngredientes')
+            .where('ingredienteSyncId').equals(byName.syncId as string)
+            .modify({ ingredienteSyncId: detId, ingredienteId: byDet.id })
+          await trans.table('compras')
+            .where('ingredienteSyncId').equals(byName.syncId as string)
+            .modify({ ingredienteSyncId: detId, ingredienteId: byDet.id })
+          await trans.table('deletions').add({
+            syncId: byName.syncId as string, table: 'ingredientes', deletedAt: now,
+          })
+          await trans.table('ingredientes').delete(byName.id as number)
+        } else if (byName.syncId !== detId) {
+          const oldSyncId = byName.syncId as string
+          await trans.table('ingredientes').update(byName.id as number, {
+            syncId: detId, updatedAt: now,
+          })
+          await trans.table('platoIngredientes')
+            .where('ingredienteSyncId').equals(oldSyncId)
+            .modify({ ingredienteSyncId: detId })
+          await trans.table('compras')
+            .where('ingredienteSyncId').equals(oldSyncId)
+            .modify({ ingredienteSyncId: detId })
+          await trans.table('deletions').add({
+            syncId: oldSyncId, table: 'ingredientes', deletedAt: now,
+          })
+        }
+      }
+
+      // ── Unidades: random syncId → deterministic ──
+      const allUni = await trans.table('unidades').toArray()
+      const uniByName = new Map<string, Record<string, unknown>>()
+      const uniByDet = new Map<string, Record<string, unknown>>()
+      for (const uni of allUni) {
+        if (uni.nombre) uniByName.set(uni.nombre as string, uni)
+        const det = seedSyncId('unidades', uni.nombre as string)
+        if (uni.syncId === det) uniByDet.set(uni.nombre as string, uni)
+      }
+
+      for (const seed of unidadesSeed) {
+        const detId = seedSyncId('unidades', seed.nombre)
+        const byName = uniByName.get(seed.nombre)
+        const byDet = uniByDet.get(seed.nombre)
+
+        if (!byName) continue
+        if (byDet && byName.id === byDet.id) continue
+
+        if (byDet && byName.id !== byDet.id) {
+          await trans.table('deletions').add({
+            syncId: byName.syncId as string, table: 'unidades', deletedAt: now,
+          })
+          await trans.table('unidades').delete(byName.id as number)
+        } else if (byName.syncId !== detId) {
+          const oldSyncId = byName.syncId as string
+          await trans.table('unidades').update(byName.id as number, {
+            syncId: detId, updatedAt: now,
+          })
+          await trans.table('deletions').add({
+            syncId: oldSyncId, table: 'unidades', deletedAt: now,
+          })
+        }
+      }
+    })
   }
 }
 
@@ -256,15 +349,24 @@ export const ingredientesSeed: { nombre: string; unidad: string }[] = [
   { nombre: 'Coco rallado', unidad: 'gr' },
 ]
 
-export function withSync<T extends object>(records: T[]): (T & { syncId: string; updatedAt: string })[] {
-  const now = new Date().toISOString()
-  return records.map((r) => ({ ...r, syncId: crypto.randomUUID(), updatedAt: now }))
+const SEED_TS = '2024-01-01T00:00:00.000Z'
+
+function seedSyncId(table: string, nombre: string): string {
+  const slug = nombre.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, '-')
+  return `seed-${table.slice(0, 3)}-${slug}`
+}
+
+export function withSeedSync<T extends { nombre: string }>(
+  table: string,
+  records: T[]
+): (T & { syncId: string; updatedAt: string })[] {
+  return records.map((r) => ({ ...r, syncId: seedSyncId(table, r.nombre), updatedAt: SEED_TS }))
 }
 
 export const SYNC_TABLES = ['platos', 'ingredientes', 'platoIngredientes', 'planificaciones', 'compras', 'unidades'] as const
 export type SyncTable = (typeof SYNC_TABLES)[number]
 
 db.on('populate', async () => {
-  await db.ingredientes.bulkAdd(withSync(ingredientesSeed))
-  await db.unidades.bulkAdd(withSync(unidadesSeed))
+  await db.ingredientes.bulkAdd(withSeedSync('ingredientes', ingredientesSeed))
+  await db.unidades.bulkAdd(withSeedSync('unidades', unidadesSeed))
 })

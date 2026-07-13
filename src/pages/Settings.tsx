@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router'
 import { LogOut, Trash2, Lock, RefreshCw, Cloud, RotateCcw, HelpCircle, Check, Copy } from 'lucide-react'
 import { useAuthStore } from '../store/authStore'
 import { useSyncStore } from '../store/syncStore'
-import { db, ingredientesSeed, unidadesSeed, withSync } from '../db/dexie'
+import { db, ingredientesSeed, unidadesSeed, withSeedSync } from '../db/dexie'
 import Modal from '../components/ui/Modal'
 import AlertCustom from '../components/ui/AlertCustom'
 
@@ -255,8 +255,8 @@ const Settings = () => {
       db.deletions.clear(),
     ])
     await Promise.all([
-      db.unidades.bulkAdd(withSync(unidadesSeed)),
-      db.ingredientes.bulkAdd(withSync(ingredientesSeed)),
+      db.unidades.bulkAdd(withSeedSync('unidades', unidadesSeed)),
+      db.ingredientes.bulkAdd(withSeedSync('ingredientes', ingredientesSeed)),
     ])
     setShowResetAlert(false)
     logout()
