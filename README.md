@@ -95,7 +95,7 @@ src/
 | `/platos/actualizar-plato/:platoId` | Editar plato | Protegida |
 | `/ingredientes` | Ingredientes | Protegida |
 | `/ingredientes/unidades` | Unidades | Protegida |
-| `/settings` | Ajustes (sync, PIN, reset, update) | Protegida |
+| `/settings` | Ajustes (sync, PIN, unidades JSON, reset, update) | Protegida |
 | `*` | 404 | Pública |
 
 `ProtectedRoute` inicializa los datos (`initialize()`) y arranca/detiene el auto-sync al montar/desmontar.

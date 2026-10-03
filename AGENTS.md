@@ -36,7 +36,7 @@ tsconfig: `target es2023`, `verbatimModuleSyntax`, `noUnusedLocals/Parameters`, 
 - `/home/planificar/:fecha` → `Planificar` (multi-selección de platos)
 - `/platos`, `/platos/plato/:platoId`, `/platos/crear-plato`, `/platos/actualizar-plato/:platoId`
 - `/ingredientes`, `/ingredientes/unidades`
-- `/settings` → sync URL + código Apps Script embebido (`APPS_SCRIPT_CODE`), cambiar PIN, reset total, "Actualizar aplicación" (fuerza update de la PWA)
+- `/settings` → sync URL + código Apps Script embebido (`APPS_SCRIPT_CODE`), cambiar PIN, exportar/importar Tipos de Unidades en JSON (import reemplaza TODAS las unidades con tombstones via `reemplazarUnidades`), reset total, "Actualizar aplicación" (fuerza update de la PWA)
 - `*` → `NotFound`
 
 `MainLayout` provee nav inferior (Inicio, Platos, Ingredientes, Settings) y el contenedor centrado.
@@ -71,7 +71,7 @@ Reglas invariantes:
 Patrón `create<State>()`, sin middleware de persistencia. Acceso no-reactivo: `useXStore.getState()`.
 
 - **`useAuthStore`**: `isAuthenticated, hasPin, loading, error`. PIN en `config['pin']`. Flag de logout en `sessionStorage['mp_loggedOut']`. Acciones: `initialize, createPin, login, logout, changePin, clearError`.
-- **`usePlanificacionStore`** (central): estado `planificacion (DataPlanificacion[] agrupado por fecha), platos, ingredientes, unidades, compras, loading`. ~20 acciones: CRUD de platos/ingredientes/unidades, `addPlatoToFecha`, `setModificarEstado`, `removePlanificacion`, `calcularListaCompras(fechaInicio, fechaFin)`, `loadCompras`, `toggleCompra`. Helpers exportados `trackDeletion`/`deleteTracked`. `initialize()` reconstruye la vista agrupada y se re-ejecuta tras cada sync y tras mutaciones que afectan vistas.
+- **`usePlanificacionStore`** (central): estado `planificacion (DataPlanificacion[] agrupado por fecha), platos, ingredientes, unidades, compras, loading`. ~20 acciones: CRUD de platos/ingredientes/unidades, `reemplazarUnidades(nombres)` (borra todas con tombstone y bulkAdd con syncIds nuevos, dedup case-insensitive), `addPlatoToFecha`, `setModificarEstado`, `removePlanificacion`, `calcularListaCompras(fechaInicio, fechaFin)`, `loadCompras`, `toggleCompra`. Helpers exportados `trackDeletion`/`deleteTracked`. `initialize()` reconstruye la vista agrupada y se re-ejecuta tras cada sync y tras mutaciones que afectan vistas.
 - **`useSyncStore`**: `syncing, lastSync, error, appsScriptUrl`. Acciones `loadUrl, saveUrl, sync, startAutoSync, stopAutoSync`. Constantes: `SYNC_INTERVAL=120_000`, `GET_TIMEOUT=60_000`, `POST_TIMEOUT=120_000`.
 - **`useToastStore`**: `addToast(message, type='info', duration=3000), removeToast`. `ToastType = 'success'|'error'|'info'|'warning'`. `<Toast/>` global montado en `App.tsx`.
 

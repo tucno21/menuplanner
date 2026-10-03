@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, type ChangeEvent } from 'react'
 import { useNavigate } from 'react-router'
-import { LogOut, Trash2, Lock, RefreshCw, Cloud, RotateCcw, HelpCircle, Check, Copy } from 'lucide-react'
+import { LogOut, Trash2, Lock, RefreshCw, Cloud, RotateCcw, HelpCircle, Check, Copy, Boxes, Download, Upload } from 'lucide-react'
 import { useAuthStore } from '../store/authStore'
 import { useSyncStore } from '../store/syncStore'
+import { usePlanificacionStore } from '../store/planificacionStore'
+import { useToastStore } from '../store/toastStore'
 import { db, ingredientesSeed, unidadesSeed, withSeedSync } from '../db/dexie'
 import Modal from '../components/ui/Modal'
 import AlertCustom from '../components/ui/AlertCustom'
@@ -188,8 +190,15 @@ const Settings = () => {
   const [showResetAlert, setShowResetAlert] = useState(false)
   const [showUpdateAlert, setShowUpdateAlert] = useState(false)
   const [showInstructionsModal, setShowInstructionsModal] = useState(false)
+  const [showUnidadesModal, setShowUnidadesModal] = useState(false)
+  const [showImportAlert, setShowImportAlert] = useState(false)
   const [copiedCode, setCopiedCode] = useState(false)
   const [syncUrlInput, setSyncUrlInput] = useState('')
+
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const pendingUnidades = useRef<string[]>([])
+  const reemplazarUnidades = usePlanificacionStore((s) => s.reemplazarUnidades)
+  const addToast = useToastStore((s) => s.addToast)
 
   const filterPin = (value: string) => value.replace(/[^0-9]/g, '').slice(0, 4)
 
@@ -291,6 +300,66 @@ const Settings = () => {
     window.location.reload()
   }
 
+  const handleExportUnidades = async () => {
+    const unidades = await db.unidades.toArray()
+    const data = unidades.map((u) => ({ nombre: u.nombre }))
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'unidades-' + new Date().toISOString().slice(0, 10) + '.json'
+    a.click()
+    URL.revokeObjectURL(url)
+    setShowUnidadesModal(false)
+    addToast('Unidades descargadas (' + data.length + ')', 'success')
+  }
+
+  const handleImportFile = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    if (!file) return
+
+    try {
+      const parsed: unknown = JSON.parse(await file.text())
+
+      let lista: unknown[] = []
+      if (Array.isArray(parsed)) {
+        lista = parsed
+      } else if (parsed && typeof parsed === 'object' && Array.isArray((parsed as { unidades?: unknown }).unidades)) {
+        lista = (parsed as { unidades: unknown[] }).unidades
+      }
+
+      const nombres = lista
+        .map((item) => {
+          if (typeof item === 'string') return item
+          if (item && typeof item === 'object' && typeof (item as { nombre?: unknown }).nombre === 'string') {
+            return item as { nombre: string }
+          }
+          return null
+        })
+        .filter((n): n is string | { nombre: string } => n !== null)
+        .map((n) => (typeof n === 'string' ? n : n.nombre))
+        .filter((n) => n.trim().length > 0)
+
+      if (nombres.length === 0) {
+        addToast('El archivo no contiene unidades validas', 'error')
+        return
+      }
+
+      pendingUnidades.current = nombres
+      setShowUnidadesModal(false)
+      setShowImportAlert(true)
+    } catch {
+      addToast('Archivo JSON invalido', 'error')
+    }
+  }
+
+  const handleImportUnidades = async () => {
+    const total = await reemplazarUnidades(pendingUnidades.current)
+    setShowImportAlert(false)
+    addToast('Se cargaron ' + total + ' unidades', 'success')
+  }
+
   return (
     <div className="flex flex-col flex-1 px-5 py-5 bg-backdrop min-h-full">
       <div className="flex justify-between items-center mb-6">
@@ -367,6 +436,19 @@ const Settings = () => {
           <div className="text-left flex-1">
             <p className="text-dark font-semibold">Cambiar PIN</p>
             <p className="text-gray-400 text-sm">Actualiza tu PIN de acceso</p>
+          </div>
+        </button>
+
+        <button
+          onClick={() => setShowUnidadesModal(true)}
+          className="w-full flex items-center gap-3 bg-white border border-gray-200 rounded-xl p-4 shadow-card hover:shadow-medium active:scale-[0.99] transition-all"
+        >
+          <div className="bg-primary/10 p-2.5 rounded-lg">
+            <Boxes size={20} className="text-primary" />
+          </div>
+          <div className="text-left flex-1">
+            <p className="text-dark font-semibold">Tipos de Unidades</p>
+            <p className="text-gray-400 text-sm">Exporta o importa unidades en JSON</p>
           </div>
         </button>
 
@@ -465,6 +547,45 @@ const Settings = () => {
         title="¿Actualizar la aplicacion? Se descargara la ultima version. Tus datos no se perderan."
         onConfirm={handleForceUpdate}
         onClose={() => setShowUpdateAlert(false)}
+      />
+
+      <Modal isOpen={showUnidadesModal} onClose={() => setShowUnidadesModal(false)}>
+        <div className="bg-white rounded-2xl p-6 w-11/12 max-w-sm">
+          <h2 className="text-xl font-bold text-primary mb-1 text-center">Tipos de Unidades</h2>
+          <p className="text-gray-400 text-sm text-center mb-5">
+            Descarga las unidades actuales o importa un archivo JSON (reemplaza todas)
+          </p>
+
+          <button
+            onClick={handleExportUnidades}
+            className="w-full flex items-center justify-center gap-2 bg-gray-200 py-3 rounded-lg text-gray-700 font-semibold mb-3 active:scale-95 transition-all"
+          >
+            <Download size={18} />
+            Descargar JSON
+          </button>
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            className="w-full flex items-center justify-center gap-2 bg-primary py-3 rounded-lg text-light font-semibold active:scale-95 transition-all"
+          >
+            <Upload size={18} />
+            Importar JSON
+          </button>
+        </div>
+      </Modal>
+
+      <AlertCustom
+        isAlert={showImportAlert}
+        title="¿Reemplazar todas las unidades? Se eliminaran las actuales y se cargaran las del archivo."
+        onConfirm={handleImportUnidades}
+        onClose={() => setShowImportAlert(false)}
+      />
+
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="application/json,.json"
+        className="hidden"
+        onChange={handleImportFile}
       />
 
       <Modal isOpen={showInstructionsModal} onClose={() => setShowInstructionsModal(false)}>

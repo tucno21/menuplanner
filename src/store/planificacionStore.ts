@@ -70,6 +70,7 @@ interface PlanificacionState {
   createUnidad: (data: { nombre: string }) => Promise<void>
   updateUnidad: (id: number, data: { nombre: string }) => Promise<void>
   deleteUnidad: (id: number) => Promise<void>
+  reemplazarUnidades: (nombres: string[]) => Promise<number>
 
   calcularListaCompras: (fechaInicio: string, fechaFin: string) => Promise<ListaItem[]>
   loadCompras: (numeroSemana: number, anio: number) => Promise<void>
@@ -381,6 +382,33 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
   deleteUnidad: async (id) => {
     await deleteTracked('unidades', id)
     await get().loadUnidades()
+  },
+
+  reemplazarUnidades: async (nombres) => {
+    const actuales = await db.unidades.toArray()
+    for (const u of actuales) {
+      if (u.id) await deleteTracked('unidades', u.id)
+    }
+
+    const vistas = new Set<string>()
+    const nuevas: Unidad[] = []
+    for (const nombre of nombres) {
+      const limpio = nombre.trim()
+      if (!limpio) continue
+      const clave = limpio.toLowerCase()
+      if (vistas.has(clave)) continue
+      vistas.add(clave)
+      nuevas.push({
+        syncId: newSyncId(),
+        nombre: limpio,
+        updatedAt: nowISO(),
+      })
+    }
+    if (nuevas.length > 0) {
+      await db.unidades.bulkAdd(nuevas)
+    }
+    await get().loadUnidades()
+    return nuevas.length
   },
 
   calcularListaCompras: async (fechaInicio: string, fechaFin: string) => {
