@@ -17,7 +17,7 @@ const Modal = ({ isOpen, onClose, children }: ModalProps) => {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-[85vw] max-w-sm sm:max-w-lg md:max-w-xl lg:max-w-2xl"
+        className="w-[85vw] max-w-sm sm:max-w-lg md:max-w-xl lg:max-w-2xl flex justify-center"
       >
         {children}
       </div>
