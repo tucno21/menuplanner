@@ -59,9 +59,7 @@ src/
 │   ├── DiasSemana.tsx    # Tarjetas de los 7 días de una semana
 │   └── ui/               # Toast, BottomSheet, Modal, AlertCustom,
 │                         # SwipeReveal, BackButton, Input
-├── constants/color.ts    # Paleta (sin uso; estilos vía tokens de Tailwind)
 ├── db/dexie.ts           # Esquema Dexie (v5), modelos, seeds, constantes de sync
-├── hooks/useForm.ts      # Hook de formularios genérico (sin uso actualmente)
 ├── pages/
 │   ├── MainLayout.tsx    # Shell con nav inferior (máx 480px, lg: 4xl)
 │   ├── Login.tsx         # Crear/login con PIN de 4 dígitos
@@ -152,5 +150,4 @@ El servidor (Sheet) mantiene una hoja por tabla + hoja `deletions`, y devuelve s
 
 - La UI y los textos están en español (sin tildes en varios strings).
 - La sync usa `axios` con `Content-Type: text/plain` en el POST (evita preflight CORS de Apps Script) y timeouts de 60s (GET) / 120s (POST).
-- Código muerto conocido: `hooks/useForm.ts`, `constants/color.ts`, `src/assets/hero.png`.
 - Documentación para agentes de IA: [`AGENTS.md`](./AGENTS.md).

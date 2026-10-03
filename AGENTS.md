@@ -103,15 +103,14 @@ Patrón `create<State>()`, sin middleware de persistencia. Acceso no-reactivo: `
 ## 5. Gotchas (no obvios, importantes)
 
 1. **`axios` se usa en la sync** (`src/store/syncStore.ts`). El POST debe mantener `Content-Type: 'text/plain'` — si se cambia a application/json falla por preflight CORS. Timeout de axios mapea a `ECONNABORTED` (antes AbortError de fetch); errores se traducen con `mapearErrorSync()`.
-2. **Código muerto conocido**: `hooks/useForm.ts`, `constants/color.ts`, `assets/hero.png`. No basar cambios nuevos en ellos sin verificar.
-3. Fechas SIEMPRE como string local `YYYY-MM-DD`; nunca `new Date('YYYY-MM-DD')` directo (UTC shift) — usar `parseFechaLocal`.
-4. `POST` a Apps Script debe ser `Content-Type: text/plain`, si no, falla por preflight CORS.
-5. El paquete de router es `react-router` (no `react-router-dom`).
-6. Los `id` locales cambian entre dispositivos; cualquier lógica nueva que referencie platos/ingredientes desde otra tabla debe guardar TAMBIÉN el `syncId` y tener fallback de resolución.
-7. `compras.cantidad` es `string`; en `platoIngredientes.cantidad` es `number`.
-8. En dev el SW de PWA está activo (`dev-dist/`); si algo raro con caché, usar Ajustes → "Actualizar aplicación" o borrar `dev-dist/`.
-9. Al editar un plato se borran y recrean sus `platoIngredientes` (con tombstones) — no asumir estabilidad de esos ids.
-10. La hoja de Home ordena ítems comprados al final usando un `Set` de `ingredienteId` comprados.
+2. Fechas SIEMPRE como string local `YYYY-MM-DD`; nunca `new Date('YYYY-MM-DD')` directo (UTC shift) — usar `parseFechaLocal`.
+3. `POST` a Apps Script debe ser `Content-Type: text/plain`, si no, falla por preflight CORS.
+4. El paquete de router es `react-router` (no `react-router-dom`).
+5. Los `id` locales cambian entre dispositivos; cualquier lógica nueva que referencie platos/ingredientes desde otra tabla debe guardar TAMBIÉN el `syncId` y tener fallback de resolución.
+6. `compras.cantidad` es `string`; en `platoIngredientes.cantidad` es `number`.
+7. En dev el SW de PWA está activo (`dev-dist/`); si algo raro con caché, usar Ajustes → "Actualizar aplicación" o borrar `dev-dist/`.
+8. Al editar un plato se borran y recrean sus `platoIngredientes` (con tombstones) — no asumir estabilidad de esos ids.
+9. La hoja de Home ordena ítems comprados al final usando un `Set` de `ingredienteId` comprados.
 
 ## 6. Memoria persistente — Engram (MCP)
 
