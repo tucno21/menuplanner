@@ -65,6 +65,23 @@ export interface Unidad {
   updatedAt: string
 }
 
+export interface Etiqueta {
+  id?: number
+  syncId: string
+  nombre: string
+  updatedAt: string
+}
+
+export interface PlatoEtiqueta {
+  id?: number
+  syncId: string
+  platoId: number
+  platoSyncId: string
+  etiquetaId: number
+  etiquetaSyncId: string
+  updatedAt: string
+}
+
 export interface Deletion {
   id?: number
   syncId: string
@@ -108,6 +125,8 @@ export class MenuPlannerDB extends Dexie {
   compras!: Table<Compra, number>
   config!: Table<Config, string>
   unidades!: Table<Unidad, number>
+  etiquetas!: Table<Etiqueta, number>
+  platoEtiquetas!: Table<PlatoEtiqueta, number>
   deletions!: Table<Deletion, number>
 
   constructor() {
@@ -271,6 +290,19 @@ export class MenuPlannerDB extends Dexie {
         }
       }
     })
+
+    this.version(6).stores({
+      platos: '++id, syncId, nombre',
+      ingredientes: '++id, syncId, nombre',
+      platoIngredientes: '++id, syncId, platoId, ingredienteId, platoSyncId, ingredienteSyncId',
+      planificaciones: '++id, syncId, platoId, fecha, estado, platoSyncId',
+      compras: '++id, syncId, ingredienteId, numeroSemana, anio, ingredienteSyncId',
+      config: 'key',
+      unidades: '++id, syncId, nombre',
+      etiquetas: '++id, syncId, nombre',
+      platoEtiquetas: '++id, syncId, platoId, etiquetaId, platoSyncId, etiquetaSyncId',
+      deletions: '++id, syncId, table, deletedAt',
+    })
   }
 }
 
@@ -369,7 +401,7 @@ export function withSeedSync<T extends { nombre: string }>(
   return records.map((r) => ({ ...r, syncId: seedSyncId(table, r.nombre), updatedAt: SEED_TS }))
 }
 
-export const SYNC_TABLES = ['platos', 'ingredientes', 'platoIngredientes', 'planificaciones', 'compras', 'unidades'] as const
+export const SYNC_TABLES = ['platos', 'ingredientes', 'platoIngredientes', 'planificaciones', 'compras', 'unidades', 'etiquetas', 'platoEtiquetas'] as const
 export type SyncTable = (typeof SYNC_TABLES)[number]
 
 db.on('populate', async () => {

@@ -29,7 +29,7 @@ interface RemotePayload {
   deletions: Record<string, unknown>[]
 }
 
-type FkMaps = { plato: Map<string, number>; ing: Map<string, number> }
+type FkMaps = { plato: Map<string, number>; ing: Map<string, number>; etq: Map<string, number> }
 
 async function mergeRemoteData(remote: RemotePayload): Promise<void> {
   let added = 0
@@ -101,6 +101,10 @@ async function mergeRemoteData(remote: RemotePayload): Promise<void> {
         resolved.ingredienteId =
           fkMaps.ing.get(resolved.ingredienteSyncId as string) ?? 0
       }
+      if (fkMaps && resolved.etiquetaSyncId) {
+        resolved.etiquetaId =
+          fkMaps.etq.get(resolved.etiquetaSyncId as string) ?? 0
+      }
 
       if (tableName === 'planificaciones' && typeof resolved.fecha === 'string') {
         const f = resolved.fecha as string
@@ -136,6 +140,9 @@ async function mergeRemoteData(remote: RemotePayload): Promise<void> {
   await mergeTable('platos')
   await mergeTable('ingredientes')
 
+  await mergeTable('unidades')
+  await mergeTable('etiquetas')
+
   const fkMaps: FkMaps = {
     plato: new Map(
       (await db.platos.toArray()).map(
@@ -147,29 +154,17 @@ async function mergeRemoteData(remote: RemotePayload): Promise<void> {
         (i) => [i.syncId, i.id!] as [string, number]
       )
     ),
+    etq: new Map(
+      (await db.etiquetas.toArray()).map(
+        (e) => [e.syncId, e.id!] as [string, number]
+      )
+    ),
   }
 
-  await mergeTable('unidades')
   await mergeTable('platoIngredientes', fkMaps)
-
-  const remotePlanif = remote.data?.['planificaciones'] ?? []
-  if (remotePlanif.length > 0) {
-    console.log('[Sync] Planificaciones from server:', remotePlanif.map((p: Record<string, unknown>) => ({
-      fecha: p.fecha,
-      estado: p.estado,
-      platoSyncId: p.platoSyncId,
-      updatedAt: p.updatedAt,
-    })))
-  }
-
   await mergeTable('planificaciones', fkMaps)
-
-  const localPlanif = await db.planificaciones.toArray()
-  console.log('[Sync] Planificaciones in IndexedDB:', localPlanif.map((p) => ({
-    id: p.id, fecha: p.fecha, estado: p.estado, platoId: p.platoId, platoSyncId: p.platoSyncId,
-  })))
-
   await mergeTable('compras', fkMaps)
+  await mergeTable('platoEtiquetas', fkMaps)
 
   console.log('[Sync] Merge:', { added, updated, deleted })
 }

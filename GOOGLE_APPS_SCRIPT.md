@@ -24,7 +24,9 @@ var TABLE_FIELDS = {
   platoIngredientes: ['syncId', 'platoSyncId', 'platoId', 'ingredienteSyncId', 'ingredienteId', 'cantidad', 'updatedAt'],
   planificaciones:   ['syncId', 'platoSyncId', 'platoId', 'fecha', 'estado', 'updatedAt'],
   compras:           ['syncId', 'ingredienteSyncId', 'ingredienteId', 'cantidad', 'estado', 'numeroSemana', 'anio', 'updatedAt'],
-  unidades:          ['syncId', 'nombre', 'updatedAt']
+  unidades:          ['syncId', 'nombre', 'updatedAt'],
+  etiquetas:         ['syncId', 'nombre', 'updatedAt'],
+  platoEtiquetas:    ['syncId', 'platoSyncId', 'platoId', 'etiquetaSyncId', 'etiquetaId', 'updatedAt']
 }
 
 var DEL_FIELDS = ['syncId', 'table', 'deletedAt']

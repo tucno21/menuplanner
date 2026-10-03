@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router'
+import { Tag } from 'lucide-react'
 import { usePlanificacionStore } from '../../store/planificacionStore'
 import type { PlatoWithIngredientes } from '../../store/planificacionStore'
 import BackButton from '../../components/ui/BackButton'
@@ -49,6 +50,20 @@ const PlatoDetail = () => {
           <BackButton />
           <h1 className="text-xl sm:text-2xl font-bold text-primary truncate">{plato.nombre}</h1>
         </div>
+
+        {plato.etiquetas.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-4">
+            {plato.etiquetas.map((etq) => (
+              <span
+                key={etq.id}
+                className="flex items-center gap-1 bg-secondary/10 border border-secondary/30 text-secondary px-3 py-1 rounded-full text-xs font-medium"
+              >
+                <Tag size={12} />
+                {etq.nombre}
+              </span>
+            ))}
+          </div>
+        )}
 
         <div className="bg-white rounded-xl p-4 sm:p-6 mb-4 shadow-card">
           <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">

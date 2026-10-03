@@ -9,7 +9,7 @@ Guía completa del proyecto para agentes de IA. Léela antes de modificar códig
 - URL desplegada: https://menuplanner-21.vercel.app/ (Vercel, rewrite SPA en `vercel.json`)
 - Autor: Carlos Tucno
 - UI en español (strings sin tildes), layout mobile-first con contenedor `max-w-[480px]` (`lg:max-w-4xl`)
-- Documentación relacionada: [`README.md`](./README.md), [`GOOGLE_APPS_SCRIPT.md`](./GOOGLE_APPS_SCRIPT.md) (backend de sync completo)
+- Documentación relacionada: [`README.md`](./README.md), [`GOOGLE_APPS_SCRIPT.md`](./GOOGLE_APPS_SCRIPT.md) (backend de sync completo), [`Documentacion/json-de-importacion.md`](./Documentacion/json-de-importacion.md) (formatos JSON de importación, pensado para IAs)
 
 ## 2. Stack y comandos
 
@@ -34,16 +34,16 @@ tsconfig: `target es2023`, `verbatimModuleSyntax`, `noUnusedLocals/Parameters`, 
 - `/home` → `Home` (tabs Semana Actual/Próxima, bottom sheets de compras y plan semanal)
 - `/home/dia/:fecha` → `Dia` (`:fecha` = `YYYY-MM-DD`; SwipeReveal: ojo=detalle, papelera=eliminar)
 - `/home/planificar/:fecha` → `Planificar` (multi-selección de platos)
-- `/platos`, `/platos/plato/:platoId`, `/platos/crear-plato`, `/platos/actualizar-plato/:platoId`
+- `/platos`, `/platos/etiquetas` (CRUD de etiquetas), `/platos/plato/:platoId`, `/platos/crear-plato`, `/platos/actualizar-plato/:platoId`
 - `/ingredientes`, `/ingredientes/unidades`
-- `/settings` → sync URL + código Apps Script embebido (`APPS_SCRIPT_CODE`), cambiar PIN, exportar/importar Tipos de Unidades en JSON (import reemplaza TODAS las unidades con tombstones via `reemplazarUnidades`), reset total, "Actualizar aplicación" (fuerza update de la PWA)
+- `/settings` → sync URL + código Apps Script embebido (`APPS_SCRIPT_CODE`), cambiar PIN, exportar/importar JSON de **unidades/etiquetas/ingredientes/platos** (`BackupTarget`), reset total, "Actualizar aplicación" (fuerza update de la PWA)
 - `*` → `NotFound`
 
 `MainLayout` provee nav inferior (Inicio, Platos, Ingredientes, Settings) y el contenedor centrado.
 
 ### 3.2 Base de datos (src/db/dexie.ts)
 
-BD **`MenuPlannerDB`**, singleton `db`, **versión 5** (v1–v5 retenidas; v3–v5 con `upgrade()`). Exporta interfaces: `Plato, Ingrediente, PlatoIngrediente, Planificacion, Compra, Config, Unidad, Deletion` y uniones `EstadoPlato = 'pendiente'|'preparado'`, `EstadoCompra = 'comprado'|'pendiente'`, `SyncTable`.
+BD **`MenuPlannerDB`**, singleton `db`, **versión 6** (v1–v6 retenidas; v3–v5 con `upgrade()`). Exporta interfaces: `Plato, Ingrediente, PlatoIngrediente, Planificacion, Compra, Config, Unidad, Etiqueta, PlatoEtiqueta, Deletion` y uniones `EstadoPlato = 'pendiente'|'preparado'`, `EstadoCompra = 'comprado'|'pendiente'`, `SyncTable`.
 
 | Tabla | PK | Índices / campos clave |
 |---|---|---|
@@ -53,6 +53,8 @@ BD **`MenuPlannerDB`**, singleton `db`, **versión 5** (v1–v5 retenidas; v3–
 | `planificaciones` | `++id` | `syncId, platoId, platoSyncId, fecha('YYYY-MM-DD'), estado, updatedAt` |
 | `compras` | `++id` | `syncId, ingredienteId, ingredienteSyncId, cantidad(string), estado, numeroSemana, anio, updatedAt` |
 | `unidades` | `++id` | `syncId, nombre, updatedAt` (24 seed) |
+| `etiquetas` | `++id` | `syncId, nombre, updatedAt` (v6, tags de platos) |
+| `platoEtiquetas` | `++id` | `syncId, platoId, etiquetaId, platoSyncId, etiquetaSyncId, updatedAt` (v6, junction plato↔etiqueta) |
 | `config` | `key`(string) | guarda `'pin'`, `'appsScriptUrl'`, `'lastSyncPushTs'` |
 | `deletions` | `++id` | tombstones `{syncId, table, deletedAt}` |
 
@@ -64,14 +66,14 @@ Reglas invariantes:
 - **FKs duplicadas**: las tablas hijas guardan id local (`platoId`/`ingredienteId`) Y syncId (`platoSyncId`/`ingredienteSyncId`). Al mergear remoto, los ids locales se remapean con mapas syncId→id (orden de merge: platos → ingredientes → unidades → platoIngredientes → planificaciones → compras).
 - `Ingrediente.unidad` guarda el NOMBRE de la unidad (string denormalizado, no FK).
 - Seed en `db.on('populate')`: 24 unidades + ~76 ingredientes.
-- `SYNC_TABLES = ['platos','ingredientes','platoIngredientes','planificaciones','compras','unidades']` (`config` y `deletions` van aparte).
+- `SYNC_TABLES = ['platos','ingredientes','platoIngredientes','planificaciones','compras','unidades','etiquetas','platoEtiquetas']` (`config` y `deletions` van aparte). Orden de merge en sync: platos → ingredientes → unidades → etiquetas → (build FK maps plato/ing/etq) → platoIngredientes → planificaciones → compras → platoEtiquetas.
 
 ### 3.3 Stores Zustand (src/store/)
 
 Patrón `create<State>()`, sin middleware de persistencia. Acceso no-reactivo: `useXStore.getState()`.
 
 - **`useAuthStore`**: `isAuthenticated, hasPin, loading, error`. PIN en `config['pin']`. Flag de logout en `sessionStorage['mp_loggedOut']`. Acciones: `initialize, createPin, login, logout, changePin, clearError`.
-- **`usePlanificacionStore`** (central): estado `planificacion (DataPlanificacion[] agrupado por fecha), platos, ingredientes, unidades, compras, loading`. ~20 acciones: CRUD de platos/ingredientes/unidades, `reemplazarUnidades(nombres)` (borra todas con tombstone y bulkAdd con syncIds nuevos, dedup case-insensitive), `addPlatoToFecha`, `setModificarEstado`, `removePlanificacion`, `calcularListaCompras(fechaInicio, fechaFin)`, `loadCompras`, `toggleCompra`. Helpers exportados `trackDeletion`/`deleteTracked`. `initialize()` reconstruye la vista agrupada y se re-ejecuta tras cada sync y tras mutaciones que afectan vistas.
+- **`usePlanificacionStore`** (central): estado `planificacion (DataPlanificacion[] agrupado por fecha), platos, ingredientes, unidades, etiquetas, compras, loading`. ~20 acciones: CRUD de platos/ingredientes/unidades/etiquetas, `reemplazarUnidades(nombres)` (borra todas con tombstone y bulkAdd con syncIds nuevos, dedup case-insensitive), `importarEtiquetas/importarIngredientes` (reemplazo con guard: cancela si un ítem usado por platos falta en el archivo), `importarPlatos(recetas)` (upsert por nombre, validación all-or-nothing de ingredientes/unidades/etiquetas), `addPlatoToFecha`, `setModificarEstado`, `removePlanificacion`, `calcularListaCompras(fechaInicio, fechaFin)`, `loadCompras`, `toggleCompra`. Helpers exportados `trackDeletion`/`deleteTracked`. `initialize()` reconstruye la vista agrupada y se re-ejecuta tras cada sync y tras mutaciones que afectan vistas.
 - **`useSyncStore`**: `syncing, lastSync, error, appsScriptUrl`. Acciones `loadUrl, saveUrl, sync, startAutoSync, stopAutoSync`. Constantes: `SYNC_INTERVAL=120_000`, `GET_TIMEOUT=60_000`, `POST_TIMEOUT=120_000`.
 - **`useToastStore`**: `addToast(message, type='info', duration=3000), removeToast`. `ToastType = 'success'|'error'|'info'|'warning'`. `<Toast/>` global montado en `App.tsx`.
 

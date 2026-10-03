@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef, type ChangeEvent } from 'react'
 import { useNavigate } from 'react-router'
-import { LogOut, Trash2, Lock, RefreshCw, Cloud, RotateCcw, HelpCircle, Check, Copy, Boxes, Download, Upload } from 'lucide-react'
+import { LogOut, Trash2, Lock, RefreshCw, Cloud, RotateCcw, HelpCircle, Check, Copy, Boxes, Download, Upload, Tag, Leaf, UtensilsCrossed } from 'lucide-react'
 import { useAuthStore } from '../store/authStore'
 import { useSyncStore } from '../store/syncStore'
-import { usePlanificacionStore } from '../store/planificacionStore'
+import { usePlanificacionStore, type ImportResult, type IngredienteImport, type PlatoReceta } from '../store/planificacionStore'
 import { useToastStore } from '../store/toastStore'
 import { db, ingredientesSeed, unidadesSeed, withSeedSync } from '../db/dexie'
 import Modal from '../components/ui/Modal'
@@ -15,7 +15,9 @@ const APPS_SCRIPT_CODE = `var TABLE_FIELDS = {
   platoIngredientes: ['syncId', 'platoSyncId', 'platoId', 'ingredienteSyncId', 'ingredienteId', 'cantidad', 'updatedAt'],
   planificaciones:   ['syncId', 'platoSyncId', 'platoId', 'fecha', 'estado', 'updatedAt'],
   compras:           ['syncId', 'ingredienteSyncId', 'ingredienteId', 'cantidad', 'estado', 'numeroSemana', 'anio', 'updatedAt'],
-  unidades:          ['syncId', 'nombre', 'updatedAt']
+  unidades:          ['syncId', 'nombre', 'updatedAt'],
+  etiquetas:         ['syncId', 'nombre', 'updatedAt'],
+  platoEtiquetas:    ['syncId', 'platoSyncId', 'platoId', 'etiquetaSyncId', 'etiquetaId', 'updatedAt']
 }
 
 var DEL_FIELDS = ['syncId', 'table', 'deletedAt']
@@ -169,6 +171,43 @@ function doPost(e) {
     .setMimeType(ContentService.MimeType.JSON)
 }`
 
+type BackupTarget = 'unidades' | 'etiquetas' | 'ingredientes' | 'platos'
+
+const BACKUP_TITLES: Record<BackupTarget, string> = {
+  unidades: 'Tipos de Unidades',
+  etiquetas: 'Etiquetas de Platos',
+  ingredientes: 'Ingredientes',
+  platos: 'Platos (Recetas Completas)',
+}
+
+const BACKUP_SUBTITLES: Record<BackupTarget, string> = {
+  unidades: 'Exporta o importa unidades en JSON',
+  etiquetas: 'Exporta o importa etiquetas en JSON',
+  ingredientes: 'Exporta o importa ingredientes en JSON',
+  platos: 'Exporta o importa recetas completas en JSON',
+}
+
+const BACKUP_DESCRIPTIONS: Record<BackupTarget, string> = {
+  unidades: 'Descarga las unidades actuales o importa un archivo JSON (reemplaza todas)',
+  etiquetas: 'Descarga las etiquetas actuales o importa un archivo JSON (reemplaza todas)',
+  ingredientes: 'Descarga los ingredientes actuales o importa un archivo JSON (reemplaza todos)',
+  platos: 'Descarga las recetas completas o importa un archivo JSON (actualiza por nombre)',
+}
+
+const CONFIRM_TITLES: Record<BackupTarget, string> = {
+  unidades: '¿Reemplazar todas las unidades? Se eliminaran las actuales y se cargaran las del archivo.',
+  etiquetas: '¿Reemplazar todas las etiquetas? Se cancela si alguna etiqueta usada por platos falta en el archivo.',
+  ingredientes: '¿Reemplazar todos los ingredientes? Se cancela si algun ingrediente usado por platos falta en el archivo.',
+  platos: '¿Importar platos? Se actualizan los que tengan el mismo nombre y se agregan los nuevos. Si falta un ingrediente o unidad, no se registra nada.',
+}
+
+const BACKUP_ICONS: Record<BackupTarget, typeof Boxes> = {
+  unidades: Boxes,
+  etiquetas: Tag,
+  ingredientes: Leaf,
+  platos: UtensilsCrossed,
+}
+
 const Settings = () => {
   const navigate = useNavigate()
   const changePin = useAuthStore((s) => s.changePin)
@@ -190,14 +229,17 @@ const Settings = () => {
   const [showResetAlert, setShowResetAlert] = useState(false)
   const [showUpdateAlert, setShowUpdateAlert] = useState(false)
   const [showInstructionsModal, setShowInstructionsModal] = useState(false)
-  const [showUnidadesModal, setShowUnidadesModal] = useState(false)
+  const [backupTarget, setBackupTarget] = useState<BackupTarget | null>(null)
   const [showImportAlert, setShowImportAlert] = useState(false)
   const [copiedCode, setCopiedCode] = useState(false)
   const [syncUrlInput, setSyncUrlInput] = useState('')
 
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const pendingUnidades = useRef<string[]>([])
+  const pendingImport = useRef<{ target: BackupTarget; data: unknown } | null>(null)
   const reemplazarUnidades = usePlanificacionStore((s) => s.reemplazarUnidades)
+  const importarEtiquetas = usePlanificacionStore((s) => s.importarEtiquetas)
+  const importarIngredientes = usePlanificacionStore((s) => s.importarIngredientes)
+  const importarPlatos = usePlanificacionStore((s) => s.importarPlatos)
   const addToast = useToastStore((s) => s.addToast)
 
   const filterPin = (value: string) => value.replace(/[^0-9]/g, '').slice(0, 4)
@@ -300,64 +342,184 @@ const Settings = () => {
     window.location.reload()
   }
 
-  const handleExportUnidades = async () => {
-    const unidades = await db.unidades.toArray()
-    const data = unidades.map((u) => ({ nombre: u.nombre }))
+  // ── Backup JSON: unidades / etiquetas / ingredientes / platos ──
+  const downloadJson = (data: unknown, baseName: string) => {
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = 'unidades-' + new Date().toISOString().slice(0, 10) + '.json'
+    a.download = baseName + '-' + new Date().toISOString().slice(0, 10) + '.json'
     a.click()
     URL.revokeObjectURL(url)
-    setShowUnidadesModal(false)
-    addToast('Unidades descargadas (' + data.length + ')', 'success')
+  }
+
+  const handleExport = async (target: BackupTarget) => {
+    if (target === 'unidades') {
+      const data = (await db.unidades.toArray()).map((u) => ({ nombre: u.nombre }))
+      downloadJson(data, 'unidades')
+      addToast('Unidades descargadas (' + data.length + ')', 'success')
+    } else if (target === 'etiquetas') {
+      const data = (await db.etiquetas.toArray()).map((e) => ({ nombre: e.nombre }))
+      downloadJson(data, 'etiquetas')
+      addToast('Etiquetas descargadas (' + data.length + ')', 'success')
+    } else if (target === 'ingredientes') {
+      const data = (await db.ingredientes.toArray()).map((i) => ({ nombre: i.nombre, unidad: i.unidad }))
+      downloadJson(data, 'ingredientes')
+      addToast('Ingredientes descargados (' + data.length + ')', 'success')
+    } else {
+      const [platos, ingredientes, platoIngredientes, etiquetas, platoEtiquetas] = await Promise.all([
+        db.platos.toArray(),
+        db.ingredientes.toArray(),
+        db.platoIngredientes.toArray(),
+        db.etiquetas.toArray(),
+        db.platoEtiquetas.toArray(),
+      ])
+      const ingById = new Map(ingredientes.map((i) => [i.id as number, i]))
+      const etqById = new Map(etiquetas.map((e) => [e.id as number, e]))
+      const data = platos.map((p) => ({
+        nombre: p.nombre,
+        descripcion: p.descripcion,
+        etiquetas: platoEtiquetas
+          .filter((pe) => pe.platoId === p.id)
+          .map((pe) => etqById.get(pe.etiquetaId)?.nombre ?? '')
+          .filter((n) => n !== ''),
+        ingredientes: platoIngredientes
+          .filter((pi) => pi.platoId === p.id)
+          .map((pi) => ({
+            nombre: ingById.get(pi.ingredienteId)?.nombre ?? '',
+            cantidad: pi.cantidad,
+            unidad: ingById.get(pi.ingredienteId)?.unidad ?? '',
+          }))
+          .filter((x) => x.nombre !== ''),
+      }))
+      downloadJson(data, 'platos')
+      addToast('Platos descargados (' + data.length + ')', 'success')
+    }
+    setBackupTarget(null)
+  }
+
+  const parseImport = (target: BackupTarget, parsed: unknown): { ok: true; data: unknown } | { ok: false; error: string } => {
+    let lista: unknown[] | null = null
+    if (Array.isArray(parsed)) {
+      lista = parsed
+    } else if (parsed && typeof parsed === 'object') {
+      for (const key of ['unidades', 'etiquetas', 'ingredientes', 'platos']) {
+        const value = (parsed as Record<string, unknown>)[key]
+        if (Array.isArray(value)) {
+          lista = value
+          break
+        }
+      }
+    }
+    if (lista === null) return { ok: false, error: 'Archivo JSON invalido' }
+
+    if (target === 'unidades' || target === 'etiquetas') {
+      const nombres = lista
+        .map((item) => {
+          if (typeof item === 'string') return item
+          if (item && typeof item === 'object' && typeof (item as { nombre?: unknown }).nombre === 'string') {
+            return (item as { nombre: string }).nombre
+          }
+          return null
+        })
+        .filter((n): n is string => typeof n === 'string' && n.trim().length > 0)
+      if (nombres.length === 0) {
+        return { ok: false, error: 'El archivo no contiene ' + (target === 'unidades' ? 'unidades' : 'etiquetas') + ' validas' }
+      }
+      return { ok: true, data: nombres }
+    }
+
+    if (target === 'ingredientes') {
+      const items: IngredienteImport[] = []
+      for (const item of lista) {
+        if (typeof item === 'string') {
+          items.push({ nombre: item })
+        } else if (item && typeof item === 'object' && typeof (item as { nombre?: unknown }).nombre === 'string') {
+          const obj = item as { nombre: string; unidad?: unknown }
+          items.push({ nombre: obj.nombre, unidad: typeof obj.unidad === 'string' ? obj.unidad : undefined })
+        }
+      }
+      const validos = items.filter((i) => i.nombre.trim().length > 0)
+      if (validos.length === 0) return { ok: false, error: 'El archivo no contiene ingredientes validos' }
+      return { ok: true, data: validos }
+    }
+
+    const recetas: PlatoReceta[] = []
+    for (const item of lista) {
+      if (item && typeof item === 'object' && typeof (item as { nombre?: unknown }).nombre === 'string') {
+        const obj = item as Record<string, unknown>
+        recetas.push({
+          nombre: obj.nombre as string,
+          descripcion: typeof obj.descripcion === 'string' ? obj.descripcion : '',
+          etiquetas: Array.isArray(obj.etiquetas) ? obj.etiquetas.map(String) : [],
+          ingredientes: Array.isArray(obj.ingredientes)
+            ? obj.ingredientes
+                .filter((ri): ri is Record<string, unknown> => ri !== null && typeof ri === 'object')
+                .map((ri) => ({
+                  nombre: String(ri.nombre ?? ''),
+                  cantidad: Number(ri.cantidad),
+                  unidad: String(ri.unidad ?? ''),
+                }))
+            : [],
+        })
+      }
+    }
+    if (recetas.length === 0) return { ok: false, error: 'El archivo no contiene platos validos' }
+    return { ok: true, data: recetas }
   }
 
   const handleImportFile = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     e.target.value = ''
-    if (!file) return
+    if (!file || !backupTarget) return
 
     try {
       const parsed: unknown = JSON.parse(await file.text())
+      const resultado = parseImport(backupTarget, parsed)
 
-      let lista: unknown[] = []
-      if (Array.isArray(parsed)) {
-        lista = parsed
-      } else if (parsed && typeof parsed === 'object' && Array.isArray((parsed as { unidades?: unknown }).unidades)) {
-        lista = (parsed as { unidades: unknown[] }).unidades
-      }
-
-      const nombres = lista
-        .map((item) => {
-          if (typeof item === 'string') return item
-          if (item && typeof item === 'object' && typeof (item as { nombre?: unknown }).nombre === 'string') {
-            return item as { nombre: string }
-          }
-          return null
-        })
-        .filter((n): n is string | { nombre: string } => n !== null)
-        .map((n) => (typeof n === 'string' ? n : n.nombre))
-        .filter((n) => n.trim().length > 0)
-
-      if (nombres.length === 0) {
-        addToast('El archivo no contiene unidades validas', 'error')
+      if (!resultado.ok) {
+        addToast(resultado.error, 'error')
         return
       }
 
-      pendingUnidades.current = nombres
-      setShowUnidadesModal(false)
+      pendingImport.current = { target: backupTarget, data: resultado.data }
+      setBackupTarget(null)
       setShowImportAlert(true)
     } catch {
       addToast('Archivo JSON invalido', 'error')
     }
   }
 
-  const handleImportUnidades = async () => {
-    const total = await reemplazarUnidades(pendingUnidades.current)
+  const handleConfirmImport = async () => {
+    const pending = pendingImport.current
     setShowImportAlert(false)
-    addToast('Se cargaron ' + total + ' unidades', 'success')
+    pendingImport.current = null
+    if (!pending) return
+
+    let result: ImportResult | number
+    if (pending.target === 'unidades') {
+      result = await reemplazarUnidades(pending.data as string[])
+    } else if (pending.target === 'etiquetas') {
+      result = await importarEtiquetas(pending.data as string[])
+    } else if (pending.target === 'ingredientes') {
+      result = await importarIngredientes(pending.data as IngredienteImport[])
+    } else {
+      result = await importarPlatos(pending.data as PlatoReceta[])
+    }
+
+    if (typeof result === 'number') {
+      addToast('Se cargaron ' + result + ' unidades', 'success')
+    } else if (result.ok) {
+      const nombres: Record<BackupTarget, string> = {
+        unidades: 'unidades',
+        etiquetas: 'etiquetas',
+        ingredientes: 'ingredientes',
+        platos: 'platos',
+      }
+      addToast('Se cargaron ' + result.total + ' ' + nombres[pending.target], 'success')
+    } else {
+      addToast(result.error, 'error')
+    }
   }
 
   return (
@@ -439,18 +601,24 @@ const Settings = () => {
           </div>
         </button>
 
-        <button
-          onClick={() => setShowUnidadesModal(true)}
-          className="w-full flex items-center gap-3 bg-white border border-gray-200 rounded-xl p-4 shadow-card hover:shadow-medium active:scale-[0.99] transition-all"
-        >
-          <div className="bg-primary/10 p-2.5 rounded-lg">
-            <Boxes size={20} className="text-primary" />
-          </div>
-          <div className="text-left flex-1">
-            <p className="text-dark font-semibold">Tipos de Unidades</p>
-            <p className="text-gray-400 text-sm">Exporta o importa unidades en JSON</p>
-          </div>
-        </button>
+        {(Object.keys(BACKUP_TITLES) as BackupTarget[]).map((target) => {
+          const Icon = BACKUP_ICONS[target]
+          return (
+            <button
+              key={target}
+              onClick={() => setBackupTarget(target)}
+              className="w-full flex items-center gap-3 bg-white border border-gray-200 rounded-xl p-4 shadow-card hover:shadow-medium active:scale-[0.99] transition-all"
+            >
+              <div className="bg-primary/10 p-2.5 rounded-lg">
+                <Icon size={20} className="text-primary" />
+              </div>
+              <div className="text-left flex-1">
+                <p className="text-dark font-semibold">{BACKUP_TITLES[target]}</p>
+                <p className="text-gray-400 text-sm">{BACKUP_SUBTITLES[target]}</p>
+              </div>
+            </button>
+          )
+        })}
 
         <button
           onClick={() => setShowResetAlert(true)}
@@ -549,15 +717,17 @@ const Settings = () => {
         onClose={() => setShowUpdateAlert(false)}
       />
 
-      <Modal isOpen={showUnidadesModal} onClose={() => setShowUnidadesModal(false)}>
+      <Modal isOpen={backupTarget !== null} onClose={() => setBackupTarget(null)}>
         <div className="bg-white rounded-2xl p-6 w-11/12 max-w-sm">
-          <h2 className="text-xl font-bold text-primary mb-1 text-center">Tipos de Unidades</h2>
+          <h2 className="text-xl font-bold text-primary mb-1 text-center">
+            {backupTarget ? BACKUP_TITLES[backupTarget] : ''}
+          </h2>
           <p className="text-gray-400 text-sm text-center mb-5">
-            Descarga las unidades actuales o importa un archivo JSON (reemplaza todas)
+            {backupTarget ? BACKUP_DESCRIPTIONS[backupTarget] : ''}
           </p>
 
           <button
-            onClick={handleExportUnidades}
+            onClick={() => backupTarget && handleExport(backupTarget)}
             className="w-full flex items-center justify-center gap-2 bg-gray-200 py-3 rounded-lg text-gray-700 font-semibold mb-3 active:scale-95 transition-all"
           >
             <Download size={18} />
@@ -575,8 +745,8 @@ const Settings = () => {
 
       <AlertCustom
         isAlert={showImportAlert}
-        title="¿Reemplazar todas las unidades? Se eliminaran las actuales y se cargaran las del archivo."
-        onConfirm={handleImportUnidades}
+        title={pendingImport.current ? CONFIRM_TITLES[pendingImport.current.target] : ''}
+        onConfirm={handleConfirmImport}
         onClose={() => setShowImportAlert(false)}
       />
 

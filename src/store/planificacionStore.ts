@@ -7,10 +7,25 @@ import {
   type EstadoPlato,
   type Planificacion,
   type Unidad,
+  type Etiqueta,
 } from '../db/dexie'
 
 const nowISO = () => new Date().toISOString()
 const newSyncId = () => crypto.randomUUID()
+
+export interface IngredienteImport {
+  nombre: string
+  unidad?: string
+}
+
+export interface PlatoReceta {
+  nombre: string
+  descripcion?: string
+  etiquetas?: string[]
+  ingredientes: { nombre: string; cantidad: number; unidad: string }[]
+}
+
+export type ImportResult = { ok: true; total: number } | { ok: false; error: string }
 
 export interface PlatoPlanificacion {
   planificacionId: number
@@ -30,6 +45,7 @@ export interface PlatoWithIngredientes {
   nombre: string
   descripcion: string
   ingredientes: { id: number; nombre: string; cantidad: string; unidad: string }[]
+  etiquetas: { id: number; nombre: string }[]
 }
 
 export interface ListaItem {
@@ -44,6 +60,7 @@ interface PlanificacionState {
   platos: Plato[]
   ingredientes: Ingrediente[]
   unidades: Unidad[]
+  etiquetas: Etiqueta[]
   compras: Compra[]
   loading: boolean
 
@@ -56,8 +73,8 @@ interface PlanificacionState {
   getPlanificacionBetweenDates: (fechaInicio: string, fechaFin: string) => DataPlanificacion[]
 
   loadPlatos: () => Promise<void>
-  createPlato: (data: { nombre: string; descripcion: string; ingredientes: { id: number; cantidad: number }[] }) => Promise<void>
-  updatePlato: (id: number, data: { nombre: string; descripcion: string; ingredientes: { id: number; cantidad: number }[] }) => Promise<void>
+  createPlato: (data: { nombre: string; descripcion: string; ingredientes: { id: number; cantidad: number }[]; etiquetas: number[] }) => Promise<void>
+  updatePlato: (id: number, data: { nombre: string; descripcion: string; ingredientes: { id: number; cantidad: number }[]; etiquetas: number[] }) => Promise<void>
   deletePlato: (id: number) => Promise<void>
   getPlatoById: (id: number) => Promise<PlatoWithIngredientes | null>
 
@@ -65,12 +82,21 @@ interface PlanificacionState {
   createIngrediente: (data: { nombre: string; unidad: string }) => Promise<void>
   updateIngrediente: (id: number, data: { nombre: string; unidad: string }) => Promise<void>
   deleteIngrediente: (id: number) => Promise<void>
+  importarIngredientes: (items: IngredienteImport[]) => Promise<ImportResult>
 
   loadUnidades: () => Promise<void>
   createUnidad: (data: { nombre: string }) => Promise<void>
   updateUnidad: (id: number, data: { nombre: string }) => Promise<void>
   deleteUnidad: (id: number) => Promise<void>
   reemplazarUnidades: (nombres: string[]) => Promise<number>
+
+  loadEtiquetas: () => Promise<void>
+  createEtiqueta: (data: { nombre: string }) => Promise<void>
+  updateEtiqueta: (id: number, data: { nombre: string }) => Promise<void>
+  deleteEtiqueta: (id: number) => Promise<void>
+  importarEtiquetas: (nombres: string[]) => Promise<ImportResult>
+
+  importarPlatos: (recetas: PlatoReceta[]) => Promise<ImportResult>
 
   calcularListaCompras: (fechaInicio: string, fechaFin: string) => Promise<ListaItem[]>
   loadCompras: (numeroSemana: number, anio: number) => Promise<void>
@@ -112,7 +138,7 @@ async function trackDeletion(syncId: string, table: string) {
   await db.deletions.add({ syncId, table, deletedAt: nowISO() })
 }
 
-async function deleteTracked(table: 'platos' | 'ingredientes' | 'platoIngredientes' | 'planificaciones' | 'compras' | 'unidades', id: number) {
+async function deleteTracked(table: 'platos' | 'ingredientes' | 'platoIngredientes' | 'planificaciones' | 'compras' | 'unidades' | 'etiquetas' | 'platoEtiquetas', id: number) {
   const record = await db[table].get(id) as { syncId?: string } | undefined
   if (record?.syncId) await trackDeletion(record.syncId, table)
   await db[table].delete(id)
@@ -123,17 +149,19 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
   platos: [],
   ingredientes: [],
   unidades: [],
+  etiquetas: [],
   compras: [],
   loading: true,
 
   initialize: async () => {
-    const [planificacion, platos, ingredientes, unidades] = await Promise.all([
+    const [planificacion, platos, ingredientes, unidades, etiquetas] = await Promise.all([
       construirPlanificacion(),
       db.platos.toArray(),
       db.ingredientes.toArray(),
       db.unidades.toArray(),
+      db.etiquetas.toArray(),
     ])
-    set({ planificacion, platos, ingredientes, unidades, loading: false })
+    set({ planificacion, platos, ingredientes, unidades, etiquetas, loading: false })
   },
 
   getPlatosFecha: (fecha: string) => {
@@ -259,6 +287,18 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
       })
     }
 
+    for (const etqId of data.etiquetas) {
+      const etiqueta = await db.etiquetas.get(etqId)
+      await db.platoEtiquetas.add({
+        syncId: newSyncId(),
+        platoId: platoId as number,
+        platoSyncId,
+        etiquetaId: etqId,
+        etiquetaSyncId: etiqueta?.syncId ?? '',
+        updatedAt: ts,
+      })
+    }
+
     await get().loadPlatos()
   },
 
@@ -274,6 +314,11 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
       if (old.id) await deleteTracked('platoIngredientes', old.id)
     }
 
+    const oldEtiquetas = await db.platoEtiquetas.where('platoId').equals(id).toArray()
+    for (const old of oldEtiquetas) {
+      if (old.id) await deleteTracked('platoEtiquetas', old.id)
+    }
+
     for (const ing of data.ingredientes) {
       const ingrediente = await db.ingredientes.get(ing.id)
       await db.platoIngredientes.add({
@@ -287,6 +332,18 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
       })
     }
 
+    for (const etqId of data.etiquetas) {
+      const etiqueta = await db.etiquetas.get(etqId)
+      await db.platoEtiquetas.add({
+        syncId: newSyncId(),
+        platoId: id,
+        platoSyncId,
+        etiquetaId: etqId,
+        etiquetaSyncId: etiqueta?.syncId ?? '',
+        updatedAt: ts,
+      })
+    }
+
     const [platos, planificacion] = await Promise.all([db.platos.toArray(), construirPlanificacion()])
     set({ platos, planificacion })
   },
@@ -295,6 +352,10 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
     const platoIngredientes = await db.platoIngredientes.where('platoId').equals(id).toArray()
     for (const pi of platoIngredientes) {
       if (pi.id) await deleteTracked('platoIngredientes', pi.id)
+    }
+    const platoEtiquetas = await db.platoEtiquetas.where('platoId').equals(id).toArray()
+    for (const pe of platoEtiquetas) {
+      if (pe.id) await deleteTracked('platoEtiquetas', pe.id)
     }
     const planificaciones = await db.planificaciones.where('platoId').equals(id).toArray()
     for (const plan of planificaciones) {
@@ -323,11 +384,20 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
       })
     )
 
+    const platoEtiquetas = await db.platoEtiquetas.where('platoId').equals(id).toArray()
+    const etiquetasData = await Promise.all(
+      platoEtiquetas.map(async (pe) => {
+        const etq = await db.etiquetas.get(pe.etiquetaId)
+        return { id: pe.etiquetaId, nombre: etq?.nombre ?? '' }
+      })
+    )
+
     return {
       id,
       nombre: plato.nombre,
       descripcion: plato.descripcion,
       ingredientes: ingredientesData,
+      etiquetas: etiquetasData,
     }
   },
 
@@ -409,6 +479,265 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
     }
     await get().loadUnidades()
     return nuevas.length
+  },
+
+  loadEtiquetas: async () => {
+    const etiquetas = await db.etiquetas.toArray()
+    set({ etiquetas })
+  },
+
+  createEtiqueta: async (data) => {
+    await db.etiquetas.add({
+      syncId: newSyncId(),
+      nombre: data.nombre,
+      updatedAt: nowISO(),
+    })
+    await get().loadEtiquetas()
+  },
+
+  updateEtiqueta: async (id, data) => {
+    await db.etiquetas.update(id, { nombre: data.nombre, updatedAt: nowISO() })
+    await get().loadEtiquetas()
+  },
+
+  deleteEtiqueta: async (id) => {
+    const junctions = await db.platoEtiquetas.where('etiquetaId').equals(id).toArray()
+    for (const j of junctions) {
+      if (j.id) await deleteTracked('platoEtiquetas', j.id)
+    }
+    await deleteTracked('etiquetas', id)
+    await get().loadEtiquetas()
+  },
+
+  importarEtiquetas: async (nombres) => {
+    const limpios: string[] = []
+    const vistas = new Set<string>()
+    for (const n of nombres) {
+      const limpio = (n ?? '').trim()
+      if (!limpio) continue
+      const clave = limpio.toLowerCase()
+      if (vistas.has(clave)) continue
+      vistas.add(clave)
+      limpios.push(limpio)
+    }
+    if (limpios.length === 0) {
+      return { ok: false, error: 'El archivo no contiene etiquetas validas' }
+    }
+
+    const actuales = await db.etiquetas.toArray()
+    const actualesClaves = new Set(actuales.map((e) => e.nombre.toLowerCase()))
+
+    const junctions = await db.platoEtiquetas.toArray()
+    if (junctions.length > 0) {
+      const usadas = new Set<string>()
+      for (const j of junctions) {
+        const etq = actuales.find((e) => e.id === j.etiquetaId)
+        if (etq) usadas.add(etq.nombre.toLowerCase())
+      }
+      for (const usada of usadas) {
+        if (!limpios.some((l) => l.toLowerCase() === usada)) {
+          const original = actuales.find((e) => e.nombre.toLowerCase() === usada)
+          return { ok: false, error: `No se puede importar: la etiqueta "${original?.nombre ?? usada}" esta siendo usada por platos y no esta en el archivo` }
+        }
+      }
+    }
+
+    for (const e of actuales) {
+      if (e.id && !limpios.some((l) => l.toLowerCase() === e.nombre.toLowerCase())) {
+        await deleteTracked('etiquetas', e.id)
+      }
+    }
+
+    const ts = nowISO()
+    const nuevas: Etiqueta[] = limpios
+      .filter((l) => !actualesClaves.has(l.toLowerCase()))
+      .map((l) => ({ syncId: newSyncId(), nombre: l, updatedAt: ts }))
+    if (nuevas.length > 0) {
+      await db.etiquetas.bulkAdd(nuevas)
+    }
+
+    await get().loadEtiquetas()
+    return { ok: true, total: limpios.length }
+  },
+
+  importarIngredientes: async (items) => {
+    const limpios: { nombre: string; unidad: string }[] = []
+    const vistas = new Set<string>()
+    for (const it of items) {
+      const nombre = (it?.nombre ?? '').trim()
+      if (!nombre) continue
+      const clave = nombre.toLowerCase()
+      if (vistas.has(clave)) continue
+      vistas.add(clave)
+      limpios.push({ nombre, unidad: (it.unidad ?? '').trim() || 'unidad' })
+    }
+    if (limpios.length === 0) {
+      return { ok: false, error: 'El archivo no contiene ingredientes validos' }
+    }
+
+    const actuales = await db.ingredientes.toArray()
+
+    const junctions = await db.platoIngredientes.toArray()
+    if (junctions.length > 0) {
+      const usadosIds = new Set(junctions.map((j) => j.ingredienteId))
+      for (const id of usadosIds) {
+        const ing = actuales.find((a) => a.id === id)
+        if (ing && !limpios.some((l) => l.nombre.toLowerCase() === ing.nombre.toLowerCase())) {
+          return { ok: false, error: `No se puede importar: el ingrediente "${ing.nombre}" esta siendo usado por platos y no esta en el archivo` }
+        }
+      }
+    }
+
+    const ts = nowISO()
+    const actualesClaves = new Set(actuales.map((a) => a.nombre.toLowerCase()))
+
+    for (const l of limpios) {
+      const actual = actuales.find((a) => a.nombre.toLowerCase() === l.nombre.toLowerCase())
+      if (actual?.id && actual.unidad !== l.unidad) {
+        await db.ingredientes.update(actual.id, { unidad: l.unidad, updatedAt: ts })
+      }
+    }
+
+    for (const a of actuales) {
+      if (a.id && !limpios.some((l) => l.nombre.toLowerCase() === a.nombre.toLowerCase())) {
+        await deleteTracked('ingredientes', a.id)
+      }
+    }
+
+    const nuevas: Ingrediente[] = limpios
+      .filter((l) => !actualesClaves.has(l.nombre.toLowerCase()))
+      .map((l) => ({ syncId: newSyncId(), nombre: l.nombre, unidad: l.unidad, updatedAt: ts }))
+    if (nuevas.length > 0) {
+      await db.ingredientes.bulkAdd(nuevas)
+    }
+
+    await get().loadIngredientes()
+    return { ok: true, total: limpios.length }
+  },
+
+  importarPlatos: async (recetas) => {
+    if (!Array.isArray(recetas) || recetas.length === 0) {
+      return { ok: false, error: 'El archivo no contiene platos validos' }
+    }
+
+    const ingredientes = await db.ingredientes.toArray()
+    const ingByNombre = new Map(ingredientes.map((i) => [i.nombre.toLowerCase(), i]))
+    const unidades = await db.unidades.toArray()
+    const uniClaves = new Set(unidades.map((u) => u.nombre.toLowerCase()))
+    const etiquetas = await db.etiquetas.toArray()
+    const etqByNombre = new Map(etiquetas.map((e) => [e.nombre.toLowerCase(), e]))
+
+    interface RecetaResuelta {
+      nombre: string
+      descripcion: string
+      etiquetaIds: number[]
+      ings: { ing: Ingrediente; cantidad: number }[]
+    }
+
+    const resueltas: RecetaResuelta[] = []
+    const nombresVistos = new Set<string>()
+
+    for (const r of recetas) {
+      const nombre = (r?.nombre ?? '').trim()
+      if (!nombre) {
+        return { ok: false, error: 'Hay un plato sin nombre en el archivo' }
+      }
+      const claveNombre = nombre.toLowerCase()
+      if (nombresVistos.has(claveNombre)) {
+        return { ok: false, error: `Plato duplicado en el archivo: "${nombre}"` }
+      }
+      nombresVistos.add(claveNombre)
+
+      if (!Array.isArray(r.ingredientes) || r.ingredientes.length === 0) {
+        return { ok: false, error: `El plato "${nombre}" no tiene ingredientes` }
+      }
+
+      const ings: { ing: Ingrediente; cantidad: number }[] = []
+      for (const ri of r.ingredientes) {
+        const ing = ingByNombre.get((ri?.nombre ?? '').trim().toLowerCase())
+        if (!ing) {
+          return { ok: false, error: `Ingrediente no encontrado: "${ri?.nombre}" (plato "${nombre}")` }
+        }
+        const cantidad = Number(ri?.cantidad)
+        if (!cantidad || cantidad <= 0) {
+          return { ok: false, error: `Cantidad invalida para "${ri?.nombre}" en el plato "${nombre}"` }
+        }
+        const unidad = (ri?.unidad ?? '').trim().toLowerCase()
+        if (!unidad || !uniClaves.has(unidad)) {
+          return { ok: false, error: `Unidad no encontrada: "${ri?.unidad}" (plato "${nombre}")` }
+        }
+        ings.push({ ing, cantidad })
+      }
+
+      const etiquetaIds: number[] = []
+      for (const ne of r.etiquetas ?? []) {
+        const etq = etqByNombre.get(String(ne ?? '').trim().toLowerCase())
+        if (!etq) {
+          return { ok: false, error: `Etiqueta no encontrada: "${ne}" (plato "${nombre}")` }
+        }
+        etiquetaIds.push(etq.id as number)
+      }
+
+      resueltas.push({ nombre, descripcion: (r.descripcion ?? '').trim(), etiquetaIds, ings })
+    }
+
+    const platosActuales = await db.platos.toArray()
+    const ts = nowISO()
+
+    for (const r of resueltas) {
+      const existente = platosActuales.find((p) => p.nombre.toLowerCase() === r.nombre.toLowerCase())
+      let platoId: number
+      let platoSyncId: string
+
+      if (existente?.id) {
+        platoId = existente.id
+        platoSyncId = existente.syncId
+        await db.platos.update(platoId, { nombre: r.nombre, descripcion: r.descripcion, updatedAt: ts })
+      } else {
+        platoSyncId = newSyncId()
+        platoId = (await db.platos.add({
+          syncId: platoSyncId,
+          nombre: r.nombre,
+          descripcion: r.descripcion,
+          updatedAt: ts,
+        })) as number
+      }
+
+      const oldIngs = await db.platoIngredientes.where('platoId').equals(platoId).toArray()
+      for (const old of oldIngs) {
+        if (old.id) await deleteTracked('platoIngredientes', old.id)
+      }
+      const oldEtq = await db.platoEtiquetas.where('platoId').equals(platoId).toArray()
+      for (const old of oldEtq) {
+        if (old.id) await deleteTracked('platoEtiquetas', old.id)
+      }
+
+      for (const { ing, cantidad } of r.ings) {
+        await db.platoIngredientes.add({
+          syncId: newSyncId(),
+          platoId,
+          platoSyncId,
+          ingredienteId: ing.id as number,
+          ingredienteSyncId: ing.syncId,
+          cantidad,
+          updatedAt: ts,
+        })
+      }
+      for (const etqId of r.etiquetaIds) {
+        const etq = etiquetas.find((e) => e.id === etqId)
+        await db.platoEtiquetas.add({
+          syncId: newSyncId(),
+          platoId,
+          platoSyncId,
+          etiquetaId: etqId,
+          etiquetaSyncId: etq?.syncId ?? '',
+          updatedAt: ts,
+        })
+      }
+    }
+
+    await get().initialize()
+    return { ok: true, total: resueltas.length }
   },
 
   calcularListaCompras: async (fechaInicio: string, fechaFin: string) => {

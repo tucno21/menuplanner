@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
-import { Trash2, Salad, X } from 'lucide-react'
+import { Trash2, Salad, X, Tag } from 'lucide-react'
 import { usePlanificacionStore } from '../../store/planificacionStore'
 import { useToastStore } from '../../store/toastStore'
 import BackButton from '../../components/ui/BackButton'
@@ -18,18 +18,22 @@ const CrearPlato = () => {
 
   const ingredientes = usePlanificacionStore((s) => s.ingredientes)
   const loadIngredientes = usePlanificacionStore((s) => s.loadIngredientes)
+  const etiquetas = usePlanificacionStore((s) => s.etiquetas)
+  const loadEtiquetas = usePlanificacionStore((s) => s.loadEtiquetas)
   const createPlato = usePlanificacionStore((s) => s.createPlato)
   const addToast = useToastStore((s) => s.addToast)
 
   const [nombre, setNombre] = useState('')
   const [descripcion, setDescripcion] = useState('')
   const [selectedIngredientes, setSelectedIngredientes] = useState<IngredienteSeleccionado[]>([])
+  const [selectedEtiquetas, setSelectedEtiquetas] = useState<number[]>([])
   const [showModal, setShowModal] = useState(false)
   const [searchIngredientes, setSearchIngredientes] = useState('')
 
   useEffect(() => {
     loadIngredientes()
-  }, [loadIngredientes])
+    loadEtiquetas()
+  }, [loadIngredientes, loadEtiquetas])
 
   const filteredIngredientes = ingredientes.filter((ing) =>
     ing.nombre.toLowerCase().includes(searchIngredientes.toLowerCase())
@@ -57,6 +61,14 @@ const CrearPlato = () => {
     setSelectedIngredientes(selectedIngredientes.filter((i) => i.id !== id))
   }
 
+  const toggleEtiqueta = (id: number) => {
+    setSelectedEtiquetas(
+      selectedEtiquetas.includes(id)
+        ? selectedEtiquetas.filter((e) => e !== id)
+        : [...selectedEtiquetas, id]
+    )
+  }
+
   const handleGuardar = async () => {
     if (!nombre.trim()) {
       addToast('El nombre del plato es obligatorio', 'warning')
@@ -79,6 +91,7 @@ const CrearPlato = () => {
       nombre,
       descripcion,
       ingredientes: selectedIngredientes.map((i) => ({ id: i.id, cantidad: Number(i.cantidad) })),
+      etiquetas: selectedEtiquetas,
     })
     addToast('Plato creado correctamente', 'success')
     navigate(-1)
@@ -106,6 +119,33 @@ const CrearPlato = () => {
           onChange={(e) => setDescripcion(e.target.value)}
           className="bg-gray-100 text-lg mb-4 text-dark p-2 rounded-lg border border-primary-light w-full outline-none min-h-[100px] resize-none"
         />
+
+        {etiquetas.length > 0 && (
+          <div className="mb-4">
+            <h2 className="text-base font-bold mb-2 text-dark flex items-center gap-1.5">
+              <Tag size={16} className="text-secondary" />
+              Etiquetas:
+            </h2>
+            <div className="flex flex-wrap gap-2">
+              {etiquetas.map((etq) => {
+                const id = etq.id!
+                const selected = selectedEtiquetas.includes(id)
+                return (
+                  <button
+                    key={id}
+                    onClick={() => toggleEtiqueta(id)}
+                    className={`px-3 py-1.5 rounded-full text-sm font-medium border active:scale-95 transition-all ${selected
+                      ? 'bg-secondary border-secondary text-light'
+                      : 'bg-white border-gray-300 text-gray-600'
+                      }`}
+                  >
+                    {etq.nombre}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        )}
 
         <button
           onClick={() => setShowModal(true)}

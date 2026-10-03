@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
-import { UtensilsCrossed, X } from 'lucide-react'
+import { UtensilsCrossed, X, Tag } from 'lucide-react'
 import { usePlanificacionStore } from '../../store/planificacionStore'
 
 const PlatosList = () => {
@@ -21,7 +21,16 @@ const PlatosList = () => {
 
   return (
     <div className="flex flex-col flex-1 px-5 pt-3 pb-5 bg-backdrop min-h-full">
-      <h1 className="text-2xl font-bold text-center text-primary mb-3">Mis Platos</h1>
+      <div className="flex items-center justify-center relative mb-3">
+        <h1 className="text-2xl font-bold text-center text-primary">Mis Platos</h1>
+        <button
+          onClick={() => navigate('/platos/etiquetas')}
+          title="Etiquetas de platos"
+          className="absolute right-0 bg-secondary/10 p-2 rounded-lg text-secondary hover:bg-secondary/20 active:scale-95 transition-all"
+        >
+          <Tag size={20} />
+        </button>
+      </div>
 
       <div className="relative mb-4">
         <input

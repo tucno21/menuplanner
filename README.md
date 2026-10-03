@@ -9,8 +9,9 @@ PWA **offline-first** para planificar menús semanales con generación automáti
 
 - **Planificación semanal**: vista de semana actual y próxima (inicio lunes), con estado por plato (`pendiente` / `preparado`).
 - **Planificación diaria**: asigna varios platos a una fecha, acciones de deslizar (ver detalle / eliminar).
-- **CRUD de platos** con ingredientes y cantidades (relación muchos-a-muchos).
+- **CRUD de platos** con ingredientes y cantidades (relación muchos-a-muchos) y **etiquetas** de clasificación (ej: "nutritivo", "gustos").
 - **CRUD de ingredientes y unidades** (24 unidades precargadas, ~76 ingredientes seed).
+- **Backup JSON** desde Ajustes: exportar/importar unidades, etiquetas, ingredientes y platos con recetas completas (validación all-or-nothing al importar platos).
 - **Lista de compras automática**: agrega ingredientes de la semana, suma cantidades por ingrediente+unidad y permite marcar ítems como comprados (por semana ISO y año).
 - **Autenticación local por PIN** (se guarda en IndexedDB, no hay servidor de auth).
 - **Sincronización multi-dispositivo** con resolución de conflictos *last-writer-wins* y eliminaciones con *tombstones*.
@@ -90,19 +91,20 @@ src/
 | `/home/dia/:fecha` | Día (`fecha` = `YYYY-MM-DD`) | Protegida |
 | `/home/planificar/:fecha` | Planificar platos para una fecha | Protegida |
 | `/platos` | Lista de platos | Protegida |
+| `/platos/etiquetas` | CRUD de etiquetas de platos | Protegida |
 | `/platos/plato/:platoId` | Detalle de plato | Protegida |
 | `/platos/crear-plato` | Crear plato | Protegida |
 | `/platos/actualizar-plato/:platoId` | Editar plato | Protegida |
 | `/ingredientes` | Ingredientes | Protegida |
 | `/ingredientes/unidades` | Unidades | Protegida |
-| `/settings` | Ajustes (sync, PIN, unidades JSON, reset, update) | Protegida |
+| `/settings` | Ajustes (sync, PIN, backups JSON, reset, update) | Protegida |
 | `*` | 404 | Pública |
 
 `ProtectedRoute` inicializa los datos (`initialize()`) y arranca/detiene el auto-sync al montar/desmontar.
 
 ## Arquitectura de datos
 
-Base de datos **`MenuPlannerDB`** (Dexie/IndexedDB), versión 5:
+Base de datos **`MenuPlannerDB`** (Dexie/IndexedDB), versión 6:
 
 | Tabla | Clave | Notas |
 |---|---|---|
@@ -112,6 +114,8 @@ Base de datos **`MenuPlannerDB`** (Dexie/IndexedDB), versión 5:
 | `planificaciones` | `++id` | `fecha` (`YYYY-MM-DD`), `estado` (`pendiente\|preparado`) |
 | `compras` | `++id` | `numeroSemana`, `anio`, `estado` (`comprado\|pendiente`) |
 | `unidades` | `++id` | 24 unidades seed |
+| `etiquetas` | `++id` | Etiquetas de platos (v6) |
+| `platoEtiquetas` | `++id` | Junction plato↔etiqueta (v6) |
 | `config` | `key` (string) | `pin`, `appsScriptUrl`, `lastSyncPushTs` |
 | `deletions` | `++id` | Tombstones `{syncId, table, deletedAt}` |
 
@@ -151,3 +155,4 @@ El servidor (Sheet) mantiene una hoja por tabla + hoja `deletions`, y devuelve s
 - La UI y los textos están en español (sin tildes en varios strings).
 - La sync usa `axios` con `Content-Type: text/plain` en el POST (evita preflight CORS de Apps Script) y timeouts de 60s (GET) / 120s (POST).
 - Documentación para agentes de IA: [`AGENTS.md`](./AGENTS.md).
+- Formatos JSON de importación (para IAs): [`Documentacion/json-de-importacion.md`](./Documentacion/json-de-importacion.md).

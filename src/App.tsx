@@ -12,6 +12,7 @@ import PlatosList from './pages/grupos/PlatosList'
 import PlatoDetail from './pages/grupos/PlatoDetail'
 import CrearPlato from './pages/grupos/CrearPlato'
 import ActualizarPlato from './pages/grupos/ActualizarPlato'
+import Etiquetas from './pages/grupos/Etiquetas'
 import Ingredientes from './pages/Ingredientes'
 import Unidades from './pages/Unidades'
 import Settings from './pages/Settings'
@@ -61,6 +62,7 @@ const App = () => {
             <Route path="/home/dia/:fecha" element={<Dia />} />
             <Route path="/home/planificar/:fecha" element={<Planificar />} />
             <Route path="/platos" element={<PlatosList />} />
+            <Route path="/platos/etiquetas" element={<Etiquetas />} />
             <Route path="/platos/plato/:platoId" element={<PlatoDetail />} />
             <Route path="/platos/crear-plato" element={<CrearPlato />} />
             <Route path="/platos/actualizar-plato/:platoId" element={<ActualizarPlato />} />
