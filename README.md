@@ -151,6 +151,6 @@ El servidor (Sheet) mantiene una hoja por tabla + hoja `deletions`, y devuelve s
 ## Notas
 
 - La UI y los textos están en español (sin tildes en varios strings).
-- `axios` está en `package.json` pero **no se usa**: la sync usa `fetch` nativo.
+- La sync usa `axios` con `Content-Type: text/plain` en el POST (evita preflight CORS de Apps Script) y timeouts de 60s (GET) / 120s (POST).
 - Código muerto conocido: `hooks/useForm.ts`, `constants/color.ts`, `src/assets/hero.png`.
 - Documentación para agentes de IA: [`AGENTS.md`](./AGENTS.md).

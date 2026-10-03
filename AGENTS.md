@@ -77,7 +77,7 @@ Patrón `create<State>()`, sin middleware de persistencia. Acceso no-reactivo: `
 
 ### 3.4 Motor de sync (syncStore.ts)
 
-1. **Pull** `GET` (fetch + AbortController, 60s) → `{ data: {tabla: filas}, deletions }`.
+1. **Pull** `GET` con axios (timeout 60s, `transformResponse` identity para parsear JSON manualmente) → `{ data: {tabla: filas}, deletions }`.
 2. **Merge** (`mergeRemoteData`): tombstones remotos aplican si `updatedAt <= deletedAt`; upsert solo si remoto más nuevo; remapeo de FKs por syncId; `planificaciones.fecha` se normaliza a 10 chars (defensa contra serialización de fechas de Sheets).
 3. **Rehidrata UI**: `planificacionStore.initialize()`.
 4. **Push**: `gatherLocalData(sinceTs)` = filas con `updatedAt > config['lastSyncPushTs']` + deletions; se Strippa el `id` local; `POST` con `Content-Type: text/plain` (**evita preflight CORS** — Apps Script no responde OPTIONS). 120s timeout. Al éxito se guarda `lastSyncPushTs`.
@@ -102,7 +102,7 @@ Patrón `create<State>()`, sin middleware de persistencia. Acceso no-reactivo: `
 
 ## 5. Gotchas (no obvios, importantes)
 
-1. **`axios` está en `package.json` pero NO se usa** — sync usa `fetch` nativo. No añadir axios a sync.
+1. **`axios` se usa en la sync** (`src/store/syncStore.ts`). El POST debe mantener `Content-Type: 'text/plain'` — si se cambia a application/json falla por preflight CORS. Timeout de axios mapea a `ECONNABORTED` (antes AbortError de fetch); errores se traducen con `mapearErrorSync()`.
 2. **Código muerto conocido**: `hooks/useForm.ts`, `constants/color.ts`, `assets/hero.png`. No basar cambios nuevos en ellos sin verificar.
 3. Fechas SIEMPRE como string local `YYYY-MM-DD`; nunca `new Date('YYYY-MM-DD')` directo (UTC shift) — usar `parseFechaLocal`.
 4. `POST` a Apps Script debe ser `Content-Type: text/plain`, si no, falla por preflight CORS.

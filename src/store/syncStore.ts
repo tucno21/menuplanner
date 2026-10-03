@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import axios from 'axios'
 import { db, SYNC_TABLES, type SyncTable } from '../db/dexie'
 import { usePlanificacionStore } from './planificacionStore'
 
@@ -212,6 +213,26 @@ async function gatherLocalData(
   return { data, deletions }
 }
 
+function mapearErrorSync(err: unknown): string {
+  if (axios.isAxiosError(err)) {
+    if (err.code === 'ECONNABORTED' || err.code === 'ETIMEDOUT' || err.code === 'ERR_CANCELED') {
+      return 'Tiempo agotado. Verifica la URL.'
+    }
+    if (err.response) {
+      const method = (err.config?.method ?? 'request').toUpperCase()
+      return method + ' HTTP ' + err.response.status
+    }
+    return 'No se pudo conectar. Verifica URL e internet.'
+  }
+  if (err instanceof SyntaxError) {
+    return 'Respuesta invalida del servidor.'
+  }
+  if (err instanceof Error) {
+    return err.message
+  }
+  return 'Error de sincronizacion'
+}
+
 export const useSyncStore = create<SyncState>((set, get) => ({
   syncing: false,
   lastSync: null,
@@ -243,19 +264,14 @@ export const useSyncStore = create<SyncState>((set, get) => ({
 
       // ── STEP 1: GET (pull) ──────────────────────────────
       console.log('[Sync] GET (pull)...')
-      const getController = new AbortController()
-      const getTimeoutId = setTimeout(
-        () => getController.abort(),
-        GET_TIMEOUT
-      )
-      const res = await fetch(url, { signal: getController.signal })
-      clearTimeout(getTimeoutId)
+      const res = await axios.get<string>(url, {
+        timeout: GET_TIMEOUT,
+        transformResponse: [(data: string) => data],
+      })
 
       console.log('[Sync] GET status:', res.status)
-      if (!res.ok) throw new Error('GET HTTP ' + res.status)
 
-      const text = await res.text()
-      const remote: RemotePayload = JSON.parse(text)
+      const remote: RemotePayload = JSON.parse(res.data)
 
       const remoteCounts: Record<string, number> = {}
       for (const k of Object.keys(remote.data ?? {})) {
@@ -285,18 +301,11 @@ export const useSyncStore = create<SyncState>((set, get) => ({
         payloadKB: Math.round(payload.length / 1024),
       })
 
-      const postController = new AbortController()
-      const postTimeoutId = setTimeout(
-        () => postController.abort(),
-        POST_TIMEOUT
-      )
-      await fetch(url, {
-        method: 'POST',
-        body: payload,
+      // text/plain evita el preflight CORS (Apps Script no responde OPTIONS)
+      await axios.post(url, payload, {
         headers: { 'Content-Type': 'text/plain' },
-        signal: postController.signal,
+        timeout: POST_TIMEOUT,
       })
-      clearTimeout(postTimeoutId)
       console.log('[Sync] Push OK')
 
       await db.config.put({ key: 'lastSyncPushTs', value: pushTs })
@@ -305,17 +314,7 @@ export const useSyncStore = create<SyncState>((set, get) => ({
       console.log('[Sync] === Ciclo completado ===')
     } catch (err) {
       console.error('[Sync] Error:', err)
-      let msg = 'Error de sincronizacion'
-      if (err instanceof DOMException && err.name === 'AbortError') {
-        msg = 'Tiempo agotado. Verifica la URL.'
-      } else if (err instanceof TypeError) {
-        msg = 'No se pudo conectar. Verifica URL e internet.'
-      } else if (err instanceof SyntaxError) {
-        msg = 'Respuesta invalida del servidor.'
-      } else if (err instanceof Error) {
-        msg = err.message
-      }
-      set({ error: msg, syncing: false })
+      set({ error: mapearErrorSync(err), syncing: false })
     } finally {
       syncInProgress = false
     }
