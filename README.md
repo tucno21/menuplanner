@@ -1,32 +1,156 @@
-# React + TypeScript + Vite
+# MenuPlanner
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+PWA **offline-first** para planificar menús semanales con generación automática de lista de compras. Los datos viven en el navegador (IndexedDB) y se sincronizan entre dispositivos mediante un backend sin servidor sobre **Google Apps Script + Google Sheets**.
 
-Currently, two official plugins are available:
+- App: https://menuplanner-21.vercel.app/
+- Autor: Carlos Tucno
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Características
 
-## React Compiler
+- **Planificación semanal**: vista de semana actual y próxima (inicio lunes), con estado por plato (`pendiente` / `preparado`).
+- **Planificación diaria**: asigna varios platos a una fecha, acciones de deslizar (ver detalle / eliminar).
+- **CRUD de platos** con ingredientes y cantidades (relación muchos-a-muchos).
+- **CRUD de ingredientes y unidades** (24 unidades precargadas, ~76 ingredientes seed).
+- **Lista de compras automática**: agrega ingredientes de la semana, suma cantidades por ingrediente+unidad y permite marcar ítems como comprados (por semana ISO y año).
+- **Autenticación local por PIN** (se guarda en IndexedDB, no hay servidor de auth).
+- **Sincronización multi-dispositivo** con resolución de conflictos *last-writer-wins* y eliminaciones con *tombstones*.
+- **PWA instalable**: manifest, service worker con precache, actualización automática y forzada desde Ajustes.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Stack
 
-## Expanding the Oxlint configuration
+| Tecnología | Uso |
+|---|---|
+| React 19 + TypeScript | UI |
+| Vite 8 | Build y dev server |
+| Tailwind CSS v4 | Estilos (tokens `@theme` en `src/index.css`) |
+| Dexie 4 | Base de datos local (IndexedDB), BD `MenuPlannerDB` |
+| Zustand 5 | Estado global (4 stores) |
+| react-router 7 | Rutas (paquete `react-router`) |
+| vite-plugin-pwa | Manifest + service worker (Workbox) |
+| oxlint | Linter |
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+El backend de sincronización es un **Google Apps Script** desplegado como Web App sobre un Google Sheet. Ver [`GOOGLE_APPS_SCRIPT.md`](./GOOGLE_APPS_SCRIPT.md) para instrucciones de despliegue y el código completo.
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+## Comandos
+
+```bash
+npm install        # instalar dependencias
+npm run dev        # dev server con --host (SW de PWA habilitado en dev)
+npm run build      # tsc -b && vite build (type-check + build de producción)
+npm run lint       # oxlint
+npm run preview    # servir el build de producción
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Generación de íconos PWA (requiere imagen fuente en `public/pwa-icon.svg`):
+
+```bash
+npx pwa-assets-generator
+```
+
+## Estructura del proyecto
+
+```
+src/
+├── main.tsx              # Punto de entrada
+├── App.tsx               # Rutas + ProtectedRoute + montaje de Toast
+├── index.css             # Tema Tailwind v4 (@theme: colores, sombras, keyframes)
+├── components/
+│   ├── CustomTab.tsx     # Tabs con indicador animado
+│   ├── DiasSemana.tsx    # Tarjetas de los 7 días de una semana
+│   └── ui/               # Toast, BottomSheet, Modal, AlertCustom,
+│                         # SwipeReveal, BackButton, Input
+├── constants/color.ts    # Paleta (sin uso; estilos vía tokens de Tailwind)
+├── db/dexie.ts           # Esquema Dexie (v5), modelos, seeds, constantes de sync
+├── hooks/useForm.ts      # Hook de formularios genérico (sin uso actualmente)
+├── pages/
+│   ├── MainLayout.tsx    # Shell con nav inferior (máx 480px, lg: 4xl)
+│   ├── Login.tsx         # Crear/login con PIN de 4 dígitos
+│   ├── Home.tsx          # Semanas + lista de compras + plan semanal
+│   ├── Dia.tsx           # Platos de un día (swipe actions)
+│   ├── Planificar.tsx    # Multi-selección de platos para una fecha
+│   ├── Ingredientes.tsx  # CRUD de ingredientes
+│   ├── Unidades.tsx      # CRUD de unidades
+│   ├── Settings.tsx      # Sync URL, cambiar PIN, reset, forzar actualización
+│   ├── NotFound.tsx      # 404
+│   └── grupos/           # PlatosList, PlatoDetail, CrearPlato, ActualizarPlato
+├── store/
+│   ├── authStore.ts           # PIN auth (initialize/createPin/login/logout/changePin)
+│   ├── planificacionStore.ts  # Store central de datos (CRUD + lista de compras)
+│   ├── syncStore.ts           # Motor de sincronización (pull/merge/push)
+│   └── toastStore.ts          # Cola de notificaciones toast
+└── utils/
+    ├── obtenerSemana.ts       # Semanas (lunes), parse local, número de semana ISO
+    └── obtenerNombreDia.ts    # Nombre del día en español (Intl es-ES)
+```
+
+## Rutas
+
+| Ruta | Página | Acceso |
+|---|---|---|
+| `/` | Login (PIN) | Pública |
+| `/home` | Inicio (semanas + compras) | Protegida |
+| `/home/dia/:fecha` | Día (`fecha` = `YYYY-MM-DD`) | Protegida |
+| `/home/planificar/:fecha` | Planificar platos para una fecha | Protegida |
+| `/platos` | Lista de platos | Protegida |
+| `/platos/plato/:platoId` | Detalle de plato | Protegida |
+| `/platos/crear-plato` | Crear plato | Protegida |
+| `/platos/actualizar-plato/:platoId` | Editar plato | Protegida |
+| `/ingredientes` | Ingredientes | Protegida |
+| `/ingredientes/unidades` | Unidades | Protegida |
+| `/settings` | Ajustes (sync, PIN, reset, update) | Protegida |
+| `*` | 404 | Pública |
+
+`ProtectedRoute` inicializa los datos (`initialize()`) y arranca/detiene el auto-sync al montar/desmontar.
+
+## Arquitectura de datos
+
+Base de datos **`MenuPlannerDB`** (Dexie/IndexedDB), versión 5:
+
+| Tabla | Clave | Notas |
+|---|---|---|
+| `platos` | `++id` | `syncId, nombre, descripcion, updatedAt` |
+| `ingredientes` | `++id` | `syncId, nombre, unidad, updatedAt` |
+| `platoIngredientes` | `++id` | Junction plato↔ingrediente con `cantidad`; guarda ids locales **y** `platoSyncId`/`ingredienteSyncId` |
+| `planificaciones` | `++id` | `fecha` (`YYYY-MM-DD`), `estado` (`pendiente\|preparado`) |
+| `compras` | `++id` | `numeroSemana`, `anio`, `estado` (`comprado\|pendiente`) |
+| `unidades` | `++id` | 24 unidades seed |
+| `config` | `key` (string) | `pin`, `appsScriptUrl`, `lastSyncPushTs` |
+| `deletions` | `++id` | Tombstones `{syncId, table, deletedAt}` |
+
+Reglas clave:
+
+- **`syncId`** es la identidad entre dispositivos (`crypto.randomUUID()`; seeds con ids deterministas `seed-xxx-nombre`). El `id` local es solo del dispositivo.
+- **`updatedAt`** (ISO string) se actualiza en cada escritura; la sync resuelve conflictos por *last-writer-wins*.
+- **Toda eliminación es soft-delete**: primero se escribe un tombstone en `deletions`, luego se borra la fila.
+- **Fechas**: siempre strings locales `YYYY-MM-DD` (usar `parseFechaLocal` para parsear, evita el off-by-one de UTC). Semanas inician lunes; número de semana ISO 8601.
+
+## Sincronización (Google Apps Script)
+
+Ciclo cada **120s** (si hay red), al recuperar conexión (`online` event) y manual desde Ajustes:
+
+1. **Pull**: `GET` al Web App → `{ data: { tabla: filas[] }, deletions: [] }`.
+2. **Merge** local: aplica tombstones remotos, upsert con LWW por `updatedAt` (remapeando FKs por `syncId`).
+3. **Push**: `POST` con `Content-Type: text/plain` (evita preflight CORS de Apps Script) enviando filas con `updatedAt > lastSyncPushTs` + deletions pendientes.
+
+El servidor (Sheet) mantiene una hoja por tabla + hoja `deletions`, y devuelve siempre el estado completo mergeado. Detalles y código en [`GOOGLE_APPS_SCRIPT.md`](./GOOGLE_APPS_SCRIPT.md).
+
+> No editar manualmente las columnas `syncId` o `updatedAt` en el spreadsheet.
+
+## PWA
+
+- `vite-plugin-pwa` con `registerType: 'autoUpdate'`, precache Workbox y SW habilitado en dev (carpeta `dev-dist/`).
+- Manifest inline en `vite.config.ts` (`theme_color #fd9e02`, `background_color #ffecd1`, standalone, portrait, español).
+- Íconos generados desde `public/pwa-icon.svg` con `@vite-pwa/assets-generator` (preset `minimal-2023`).
+- **Actualización forzada** desde Ajustes: desregistra SWs, borra Cache Storage y recarga.
+
+## Despliegue
+
+- **Vercel**: rewrite `/(.*) → /` (`vercel.json`) para SPA routing. Deploy automático del repositorio.
+- El backend de sync es independiente: solo se necesita pegar la URL `/exec` del Web App en Ajustes → Sync.
+
+## Notas
+
+- La UI y los textos están en español (sin tildes en varios strings).
+- `axios` está en `package.json` pero **no se usa**: la sync usa `fetch` nativo.
+- Código muerto conocido: `hooks/useForm.ts`, `constants/color.ts`, `src/assets/hero.png`.
+- Documentación para agentes de IA: [`AGENTS.md`](./AGENTS.md).
