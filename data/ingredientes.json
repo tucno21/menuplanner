@@ -114,7 +114,8 @@
             "carbohidratos": 19.0,
             "grasas": 1.2,
             "fibra": 2.7
-        }
+        },
+        "pesoPorUnidad": 200
     },
     {
         "nombre": "Maíz morado",
@@ -491,7 +492,8 @@
             "carbohidratos": 4.3,
             "grasas": 0.2,
             "fibra": 1.2
-        }
+        },
+        "pesoPorUnidad": 120
     },
     {
         "nombre": "Lechuga",
@@ -504,7 +506,8 @@
             "carbohidratos": 2.9,
             "grasas": 0.2,
             "fibra": 1.3
-        }
+        },
+        "pesoPorUnidad": 500
     },
     {
         "nombre": "Pepino",
@@ -517,7 +520,8 @@
             "carbohidratos": 3.6,
             "grasas": 0.1,
             "fibra": 0.5
-        }
+        },
+        "pesoPorUnidad": 300
     },
     {
         "nombre": "Brócoli",
@@ -530,7 +534,8 @@
             "carbohidratos": 4.0,
             "grasas": 1.3,
             "fibra": 0.7
-        }
+        },
+        "pesoPorUnidad": 600
     },
     {
         "nombre": "Coliflor",
@@ -543,7 +548,8 @@
             "carbohidratos": 5.0,
             "grasas": 0.3,
             "fibra": 2.0
-        }
+        },
+        "pesoPorUnidad": 800
     },
     {
         "nombre": "Col",
@@ -556,7 +562,8 @@
             "carbohidratos": 5.8,
             "grasas": 0.1,
             "fibra": 2.5
-        }
+        },
+        "pesoPorUnidad": 1000
     },
     {
         "nombre": "Zanahoria",
@@ -582,7 +589,8 @@
             "carbohidratos": 5.4,
             "grasas": 0.3,
             "fibra": 2.7
-        }
+        },
+        "pesoPorUnidad": 150
     },
     {
         "nombre": "Rabanito",
@@ -595,7 +603,8 @@
             "carbohidratos": 3.4,
             "grasas": 0.1,
             "fibra": 1.6
-        }
+        },
+        "pesoPorUnidad": 20
     },
     {
         "nombre": "Espinaca",
@@ -634,7 +643,8 @@
             "carbohidratos": 14.2,
             "grasas": 0.3,
             "fibra": 1.8
-        }
+        },
+        "pesoPorUnidad": 200
     },
     {
         "nombre": "Zapallo",
@@ -673,7 +683,8 @@
             "carbohidratos": 3.3,
             "grasas": 0.2,
             "fibra": 1.0
-        }
+        },
+        "pesoPorUnidad": 150
     },
     {
         "nombre": "Pimiento",
@@ -686,7 +697,8 @@
             "carbohidratos": 5.1,
             "grasas": 0.1,
             "fibra": 0.7
-        }
+        },
+        "pesoPorUnidad": 150
     },
     {
         "nombre": "Alcachofa",
@@ -699,7 +711,8 @@
             "carbohidratos": 10.5,
             "grasas": 0.2,
             "fibra": 5.4
-        }
+        },
+        "pesoPorUnidad": 300
     },
     {
         "nombre": "Rocoto",
@@ -712,7 +725,8 @@
             "carbohidratos": 8.8,
             "grasas": 0.4,
             "fibra": 1.5
-        }
+        },
+        "pesoPorUnidad": 20
     },
     {
         "nombre": "Ají limo",
@@ -725,7 +739,8 @@
             "carbohidratos": 9.5,
             "grasas": 0.4,
             "fibra": 1.5
-        }
+        },
+        "pesoPorUnidad": 10
     },
     {
         "nombre": "Ají amarillo",
@@ -738,7 +753,8 @@
             "carbohidratos": 9.5,
             "grasas": 0.4,
             "fibra": 1.5
-        }
+        },
+        "pesoPorUnidad": 30
     },
     {
         "nombre": "Choclo",
@@ -751,7 +767,8 @@
             "carbohidratos": 19.0,
             "grasas": 1.2,
             "fibra": 2.7
-        }
+        },
+        "pesoPorUnidad": 200
     },
     {
         "nombre": "Tomate de árbol / sachatomate",
@@ -764,7 +781,8 @@
             "carbohidratos": 6.0,
             "grasas": 0.4,
             "fibra": 1.5
-        }
+        },
+        "pesoPorUnidad": 100
     },
     {
         "nombre": "Cebolla roja",
@@ -777,7 +795,8 @@
             "carbohidratos": 9.3,
             "grasas": 0.1,
             "fibra": 1.7
-        }
+        },
+        "pesoPorUnidad": 150
     },
     {
         "nombre": "Cebolla blanca",
@@ -790,7 +809,8 @@
             "carbohidratos": 9.3,
             "grasas": 0.1,
             "fibra": 1.7
-        }
+        },
+        "pesoPorUnidad": 150
     },
     {
         "nombre": "Zapallo loche",
@@ -855,7 +875,8 @@
             "carbohidratos": 9.3,
             "grasas": 0.1,
             "fibra": 1.7
-        }
+        },
+        "pesoPorUnidad": 150
     },
     {
         "nombre": "Cebollita china",
@@ -998,7 +1019,8 @@
             "carbohidratos": 9.3,
             "grasas": 0.3,
             "fibra": 2.8
-        }
+        },
+        "pesoPorUnidad": 60
     },
     {
         "nombre": "Ají panca",
@@ -1141,7 +1163,8 @@
             "carbohidratos": 11.8,
             "grasas": 0.1,
             "fibra": 2.4
-        }
+        },
+        "pesoPorUnidad": 180
     },
     {
         "nombre": "Mandarina",
@@ -1154,7 +1177,8 @@
             "carbohidratos": 13.3,
             "grasas": 0.3,
             "fibra": 1.8
-        }
+        },
+        "pesoPorUnidad": 100
     },
     {
         "nombre": "Manzana",
@@ -1167,7 +1191,8 @@
             "carbohidratos": 13.8,
             "grasas": 0.2,
             "fibra": 2.4
-        }
+        },
+        "pesoPorUnidad": 180
     },
     {
         "nombre": "Pera",
@@ -1180,7 +1205,8 @@
             "carbohidratos": 15.2,
             "grasas": 0.1,
             "fibra": 3.1
-        }
+        },
+        "pesoPorUnidad": 170
     },
     {
         "nombre": "Papaya",
@@ -1193,7 +1219,8 @@
             "carbohidratos": 10.8,
             "grasas": 0.3,
             "fibra": 1.7
-        }
+        },
+        "pesoPorUnidad": 1000
     },
     {
         "nombre": "Plátano",
@@ -1206,7 +1233,8 @@
             "carbohidratos": 22.8,
             "grasas": 0.3,
             "fibra": 2.6
-        }
+        },
+        "pesoPorUnidad": 120
     },
     {
         "nombre": "Durazno",
@@ -1219,7 +1247,8 @@
             "carbohidratos": 9.5,
             "grasas": 0.3,
             "fibra": 1.5
-        }
+        },
+        "pesoPorUnidad": 150
     },
     {
         "nombre": "Membrillo",
@@ -1232,7 +1261,8 @@
             "carbohidratos": 15.3,
             "grasas": 0.1,
             "fibra": 1.9
-        }
+        },
+        "pesoPorUnidad": 200
     },
     {
         "nombre": "Uva",
@@ -1258,7 +1288,8 @@
             "carbohidratos": 15.0,
             "grasas": 0.4,
             "fibra": 1.6
-        }
+        },
+        "pesoPorUnidad": 300
     },
     {
         "nombre": "Piña",
@@ -1271,7 +1302,8 @@
             "carbohidratos": 13.1,
             "grasas": 0.1,
             "fibra": 1.4
-        }
+        },
+        "pesoPorUnidad": 1200
     },
     {
         "nombre": "Sandía",
@@ -1284,7 +1316,8 @@
             "carbohidratos": 7.6,
             "grasas": 0.2,
             "fibra": 0.4
-        }
+        },
+        "pesoPorUnidad": 4000
     },
     {
         "nombre": "Melón",
@@ -1297,7 +1330,8 @@
             "carbohidratos": 8.2,
             "grasas": 0.2,
             "fibra": 0.9
-        }
+        },
+        "pesoPorUnidad": 1000
     },
     {
         "nombre": "Chirimoya",
@@ -1310,7 +1344,8 @@
             "carbohidratos": 17.7,
             "grasas": 0.7,
             "fibra": 3.0
-        }
+        },
+        "pesoPorUnidad": 300
     },
     {
         "nombre": "Lúcuma",
@@ -1323,7 +1358,8 @@
             "carbohidratos": 25.0,
             "grasas": 0.2,
             "fibra": 1.0
-        }
+        },
+        "pesoPorUnidad": 150
     },
     {
         "nombre": "Granadilla",
@@ -1336,7 +1372,8 @@
             "carbohidratos": 23.4,
             "grasas": 0.7,
             "fibra": 10.4
-        }
+        },
+        "pesoPorUnidad": 100
     },
     {
         "nombre": "Maracuyá",
@@ -1349,7 +1386,8 @@
             "carbohidratos": 23.4,
             "grasas": 0.7,
             "fibra": 10.4
-        }
+        },
+        "pesoPorUnidad": 80
     },
     {
         "nombre": "Tumbo",
@@ -1362,7 +1400,8 @@
             "carbohidratos": 8.0,
             "grasas": 0.3,
             "fibra": 1.5
-        }
+        },
+        "pesoPorUnidad": 150
     },
     {
         "nombre": "Aguaymanto",
@@ -1388,7 +1427,8 @@
             "carbohidratos": 9.6,
             "grasas": 0.5,
             "fibra": 3.6
-        }
+        },
+        "pesoPorUnidad": 100
     },
     {
         "nombre": "Capulí",
@@ -1453,7 +1493,8 @@
             "carbohidratos": 8.5,
             "grasas": 14.7,
             "fibra": 6.7
-        }
+        },
+        "pesoPorUnidad": 200
     },
     {
         "nombre": "Guanábana",
@@ -1466,7 +1507,8 @@
             "carbohidratos": 16.8,
             "grasas": 0.3,
             "fibra": 3.3
-        }
+        },
+        "pesoPorUnidad": 2000
     },
     {
         "nombre": "Guayaba",
@@ -1479,7 +1521,8 @@
             "carbohidratos": 14.3,
             "grasas": 1.0,
             "fibra": 5.4
-        }
+        },
+        "pesoPorUnidad": 100
     },
     {
         "nombre": "Cocona",
@@ -1492,7 +1535,8 @@
             "carbohidratos": 7.0,
             "grasas": 0.3,
             "fibra": 1.5
-        }
+        },
+        "pesoPorUnidad": 200
     },
     {
         "nombre": "Camu camu",
@@ -1518,7 +1562,8 @@
             "carbohidratos": 31.0,
             "grasas": 8.0,
             "fibra": 6.0
-        }
+        },
+        "pesoPorUnidad": 50
     },
     {
         "nombre": "Arazá",
@@ -1544,7 +1589,8 @@
             "carbohidratos": 14.0,
             "grasas": 0.5,
             "fibra": 2.0
-        }
+        },
+        "pesoPorUnidad": 100
     },
     {
         "nombre": "Pacay / guaba",
@@ -1557,7 +1603,8 @@
             "carbohidratos": 14.0,
             "grasas": 0.2,
             "fibra": 1.0
-        }
+        },
+        "pesoPorUnidad": 200
     },
     {
         "nombre": "Pepino dulce",
@@ -1570,7 +1617,8 @@
             "carbohidratos": 6.4,
             "grasas": 0.1,
             "fibra": 1.0
-        }
+        },
+        "pesoPorUnidad": 200
     },
     {
         "nombre": "Higo",
@@ -1583,7 +1631,8 @@
             "carbohidratos": 19.2,
             "grasas": 0.3,
             "fibra": 2.9
-        }
+        },
+        "pesoPorUnidad": 50
     },
     {
         "nombre": "Pollo sin piel",

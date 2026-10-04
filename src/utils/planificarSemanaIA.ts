@@ -1,6 +1,9 @@
 import { generarPlanSemanal, type SlotPlanSemanal } from './planificarSemana'
 
-const MODELO_GEMINI = 'gemini-2.0-flash'
+const MODELO_GEMINI = 'gemini-3.8-flash'
+// Google retira modelos viejos periodicamente (gemini-2.0-flash dejo de existir).
+// Si el modelo principal responde 404, se reintenta con el alias movil mas reciente.
+const MODELO_GEMINI_FALLBACK = 'gemini-flash-latest'
 const URL_GEMINI = 'https://generativelanguage.googleapis.com/v1beta/models'
 const TIMEOUT_IA_MS = 30_000
 
@@ -170,18 +173,25 @@ export async function planificarConIA(opciones: {
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), TIMEOUT_IA_MS)
   try {
-    const res = await fetchFn(
-      `${URL_GEMINI}/${MODELO_GEMINI}:generateContent?key=${encodeURIComponent(apiKey)}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        signal: controller.signal,
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { temperature: 0.7, responseMimeType: 'application/json' },
-        }),
-      }
-    )
+    const llamada = (modelo: string) =>
+      fetchFn(
+        `${URL_GEMINI}/${modelo}:generateContent?key=${encodeURIComponent(apiKey)}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          signal: controller.signal,
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: { temperature: 0.7, responseMimeType: 'application/json' },
+          }),
+        }
+      )
+
+    let res = await llamada(MODELO_GEMINI)
+    // Modelo retirado por Google (404) -> reintenta con el alias mas reciente
+    if (res.status === 404) {
+      res = await llamada(MODELO_GEMINI_FALLBACK)
+    }
 
     if (!res.ok) {
       const error =

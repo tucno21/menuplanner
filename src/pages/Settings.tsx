@@ -935,7 +935,7 @@ const Settings = () => {
               </li>
               <li>Haz clic en <strong>Get API key</strong> (o <strong>Create API key</strong>)</li>
               <li>Selecciona <strong>Create API key in new project</strong></li>
-              <li>Se generara una clave que empieza con <code className="bg-gray-100 px-1 rounded text-xs">AIza...</code> — copiala</li>
+              <li>Se generara tu API key — copiala completa (puede empezar con <code className="bg-gray-100 px-1 rounded text-xs">AIza...</code> o <code className="bg-gray-100 px-1 rounded text-xs">AQ.</code>)</li>
               <li>Vuelve aqui, pegala en el campo de arriba y toca <strong>Guardar</strong></li>
               <li>Listo: en Inicio toca <strong>Planificar</strong> y elige el modo <strong>IA (Gemini)</strong></li>
             </ol>

@@ -31,5 +31,8 @@
     },
     {
         "nombre": "Desayuno y almuerzo"
+    },
+    {
+        "nombre": "Cena"
     }
 ]
