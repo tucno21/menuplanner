@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router'
 import { Leaf, Pencil, Trash2, Settings2 } from 'lucide-react'
 import { coincideBusqueda } from '../utils/busqueda'
 import { usePlanificacionStore } from '../store/planificacionStore'
+import { useToastStore } from '../store/toastStore'
 import Modal from '../components/ui/Modal'
 import AlertCustom from '../components/ui/AlertCustom'
 
@@ -15,12 +16,14 @@ const Ingredientes = () => {
   const createIngrediente = usePlanificacionStore((s) => s.createIngrediente)
   const updateIngrediente = usePlanificacionStore((s) => s.updateIngrediente)
   const deleteIngrediente = usePlanificacionStore((s) => s.deleteIngrediente)
+  const addToast = useToastStore((s) => s.addToast)
 
   const [searchQuery, setSearchQuery] = useState('')
   const [showModal, setShowModal] = useState(false)
   const [editingId, setEditingId] = useState<number | null>(null)
   const [formNombre, setFormNombre] = useState('')
   const [formUnidad, setFormUnidad] = useState('')
+  const [formPeso, setFormPeso] = useState('')
   const [showAlert, setShowAlert] = useState(false)
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null)
 
@@ -36,22 +39,34 @@ const Ingredientes = () => {
     setEditingId(null)
     setFormNombre('')
     setFormUnidad('')
+    setFormPeso('')
     setShowModal(true)
   }
 
-  const openEdit = (id: number, nombre: string, unidad: string) => {
+  const openEdit = (id: number, nombre: string, unidad: string, pesoPorUnidad?: number) => {
     setEditingId(id)
     setFormNombre(nombre)
     setFormUnidad(unidad)
+    setFormPeso(pesoPorUnidad !== undefined ? String(pesoPorUnidad) : '')
     setShowModal(true)
   }
 
   const handleSave = async () => {
     if (!formNombre.trim() || !formUnidad.trim()) return
+    // pesoPorUnidad SOLO aplica cuando la unidad es 'unidad'; campo vacio = sin peso
+    let peso: number | undefined
+    if (formUnidad.trim().toLowerCase() === 'unidad' && formPeso.trim()) {
+      const n = Number(formPeso)
+      if (!Number.isFinite(n) || n <= 0) {
+        addToast('El peso por unidad debe ser un numero mayor a 0', 'warning')
+        return
+      }
+      peso = n
+    }
     if (editingId !== null) {
-      await updateIngrediente(editingId, { nombre: formNombre, unidad: formUnidad })
+      await updateIngrediente(editingId, { nombre: formNombre, unidad: formUnidad, pesoPorUnidad: peso })
     } else {
-      await createIngrediente({ nombre: formNombre, unidad: formUnidad })
+      await createIngrediente({ nombre: formNombre, unidad: formUnidad, pesoPorUnidad: peso })
     }
     setShowModal(false)
   }
@@ -112,11 +127,16 @@ const Ingredientes = () => {
                 <div className="bg-primary rounded-full p-2">
                   <Leaf size={20} className="text-light" />
                 </div>
-                <span className="text-lg text-dark font-medium">{ing.nombre}</span>
+                <div>
+                  <span className="text-lg text-dark font-medium">{ing.nombre}</span>
+                  {ing.pesoPorUnidad !== undefined && (
+                    <p className="text-xs text-gray-400">1 unidad ≈ {ing.pesoPorUnidad} g</p>
+                  )}
+                </div>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-sm text-gray-500 mr-2">{ing.unidad}</span>
-                <button onClick={() => openEdit(ing.id!, ing.nombre, ing.unidad)}
+                <button onClick={() => openEdit(ing.id!, ing.nombre, ing.unidad, ing.pesoPorUnidad)}
                   className="bg-info/20 p-2 rounded-full">
                   <Pencil size={18} className="text-info" />
                 </button>
@@ -147,13 +167,29 @@ const Ingredientes = () => {
           <select
             value={formUnidad}
             onChange={(e) => setFormUnidad(e.target.value)}
-            className="bg-gray-100 rounded-lg px-4 py-3 w-full mb-4 border border-gray-300 outline-none text-dark"
+            className="bg-gray-100 rounded-lg px-4 py-3 w-full mb-3 border border-gray-300 outline-none text-dark"
           >
             <option value="">Seleccionar unidad</option>
             {unidades.map((u) => (
               <option key={u.id} value={u.nombre}>{u.nombre}</option>
             ))}
           </select>
+
+          {formUnidad.trim().toLowerCase() === 'unidad' && (
+            <div className="mb-4">
+              <input
+                type="number"
+                min="0"
+                step="any"
+                inputMode="decimal"
+                placeholder="Peso aproximado por unidad (g)"
+                value={formPeso}
+                onChange={(e) => setFormPeso(e.target.value)}
+                className="bg-gray-100 rounded-lg px-4 py-3 w-full border border-gray-300 outline-none text-dark"
+              />
+              <p className="text-[11px] text-gray-400 mt-1">Opcional. Ej: Brocoli = 600. Se usa solo para el calculo nutricional.</p>
+            </div>
+          )}
 
           <div className="flex flex-row gap-3">
             <button

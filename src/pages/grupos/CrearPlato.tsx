@@ -71,13 +71,14 @@ const CrearPlato = () => {
   )
 
   // Cálculo nutricional en vivo: se recalcula al cambiar ingredientes, cantidades o porciones
-  const mapaNutricionIng = new Map(ingredientes.map((i) => [i.id as number, i.nutricion ?? null]))
+  const mapaIngs = new Map(ingredientes.map((i) => [i.id as number, i]))
   const calculoNutricion = calcularNutricionReceta(
     selectedIngredientes.map((sel) => ({
       nombre: sel.nombre,
       cantidad: Number(sel.cantidad) || 0,
       unidad: sel.unidad,
-      nutricion: mapaNutricionIng.get(sel.id) ?? null,
+      nutricion: mapaIngs.get(sel.id)?.nutricion ?? null,
+      pesoPorUnidad: mapaIngs.get(sel.id)?.pesoPorUnidad ?? null,
     })),
     nutricionForm.porciones.trim() ? Number(nutricionForm.porciones) : undefined
   )

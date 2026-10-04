@@ -36,6 +36,9 @@ export interface LineaReceta {
   cantidad: number
   unidad: string
   nutricion?: NutricionIngrediente | null
+  // Gramos que pesa 1 'unidad' del ingrediente. Solo se usa cuando la unidad
+  // de la linea es 'unidad' y la nutricion esta expresada en 'gr'.
+  pesoPorUnidad?: number | null
 }
 
 export type EstadoCalculo = 'calculado' | 'parcial' | 'sin-informacion'
@@ -58,6 +61,28 @@ function redondear(n: Nutricion): Nutricion {
   }
 }
 
+// Factor de conversion de una linea completa.
+// Ademas de las conversiones exactas (factorConversion), resuelve la
+// equivalencia fisica opcional: 1 'unidad' del ingrediente = pesoPorUnidad gramos.
+// Nunca asume pesos: si no hay equivalencia, devuelve null (linea sin datos).
+function factorLinea(linea: LineaReceta): number | null {
+  const nutricion = linea.nutricion as NutricionIngrediente
+  const factor = factorConversion(linea.unidad, nutricion.unidadBase)
+  if (factor !== null) return factor
+
+  const desdeNorm = String(linea.unidad ?? '').trim().toLowerCase()
+  if (
+    desdeNorm === 'unidad' &&
+    nutricion.unidadBase === 'gr' &&
+    typeof linea.pesoPorUnidad === 'number' &&
+    Number.isFinite(linea.pesoPorUnidad) &&
+    linea.pesoPorUnidad > 0
+  ) {
+    return linea.pesoPorUnidad
+  }
+  return null
+}
+
 // Calcula la nutricion de una receta a partir de sus lineas de ingredientes.
 // nutricion del ingrediente x cantidad (convertida a unidadBase) / base = aporte
 // - estado 'calculado': todas las lineas aportaron datos
@@ -74,7 +99,7 @@ export function calcularNutricionReceta(lineas: LineaReceta[], porciones?: numbe
       nombresFaltantes.add(linea.nombre)
       continue
     }
-    const factor = factorConversion(linea.unidad, linea.nutricion.unidadBase)
+    const factor = factorLinea(linea)
     if (factor === null) {
       nombresFaltantes.add(linea.nombre)
       continue

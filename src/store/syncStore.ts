@@ -90,6 +90,19 @@ function aplastarIngrediente(row: Record<string, unknown>): void {
 
 // Pull: columnas nut* -> nutricion {} (o nada si base/unidadBase son invalidos)
 function reconstruirIngrediente(resolved: Record<string, unknown>): void {
+  // pesoPorUnidad: Sheets puede devolver el numero como string
+  if (
+    resolved.pesoPorUnidad === '' ||
+    resolved.pesoPorUnidad === undefined ||
+    resolved.pesoPorUnidad === null
+  ) {
+    delete resolved.pesoPorUnidad
+  } else {
+    const p = Number(resolved.pesoPorUnidad)
+    if (Number.isFinite(p) && p > 0) resolved.pesoPorUnidad = p
+    else delete resolved.pesoPorUnidad
+  }
+
   const rawBase = resolved.nutBase
   const base = Number(rawBase)
   const unidadBase = String(resolved.nutUnidadBase ?? '').trim().toLowerCase()

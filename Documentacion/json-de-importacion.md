@@ -123,10 +123,19 @@ También es válido `[ { "nombre": "nutritivo" }, ... ]`.
   { "nombre": "Pollo", "unidad": "kg", "nutricion": { "base": 100, "unidadBase": "gr", "calorias": 165, "proteinas": 31, "carbohidratos": 0, "grasas": 3.6, "fibra": 0 } },
   { "nombre": "Huevos", "unidad": "unidad", "nutricion": { "base": 1, "unidadBase": "unidad", "calorias": 70, "proteinas": 6, "carbohidratos": 0.5, "grasas": 5, "fibra": 0 } },
   { "nombre": "Leche", "unidad": "ml", "nutricion": { "base": 100, "unidadBase": "ml", "calorias": 60, "proteinas": 3, "carbohidratos": 5, "grasas": 3, "fibra": 0 } },
+  { "nombre": "Brocoli", "unidad": "unidad", "pesoPorUnidad": 600, "nutricion": { "base": 100, "unidadBase": "gr", "calorias": 34, "proteinas": 2.8, "carbohidratos": 6.6, "grasas": 0.4, "fibra": 2.6 } },
   { "nombre": "Tomate", "unidad": "unidad" },
   { "nombre": "Cebolla", "unidad": "unidad" }
 ]
 ```
+
+**Sobre `pesoPorUnidad` (OPCIONAL, gramos):**
+
+- Cuánto pesa fisicamente **1 unidad** del ingrediente (ej: Brocoli = 600).
+- **SOLO** se usa cuando la unidad del ingrediente es `"unidad"` y su nutricion esta expresada en `"gr"`: la app calcula `cantidad × pesoPorUnidad` gramos para la nutricion (1 brocoli de 600 g, 2 = 1200 g).
+- **NO afecta la lista de compras ni las recetas**: siguen mostrando "1 unidad", no gramos.
+- Debe ser un **numero > 0** (`"600"` como texto es invalido). Sin este campo, no se asume ningun peso.
+- No aplica a otras unidades comerciales (lata, paquete, bolsa...) salvo que su nutricion este definida en esa misma unidad.
 
 **Sobre `nutricion` (OPCIONAL):**
 
@@ -143,13 +152,14 @@ También es válido `[ { "nombre": "nutritivo" }, ... ]`.
 - Para diferenciar crudo/cocido (Arroz crudo vs Arroz cocido), crear **ingredientes separados** con su propia nutricion y elegir el correcto en cada receta.
 
 **Restricciones:**
-- Formato por elemento: `{ "nombre": string, "unidad": string, "nutricion"?: {...} }`.
+- Formato por elemento: `{ "nombre": string, "unidad": string, "pesoPorUnidad"?: number, "nutricion"?: {...} }`.
   - También se acepta un string simple (`"Arroz"`) → la unidad queda como `"unidad"` por defecto.
 - La unidad **debería existir** en la tabla de unidades (importar unidades primero). Si la unidad no existe, el ingrediente se crea igual, pero al crear **platos** con esa unidad el import fallará.
+- `pesoPorUnidad` (si se incluye): número estricto > 0 (0, negativos o texto como `"600"` rechazan TODO el import).
 - `nutricion` (si se incluye) se valida: `base` número > 0, `unidadBase` ∈ {gr, ml, unidad}, valores numéricos ≥ 0. Si cualquier nutricion del archivo es invalida, **no se importa nada**.
 - ⚠️ **Protección:** si el ingrediente "Pollo" está usado por platos y no está en el archivo → error:
   `No se puede importar: el ingrediente "Pollo" esta siendo usado por platos y no esta en el archivo`
-- Los ingredientes que coinciden por nombre **conservan su identidad**; si cambia la unidad o la nutricion, se actualizan. Si el ingrediente existia con nutricion y en el archivo no la trae, se **elimina** su nutricion (el archivo es la fuente de verdad).
+- Los ingredientes que coinciden por nombre **conservan su identidad**; si cambia la unidad, el peso o la nutricion, se actualizan. Si el ingrediente existia con peso/nutricion y en el archivo no los trae, se **eliminan** (el archivo es la fuente de verdad).
 
 ---
 

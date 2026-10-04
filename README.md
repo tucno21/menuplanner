@@ -111,7 +111,7 @@ Base de datos **`MenuPlannerDB`** (Dexie/IndexedDB), versión 6:
 | Tabla | Clave | Notas |
 |---|---|---|
 | `platos` | `++id` | `syncId, nombre, descripcion, updatedAt` + `porciones`/`nutricion` opcionales (no indexados) |
-| `ingredientes` | `++id` | `syncId, nombre, unidad, updatedAt` + `nutricion` opcional (por 100 g/100 ml/unidad, no indexado) |
+| `ingredientes` | `++id` | `syncId, nombre, unidad, updatedAt` + `pesoPorUnidad`/`nutricion` opcionales (no indexados) |
 | `platoIngredientes` | `++id` | Junction plato↔ingrediente con `cantidad`; guarda ids locales **y** `platoSyncId`/`ingredienteSyncId` |
 | `planificaciones` | `++id` | `fecha` (`YYYY-MM-DD`), `estado` (`pendiente\|preparado`) |
 | `compras` | `++id` | `numeroSemana`, `anio`, `estado` (`comprado\|pendiente`) |

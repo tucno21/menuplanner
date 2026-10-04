@@ -52,6 +52,7 @@ const PlatoDetail = () => {
       cantidad: Number(ing.cantidad) || 0,
       unidad: ing.unidad,
       nutricion: ing.nutricion ?? null,
+      pesoPorUnidad: ing.pesoPorUnidad ?? null,
     })),
     plato.porciones
   )

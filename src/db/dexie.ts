@@ -18,6 +18,9 @@ export interface Ingrediente {
   syncId: string
   nombre: string
   unidad: string
+  // Gramos que pesa fisicamente 1 'unidad' (solo informativo y para nutricion).
+  // NO se usa en la lista de compras: sigue mostrando la unidad de compra/uso.
+  pesoPorUnidad?: number
   nutricion?: NutricionIngrediente
   updatedAt: string
 }

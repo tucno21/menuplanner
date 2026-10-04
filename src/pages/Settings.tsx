@@ -12,7 +12,7 @@ import AlertCustom from '../components/ui/AlertCustom'
 
 const APPS_SCRIPT_CODE = `var TABLE_FIELDS = {
   platos:            ['syncId', 'nombre', 'descripcion', 'porciones', 'calorias', 'proteinas', 'carbohidratos', 'grasas', 'fibra', 'updatedAt'],
-  ingredientes:      ['syncId', 'nombre', 'unidad', 'nutBase', 'nutUnidadBase', 'nutCalorias', 'nutProteinas', 'nutCarbohidratos', 'nutGrasas', 'nutFibra', 'updatedAt'],
+  ingredientes:      ['syncId', 'nombre', 'unidad', 'pesoPorUnidad', 'nutBase', 'nutUnidadBase', 'nutCalorias', 'nutProteinas', 'nutCarbohidratos', 'nutGrasas', 'nutFibra', 'updatedAt'],
   platoIngredientes: ['syncId', 'platoSyncId', 'platoId', 'ingredienteSyncId', 'ingredienteId', 'cantidad', 'updatedAt'],
   planificaciones:   ['syncId', 'platoSyncId', 'platoId', 'fecha', 'estado', 'updatedAt'],
   compras:           ['syncId', 'ingredienteSyncId', 'ingredienteId', 'cantidad', 'estado', 'numeroSemana', 'anio', 'updatedAt'],
@@ -403,6 +403,7 @@ const Settings = () => {
       const data = (await db.ingredientes.toArray()).map((i) => ({
         nombre: i.nombre,
         unidad: i.unidad,
+        ...(i.pesoPorUnidad !== undefined ? { pesoPorUnidad: i.pesoPorUnidad } : {}),
         ...(i.nutricion ? { nutricion: i.nutricion } : {}),
       }))
       downloadJson(data, 'ingredientes')
@@ -478,10 +479,11 @@ const Settings = () => {
         if (typeof item === 'string') {
           items.push({ nombre: item })
         } else if (item && typeof item === 'object' && typeof (item as { nombre?: unknown }).nombre === 'string') {
-          const obj = item as { nombre: string; unidad?: unknown; nutricion?: unknown }
+          const obj = item as { nombre: string; unidad?: unknown; pesoPorUnidad?: unknown; nutricion?: unknown }
           items.push({
             nombre: obj.nombre,
             unidad: typeof obj.unidad === 'string' ? obj.unidad : undefined,
+            pesoPorUnidad: obj.pesoPorUnidad,
             nutricion: obj.nutricion,
           })
         }

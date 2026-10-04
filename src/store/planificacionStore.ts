@@ -10,7 +10,7 @@ import {
   type Etiqueta,
   type PlatoEtiqueta,
 } from '../db/dexie'
-import { validarNutricionReceta, validarNutricionIngrediente, type Nutricion, type NutricionIngrediente } from '../utils/nutricion'
+import { validarNutricionReceta, validarNutricionIngrediente, validarPesoPorUnidad, type Nutricion, type NutricionIngrediente } from '../utils/nutricion'
 import { generarPlanSemanal, type SlotPlanSemanal } from '../utils/planificarSemana'
 import { planificarConIA, type PlatoParaIA } from '../utils/planificarSemanaIA'
 import { calcularNutricionReceta } from '../utils/calcularNutricion'
@@ -21,6 +21,7 @@ const newSyncId = () => crypto.randomUUID()
 export interface IngredienteImport {
   nombre: string
   unidad?: string
+  pesoPorUnidad?: unknown
   nutricion?: unknown
 }
 
@@ -54,7 +55,7 @@ export interface PlatoWithIngredientes {
   descripcion: string
   porciones?: number
   nutricion?: Nutricion
-  ingredientes: { id: number; nombre: string; cantidad: string; unidad: string; nutricion?: NutricionIngrediente }[]
+  ingredientes: { id: number; nombre: string; cantidad: string; unidad: string; pesoPorUnidad?: number; nutricion?: NutricionIngrediente }[]
   etiquetas: { id: number; nombre: string }[]
 }
 
@@ -101,8 +102,8 @@ interface PlanificacionState {
   getPlatoById: (id: number) => Promise<PlatoWithIngredientes | null>
 
   loadIngredientes: () => Promise<void>
-  createIngrediente: (data: { nombre: string; unidad: string; nutricion?: NutricionIngrediente }) => Promise<void>
-  updateIngrediente: (id: number, data: { nombre: string; unidad: string; nutricion?: NutricionIngrediente }) => Promise<void>
+  createIngrediente: (data: { nombre: string; unidad: string; pesoPorUnidad?: number; nutricion?: NutricionIngrediente }) => Promise<void>
+  updateIngrediente: (id: number, data: { nombre: string; unidad: string; pesoPorUnidad?: number; nutricion?: NutricionIngrediente }) => Promise<void>
   deleteIngrediente: (id: number) => Promise<void>
   importarIngredientes: (items: IngredienteImport[]) => Promise<ImportResult>
 
@@ -599,6 +600,7 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
           nombre: ing?.nombre ?? '',
           cantidad: String(pi.cantidad),
           unidad: ing?.unidad ?? '',
+          pesoPorUnidad: ing?.pesoPorUnidad,
           nutricion: ing?.nutricion,
         }
       })
@@ -635,6 +637,7 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
       unidad: data.unidad,
       updatedAt: nowISO(),
     }
+    if (data.pesoPorUnidad !== undefined) nuevo.pesoPorUnidad = data.pesoPorUnidad
     if (data.nutricion) nuevo.nutricion = data.nutricion
     await db.ingredientes.add(nuevo)
     await get().loadIngredientes()
@@ -644,6 +647,8 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
     const actual = await db.ingredientes.get(id)
     if (actual) {
       const actualizado: Ingrediente = { ...actual, nombre: data.nombre, unidad: data.unidad, updatedAt: nowISO() }
+      if (data.pesoPorUnidad !== undefined) actualizado.pesoPorUnidad = data.pesoPorUnidad
+      else delete actualizado.pesoPorUnidad
       if (data.nutricion) actualizado.nutricion = data.nutricion
       else delete actualizado.nutricion
       await db.ingredientes.put(actualizado)
@@ -796,7 +801,7 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
   },
 
   importarIngredientes: async (items) => {
-    const limpios: { nombre: string; unidad: string; nutricion?: NutricionIngrediente }[] = []
+    const limpios: { nombre: string; unidad: string; pesoPorUnidad?: number; nutricion?: NutricionIngrediente }[] = []
     const vistas = new Set<string>()
     for (const it of items) {
       const nombre = (it?.nombre ?? '').trim()
@@ -804,9 +809,11 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
       const clave = nombre.toLowerCase()
       if (vistas.has(clave)) continue
       vistas.add(clave)
+      const peso = validarPesoPorUnidad(it.pesoPorUnidad, nombre)
+      if (!peso.ok) return { ok: false, error: peso.error }
       const nutri = validarNutricionIngrediente(it.nutricion, nombre)
       if (!nutri.ok) return { ok: false, error: nutri.error }
-      limpios.push({ nombre, unidad: (it.unidad ?? '').trim() || 'unidad', nutricion: nutri.nutricion })
+      limpios.push({ nombre, unidad: (it.unidad ?? '').trim() || 'unidad', pesoPorUnidad: peso.peso, nutricion: nutri.nutricion })
     }
     if (limpios.length === 0) {
       return { ok: false, error: 'El archivo no contiene ingredientes validos' }
@@ -831,9 +838,12 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
     for (const l of limpios) {
       const actual = actuales.find((a) => a.nombre.toLowerCase() === l.nombre.toLowerCase())
       if (actual?.id) {
+        const pesoCambia = JSON.stringify(actual.pesoPorUnidad ?? null) !== JSON.stringify(l.pesoPorUnidad ?? null)
         const nutricionCambia = JSON.stringify(actual.nutricion ?? null) !== JSON.stringify(l.nutricion ?? null)
-        if (actual.unidad !== l.unidad || nutricionCambia) {
+        if (actual.unidad !== l.unidad || pesoCambia || nutricionCambia) {
           const actualizado: Ingrediente = { ...actual, unidad: l.unidad, updatedAt: ts }
+          if (l.pesoPorUnidad !== undefined) actualizado.pesoPorUnidad = l.pesoPorUnidad
+          else delete actualizado.pesoPorUnidad
           if (l.nutricion) actualizado.nutricion = l.nutricion
           else delete actualizado.nutricion
           await db.ingredientes.put(actualizado)
@@ -851,6 +861,7 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
       .filter((l) => !actualesClaves.has(l.nombre.toLowerCase()))
       .map((l) => {
         const nueva: Ingrediente = { syncId: newSyncId(), nombre: l.nombre, unidad: l.unidad, updatedAt: ts }
+        if (l.pesoPorUnidad !== undefined) nueva.pesoPorUnidad = l.pesoPorUnidad
         if (l.nutricion) nueva.nutricion = l.nutricion
         return nueva
       })

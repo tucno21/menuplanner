@@ -143,3 +143,20 @@ export function validarNutricionIngrediente(raw: unknown, nombre: string): Nutri
   }
   return { ok: true, nutricion }
 }
+
+export type PesoPorUnidadParseResult =
+  | { ok: true; peso?: number }
+  | { ok: false; error: string }
+
+// Valida pesoPorUnidad del ingrediente (gramos que pesa 1 'unidad').
+// Opcional. Estricto: solo numero finito > 0 (el string "600" es invalido).
+export function validarPesoPorUnidad(valor: unknown, nombre: string): PesoPorUnidadParseResult {
+  if (valor === undefined || valor === null) return { ok: true }
+  if (typeof valor !== 'number' || !Number.isFinite(valor) || valor <= 0) {
+    return {
+      ok: false,
+      error: `Valor invalido de pesoPorUnidad para "${nombre}" (debe ser un numero de gramos mayor a 0)`,
+    }
+  }
+  return { ok: true, peso: valor }
+}

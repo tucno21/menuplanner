@@ -20,7 +20,7 @@
 ```javascript
 var TABLE_FIELDS = {
   platos:            ['syncId', 'nombre', 'descripcion', 'porciones', 'calorias', 'proteinas', 'carbohidratos', 'grasas', 'fibra', 'updatedAt'],
-  ingredientes:      ['syncId', 'nombre', 'unidad', 'nutBase', 'nutUnidadBase', 'nutCalorias', 'nutProteinas', 'nutCarbohidratos', 'nutGrasas', 'nutFibra', 'updatedAt'],
+  ingredientes:      ['syncId', 'nombre', 'unidad', 'pesoPorUnidad', 'nutBase', 'nutUnidadBase', 'nutCalorias', 'nutProteinas', 'nutCarbohidratos', 'nutGrasas', 'nutFibra', 'updatedAt'],
   platoIngredientes: ['syncId', 'platoSyncId', 'platoId', 'ingredienteSyncId', 'ingredienteId', 'cantidad', 'updatedAt'],
   planificaciones:   ['syncId', 'platoSyncId', 'platoId', 'fecha', 'estado', 'updatedAt'],
   compras:           ['syncId', 'ingredienteSyncId', 'ingredienteId', 'cantidad', 'estado', 'numeroSemana', 'anio', 'updatedAt'],
