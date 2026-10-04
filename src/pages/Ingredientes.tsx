@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { Leaf, Pencil, Trash2, Settings2 } from 'lucide-react'
+import { coincideBusqueda } from '../utils/busqueda'
 import { usePlanificacionStore } from '../store/planificacionStore'
 import Modal from '../components/ui/Modal'
 import AlertCustom from '../components/ui/AlertCustom'
@@ -28,7 +29,7 @@ const Ingredientes = () => {
   }, [loadIngredientes])
 
   const filteredIngredientes = ingredientes.filter((ing) =>
-    ing.nombre.toLowerCase().includes(searchQuery.toLowerCase())
+    coincideBusqueda(ing.nombre, searchQuery)
   )
 
   const openCreate = () => {

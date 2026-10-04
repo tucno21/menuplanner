@@ -2,13 +2,17 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router'
 import { UtensilsCrossed, CheckCircle2 } from 'lucide-react'
 import { usePlanificacionStore } from '../store/planificacionStore'
+import { platoCoincideBusqueda } from '../utils/busqueda'
 import BackButton from '../components/ui/BackButton'
 const Planificar = () => {
   const { fecha } = useParams()
   const navigate = useNavigate()
 
   const platos = usePlanificacionStore((s) => s.platos)
+  const etiquetas = usePlanificacionStore((s) => s.etiquetas)
+  const platoEtiquetas = usePlanificacionStore((s) => s.platoEtiquetas)
   const loadPlatos = usePlanificacionStore((s) => s.loadPlatos)
+  const loadEtiquetas = usePlanificacionStore((s) => s.loadEtiquetas)
   const addPlatoToFecha = usePlanificacionStore((s) => s.addPlatoToFecha)
 
   const [searchQuery, setSearchQuery] = useState('')
@@ -16,13 +20,24 @@ const Planificar = () => {
 
   useEffect(() => {
     loadPlatos()
-  }, [loadPlatos])
+    loadEtiquetas()
+  }, [loadPlatos, loadEtiquetas])
 
   const fechaStr = fecha ?? ''
 
+  // Mapa platoId -> nombres de etiquetas para la busqueda
+  const etiquetasPorPlato = new Map<number, string[]>()
+  for (const pe of platoEtiquetas) {
+    const etq = etiquetas.find((e) => e.id === pe.etiquetaId)
+    if (!etq || pe.platoId == null) continue
+    const lista = etiquetasPorPlato.get(pe.platoId) ?? []
+    lista.push(etq.nombre)
+    etiquetasPorPlato.set(pe.platoId, lista)
+  }
+
   const filteredPlatos = platos.filter(
     (p) =>
-      p.nombre.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      platoCoincideBusqueda(p.nombre, p.id != null ? etiquetasPorPlato.get(p.id) ?? [] : [], searchQuery) ||
       (p.id != null && selectedPlatos.has(p.id))
   )
 

@@ -9,6 +9,7 @@ PWA **offline-first** para planificar menús semanales con generación automáti
 
 - **Planificación semanal**: vista de semana actual y próxima (inicio lunes), con estado por plato (`pendiente` / `preparado`).
 - **Planificación diaria**: asigna varios platos a una fecha, acciones de deslizar (ver detalle / eliminar).
+- **Búsqueda de platos** por nombre y **etiquetas** (varias palabras en cualquier orden, ignora tildes) en /platos y al planificar.
 - **CRUD de platos** con ingredientes y cantidades (relación muchos-a-muchos), **etiquetas** de clasificación e **información nutricional** (porciones + kcal/proteínas/carbohidratos/grasas/fibra) — calculada **automáticamente** desde los ingredientes (o manual como fallback).
 - **CRUD de ingredientes y unidades** (24 unidades precargadas, ~76 ingredientes seed) con **nutrición opcional por 100 g / 100 ml / unidad**, cargable masivamente por JSON.
 - **Backup JSON** desde Ajustes: exportar/importar unidades, etiquetas, ingredientes y platos con recetas completas (validación all-or-nothing al importar platos).

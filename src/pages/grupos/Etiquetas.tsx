@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Tag, Pencil, Trash2 } from 'lucide-react'
 import { usePlanificacionStore } from '../../store/planificacionStore'
+import { coincideBusqueda } from '../../utils/busqueda'
 import BackButton from '../../components/ui/BackButton'
 import Modal from '../../components/ui/Modal'
 import AlertCustom from '../../components/ui/AlertCustom'
@@ -25,7 +26,7 @@ const Etiquetas = () => {
   }, [loadEtiquetas])
 
   const filteredEtiquetas = etiquetas.filter((e) =>
-    e.nombre.toLowerCase().includes(searchQuery.toLowerCase())
+    coincideBusqueda(e.nombre, searchQuery)
   )
 
   const openCreate = () => {

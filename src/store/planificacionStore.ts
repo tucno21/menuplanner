@@ -8,6 +8,7 @@ import {
   type Planificacion,
   type Unidad,
   type Etiqueta,
+  type PlatoEtiqueta,
 } from '../db/dexie'
 import { validarNutricionReceta, validarNutricionIngrediente, type Nutricion, type NutricionIngrediente } from '../utils/nutricion'
 
@@ -67,6 +68,7 @@ interface PlanificacionState {
   ingredientes: Ingrediente[]
   unidades: Unidad[]
   etiquetas: Etiqueta[]
+  platoEtiquetas: PlatoEtiqueta[]
   compras: Compra[]
   loading: boolean
 
@@ -156,18 +158,20 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
   ingredientes: [],
   unidades: [],
   etiquetas: [],
+  platoEtiquetas: [],
   compras: [],
   loading: true,
 
   initialize: async () => {
-    const [planificacion, platos, ingredientes, unidades, etiquetas] = await Promise.all([
+    const [planificacion, platos, ingredientes, unidades, etiquetas, platoEtiquetas] = await Promise.all([
       construirPlanificacion(),
       db.platos.toArray(),
       db.ingredientes.toArray(),
       db.unidades.toArray(),
       db.etiquetas.toArray(),
+      db.platoEtiquetas.toArray(),
     ])
-    set({ planificacion, platos, ingredientes, unidades, etiquetas, loading: false })
+    set({ planificacion, platos, ingredientes, unidades, etiquetas, platoEtiquetas, loading: false })
   },
 
   getPlatosFecha: (fecha: string) => {
@@ -308,7 +312,7 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
       })
     }
 
-    await get().loadPlatos()
+    await Promise.all([get().loadPlatos(), get().loadEtiquetas()])
   },
 
   updatePlato: async (id: number, data) => {
@@ -367,8 +371,12 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
       })
     }
 
-    const [platos, planificacion] = await Promise.all([db.platos.toArray(), construirPlanificacion()])
-    set({ platos, planificacion })
+    const [platos, planificacion, platoEtiquetas] = await Promise.all([
+      db.platos.toArray(),
+      construirPlanificacion(),
+      db.platoEtiquetas.toArray(),
+    ])
+    set({ platos, planificacion, platoEtiquetas })
   },
 
   deletePlato: async (id: number) => {
@@ -518,8 +526,11 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
   },
 
   loadEtiquetas: async () => {
-    const etiquetas = await db.etiquetas.toArray()
-    set({ etiquetas })
+    const [etiquetas, platoEtiquetas] = await Promise.all([
+      db.etiquetas.toArray(),
+      db.platoEtiquetas.toArray(),
+    ])
+    set({ etiquetas, platoEtiquetas })
   },
 
   createEtiqueta: async (data) => {

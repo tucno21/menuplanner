@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { Trash2, Salad, Tag, Flame } from 'lucide-react'
 import { usePlanificacionStore } from '../../store/planificacionStore'
+import { coincideBusqueda } from '../../utils/busqueda'
 import { useToastStore } from '../../store/toastStore'
 import type { Nutricion, NutricionKey } from '../../utils/nutricion'
 import { calcularNutricionReceta } from '../../utils/calcularNutricion'
@@ -96,7 +97,7 @@ const ActualizarPlato = () => {
   }, [platoIdNum, getPlatoById, loadIngredientes, loadEtiquetas])
 
   const filteredIngredientes = ingredientes.filter((ing) =>
-    ing.nombre.toLowerCase().includes(searchIngredientes.toLowerCase())
+    coincideBusqueda(ing.nombre, searchIngredientes)
   )
 
   // Cálculo nutricional en vivo: se recalcula al cambiar ingredientes, cantidades o porciones

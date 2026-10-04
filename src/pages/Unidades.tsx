@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Ruler, Pencil, Trash2 } from 'lucide-react'
 import { usePlanificacionStore } from '../store/planificacionStore'
+import { coincideBusqueda } from '../utils/busqueda'
 import BackButton from '../components/ui/BackButton'
 import Modal from '../components/ui/Modal'
 import AlertCustom from '../components/ui/AlertCustom'
@@ -25,7 +26,7 @@ const Unidades = () => {
   }, [loadUnidades])
 
   const filteredUnidades = unidades.filter((u) =>
-    u.nombre.toLowerCase().includes(searchQuery.toLowerCase())
+    coincideBusqueda(u.nombre, searchQuery)
   )
 
   const openCreate = () => {
