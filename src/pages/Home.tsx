@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
-import { CheckCircle, Circle, Sparkles } from 'lucide-react'
+import { CheckCircle, Circle, Sparkles, Zap } from 'lucide-react'
 import { usePlanificacionStore } from '../store/planificacionStore'
 import type { ListaItem, PlatoPlanificacion } from '../store/planificacionStore'
 import { useToastStore } from '../store/toastStore'
+import { db } from '../db/dexie'
 import { obtenerSemanaActual, obtenerProximaSemana, obtenerNumeroSemana, parseFechaLocal } from '../utils/obtenerSemana'
 import { obtenerNombreDia } from '../utils/obtenerNombreDia'
 import CustomTab from '../components/CustomTab'
@@ -22,6 +23,7 @@ const Home = () => {
   const etiquetas = usePlanificacionStore((s) => s.etiquetas)
   const platoEtiquetas = usePlanificacionStore((s) => s.platoEtiquetas)
   const planificarSemana = usePlanificacionStore((s) => s.planificarSemana)
+  const planificarSemanaConIA = usePlanificacionStore((s) => s.planificarSemanaConIA)
   const loadEtiquetas = usePlanificacionStore((s) => s.loadEtiquetas)
   const calcularListaCompras = usePlanificacionStore((s) => s.calcularListaCompras)
   const loadCompras = usePlanificacionStore((s) => s.loadCompras)
@@ -35,6 +37,9 @@ const Home = () => {
   const [showPlanificacion, setShowPlanificacion] = useState(false)
   const [showPlanificar, setShowPlanificar] = useState(false)
   const [seleccionEtiquetas, setSeleccionEtiquetas] = useState<string[]>([])
+  const [modoIA, setModoIA] = useState(false)
+  const [comentarioIA, setComentarioIA] = useState('')
+  const [tieneKeyIA, setTieneKeyIA] = useState(false)
   const [planificando, setPlanificando] = useState(false)
   const [listaCompras, setListaCompras] = useState<ListaItem[]>([])
   const [numeroSemana, setNumeroSemana] = useState(0)
@@ -43,6 +48,8 @@ const Home = () => {
 
   useEffect(() => {
     loadEtiquetas()
+    db.config.get('aiApiKey').then((c) => setTieneKeyIA(!!c?.value))
+    db.config.get('aiComentario').then((c) => setComentarioIA(c?.value ?? ''))
   }, [loadEtiquetas])
 
   const semanaActual = obtenerSemanaActual(planificacion)
@@ -72,10 +79,16 @@ const Home = () => {
   }
 
   const handlePlanificar = async () => {
+    if (modoIA && !navigator.onLine) {
+      addToast('Sin internet para usar la IA', 'error')
+      return
+    }
     const semana = activeTab === 0 ? semanaActual : proximaSemana
     const fechas = semana.map((d) => d.fecha)
     setPlanificando(true)
-    const resultado = await planificarSemana(fechas, seleccionEtiquetas)
+    const resultado = modoIA
+      ? await planificarSemanaConIA(fechas, seleccionEtiquetas, comentarioIA)
+      : await planificarSemana(fechas, seleccionEtiquetas)
     setPlanificando(false)
     if (!resultado.ok) {
       addToast(resultado.error ?? 'No se pudo planificar', 'error')
@@ -85,6 +98,9 @@ const Home = () => {
       addToast('Todos los dias de la semana ya tienen platos', 'info')
     } else {
       addToast(`Se planificaron ${resultado.dias} dia(s) (${resultado.platosAsignados} platos)`, 'success')
+    }
+    if (resultado.avisoLocal) {
+      addToast(resultado.avisoLocal, 'warning')
     }
     setShowPlanificar(false)
     setSeleccionEtiquetas([])
@@ -263,15 +279,15 @@ const Home = () => {
           </div>
         ) : (
           <>
-            <p className="text-sm text-gray-500 mb-3">Selecciona una o mas etiquetas:</p>
-            <div className="flex flex-wrap gap-2 mb-4">
+            <p className="text-sm text-gray-500 mb-2">Selecciona una o mas etiquetas:</p>
+            <div className="flex flex-wrap gap-1.5 mb-4">
               {etiquetas.map((etq) => {
                 const selected = seleccionEtiquetas.includes(etq.nombre)
                 return (
                   <button
                     key={etq.id}
                     onClick={() => toggleEtiquetaSeleccion(etq.nombre)}
-                    className={`px-3 py-1.5 rounded-full text-sm font-medium border active:scale-95 transition-all ${selected
+                    className={`px-2.5 py-1 rounded-full text-xs font-medium border active:scale-95 transition-all ${selected
                       ? 'bg-secondary border-secondary text-light'
                       : 'bg-white border-gray-300 text-gray-600'
                       }`}
@@ -281,6 +297,49 @@ const Home = () => {
                 )
               })}
             </div>
+
+            <div className="flex gap-2 mb-4">
+              <button
+                onClick={() => setModoIA(false)}
+                className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-sm font-semibold border active:scale-95 transition-all ${!modoIA
+                  ? 'bg-secondary border-secondary text-light'
+                  : 'bg-white border-gray-300 text-gray-600'
+                  }`}
+              >
+                <Zap size={15} />
+                Rapido (offline)
+              </button>
+              <button
+                onClick={() => setModoIA(true)}
+                className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-sm font-semibold border active:scale-95 transition-all ${modoIA
+                  ? 'bg-primary border-primary text-light'
+                  : 'bg-white border-gray-300 text-gray-600'
+                  }`}
+              >
+                <Sparkles size={15} />
+                IA (Gemini)
+              </button>
+            </div>
+
+            {modoIA && (
+              <div className="mb-4">
+                {!tieneKeyIA && (
+                  <button
+                    onClick={() => navigate('/settings')}
+                    className="w-full text-left bg-primary/10 border border-primary/30 text-dark text-xs rounded-lg p-3 mb-2"
+                  >
+                    No tienes API key de Gemini. Tocala para configurarla en Ajustes.
+                  </button>
+                )}
+                <textarea
+                  placeholder="Comentarios para la IA (opcional): alergias, salud, preferencias, platos por dia..."
+                  value={comentarioIA}
+                  onChange={(e) => setComentarioIA(e.target.value)}
+                  className="bg-gray-100 text-sm text-dark p-2 rounded-lg border border-gray-300 w-full outline-none resize-none"
+                  rows={3}
+                />
+              </div>
+            )}
 
             <p className="text-sm text-center font-medium text-gray-700 mb-4">
               {seleccionEtiquetas.length === 0
@@ -292,15 +351,17 @@ const Home = () => {
 
             <button
               onClick={handlePlanificar}
-              disabled={planificando || seleccionEtiquetas.length === 0 || platosCoincidentes === 0}
+              disabled={planificando || seleccionEtiquetas.length === 0 || platosCoincidentes === 0 || (modoIA && (!tieneKeyIA || !navigator.onLine))}
               className="w-full flex items-center justify-center gap-2 bg-primary py-3 rounded-lg text-light text-lg font-semibold active:scale-95 transition-all disabled:opacity-50"
             >
-              <Sparkles size={18} />
-              {planificando ? 'Planificando...' : 'Planificar'}
+              {modoIA ? <Sparkles size={18} /> : <Zap size={18} />}
+              {planificando ? 'Planificando...' : modoIA ? 'Planificar con IA' : 'Planificar'}
             </button>
 
             <p className="text-[11px] text-gray-400 text-center mt-3">
-              Se llenaran los dias vacios de la semana con 2 platos por dia. Los platos ya asignados no se tocan.
+              {modoIA
+                ? 'La IA decide cuantos platos por dia (1 a 3) segun tus platos y comentarios. Requiere internet. Si falla, se usa el plan local.'
+                : 'Se llenaran los dias vacios de la semana con 2 platos por dia. Los platos ya asignados no se tocan.'}
             </p>
           </>
         )}

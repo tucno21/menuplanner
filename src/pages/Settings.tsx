@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, type ChangeEvent } from 'react'
 import { useNavigate } from 'react-router'
-import { LogOut, Trash2, Lock, RefreshCw, Cloud, RotateCcw, HelpCircle, Check, Copy, Boxes, Download, Upload, Tag, Leaf, UtensilsCrossed } from 'lucide-react'
+import { LogOut, Trash2, Lock, RefreshCw, Cloud, RotateCcw, HelpCircle, Check, Copy, Boxes, Download, Upload, Tag, Leaf, UtensilsCrossed, KeyRound, Eye, EyeOff } from 'lucide-react'
 import { useAuthStore } from '../store/authStore'
 import { useSyncStore } from '../store/syncStore'
 import { usePlanificacionStore, type ImportResult, type IngredienteImport, type PlatoReceta } from '../store/planificacionStore'
@@ -242,6 +242,10 @@ const Settings = () => {
   const [showResetAlert, setShowResetAlert] = useState(false)
   const [showUpdateAlert, setShowUpdateAlert] = useState(false)
   const [showInstructionsModal, setShowInstructionsModal] = useState(false)
+  const [showTutorialIAModal, setShowTutorialIAModal] = useState(false)
+  const [iaKeyInput, setIaKeyInput] = useState('')
+  const [mostrarIaKey, setMostrarIaKey] = useState(false)
+  const [tieneIaKey, setTieneIaKey] = useState(false)
   const [backupTarget, setBackupTarget] = useState<BackupTarget | null>(null)
   const [showImportAlert, setShowImportAlert] = useState(false)
   const [copiedCode, setCopiedCode] = useState(false)
@@ -259,6 +263,7 @@ const Settings = () => {
 
   useEffect(() => {
     loadUrl()
+    db.config.get('aiApiKey').then((c) => setTieneIaKey(!!c?.value))
   }, [loadUrl])
 
   useEffect(() => {
@@ -297,6 +302,25 @@ const Settings = () => {
     setNewPin('')
     setConfirmPin('')
     setError(null)
+  }
+
+  const handleGuardarIaKey = async () => {
+    const key = iaKeyInput.trim()
+    if (!key) {
+      addToast('Pega tu API key de Gemini', 'warning')
+      return
+    }
+    await db.config.put({ key: 'aiApiKey', value: key })
+    setTieneIaKey(true)
+    setIaKeyInput('')
+    addToast('API key guardada', 'success')
+  }
+
+  const handleQuitarIaKey = async () => {
+    await db.config.delete('aiApiKey')
+    setTieneIaKey(false)
+    setIaKeyInput('')
+    addToast('API key eliminada', 'info')
   }
 
   const handleLogout = () => {
@@ -638,6 +662,65 @@ const Settings = () => {
           </div>
         </button>
 
+        <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-card">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="bg-primary/10 p-2.5 rounded-lg">
+              <KeyRound size={20} className="text-primary" />
+            </div>
+            <div className="flex-1">
+              <p className="text-dark font-semibold">Planificador IA</p>
+              <p className="text-gray-400 text-sm">Gemini para planificar la semana</p>
+            </div>
+            {tieneIaKey && (
+              <span className="flex items-center gap-1 bg-success/10 text-success text-xs font-semibold px-2 py-1 rounded-full">
+                <Check size={13} />
+                Configurada
+              </span>
+            )}
+          </div>
+
+          <div className="relative mb-2">
+            <input
+              type={mostrarIaKey ? 'text' : 'password'}
+              placeholder="API key de Gemini"
+              value={iaKeyInput}
+              onChange={(e) => setIaKeyInput(e.target.value)}
+              className="bg-gray-100 rounded-lg px-4 py-2.5 w-full border border-gray-300 outline-none text-dark text-sm pr-10"
+            />
+            <button
+              onClick={() => setMostrarIaKey(!mostrarIaKey)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            >
+              {mostrarIaKey ? <EyeOff size={16} /> : <Eye size={16} />}
+            </button>
+          </div>
+
+          <div className="flex gap-2 mb-2">
+            <button
+              onClick={handleGuardarIaKey}
+              className="flex-1 bg-primary py-2.5 rounded-lg text-light font-semibold text-sm active:scale-95 transition-all"
+            >
+              Guardar
+            </button>
+            {tieneIaKey && (
+              <button
+                onClick={handleQuitarIaKey}
+                className="bg-danger/10 border border-danger/30 text-danger py-2.5 px-4 rounded-lg font-semibold text-sm active:scale-95 transition-all"
+              >
+                Quitar
+              </button>
+            )}
+          </div>
+
+          <button
+            onClick={() => setShowTutorialIAModal(true)}
+            className="flex items-center gap-1.5 text-primary text-xs font-medium active:scale-95 transition-all"
+          >
+            <HelpCircle size={14} />
+            Como obtener una API key gratis (tutorial)
+          </button>
+        </div>
+
         {(Object.keys(BACKUP_TITLES) as BackupTarget[]).map((target) => {
           const Icon = BACKUP_ICONS[target]
           return (
@@ -835,6 +918,41 @@ const Settings = () => {
             className="w-full bg-primary py-2.5 rounded-lg text-light font-semibold text-sm active:scale-95 transition-all"
           >
             Cerrar
+          </button>
+        </div>
+      </Modal>
+
+      <Modal isOpen={showTutorialIAModal} onClose={() => setShowTutorialIAModal(false)}>
+        <div className="bg-white rounded-2xl p-5 w-[95vw] max-w-lg max-h-[85vh] flex flex-col">
+          <h2 className="text-lg font-bold text-primary mb-3">Como obtener tu API key de Gemini</h2>
+
+          <div className="overflow-y-auto flex-1 space-y-3 mb-4">
+            <ol className="text-sm text-gray-600 space-y-1.5 list-decimal list-inside">
+              <li>
+                Abre <a href="https://aistudio.google.com" target="_blank" rel="noopener noreferrer" className="text-primary underline">aistudio.google.com</a> e inicia sesion con tu cuenta Google
+              </li>
+              <li>Haz clic en <strong>Get API key</strong> (o <strong>Create API key</strong>)</li>
+              <li>Selecciona <strong>Create API key in new project</strong></li>
+              <li>Se generara una clave que empieza con <code className="bg-gray-100 px-1 rounded text-xs">AIza...</code> — copiala</li>
+              <li>Vuelve aqui, pegala en el campo de arriba y toca <strong>Guardar</strong></li>
+              <li>Listo: en Inicio toca <strong>Planificar</strong> y elige el modo <strong>IA (Gemini)</strong></li>
+            </ol>
+
+            <div className="bg-gray-100 rounded-lg p-3 text-xs text-gray-600">
+              <p className="font-semibold mb-1">Importante:</p>
+              <ul className="space-y-1 list-disc list-inside">
+                <li>El tier gratuito de Gemini es suficiente para uso personal</li>
+                <li>Tu clave se guarda solo en este dispositivo, nunca se comparte</li>
+                <li>No la publiques ni la compartas con nadie</li>
+              </ul>
+            </div>
+          </div>
+
+          <button
+            onClick={() => setShowTutorialIAModal(false)}
+            className="w-full bg-primary py-2.5 rounded-lg text-light font-semibold text-sm active:scale-95 transition-all"
+          >
+            Entendido
           </button>
         </div>
       </Modal>

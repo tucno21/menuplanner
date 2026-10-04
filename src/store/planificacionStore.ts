@@ -11,7 +11,9 @@ import {
   type PlatoEtiqueta,
 } from '../db/dexie'
 import { validarNutricionReceta, validarNutricionIngrediente, type Nutricion, type NutricionIngrediente } from '../utils/nutricion'
-import { generarPlanSemanal } from '../utils/planificarSemana'
+import { generarPlanSemanal, type SlotPlanSemanal } from '../utils/planificarSemana'
+import { planificarConIA, type PlatoParaIA } from '../utils/planificarSemanaIA'
+import { calcularNutricionReceta } from '../utils/calcularNutricion'
 
 const nowISO = () => new Date().toISOString()
 const newSyncId = () => crypto.randomUUID()
@@ -56,6 +58,15 @@ export interface PlatoWithIngredientes {
   etiquetas: { id: number; nombre: string }[]
 }
 
+export interface ResultadoPlanificador {
+  ok: boolean
+  dias: number
+  platosAsignados: number
+  error?: string
+  // Aviso de que parte (o todo) el plan se genero con el algoritmo local
+  avisoLocal?: string
+}
+
 export interface ListaItem {
   id: number
   ingrediente: string
@@ -77,7 +88,8 @@ interface PlanificacionState {
 
   getPlatosFecha: (fecha: string) => DataPlanificacion | null
   addPlatoToFecha: (platoId: number, fecha: string, estado: EstadoPlato) => Promise<boolean>
-  planificarSemana: (fechas: string[], etiquetasSeleccionadas: string[]) => Promise<{ ok: boolean; dias: number; platosAsignados: number; error?: string }>
+  planificarSemana: (fechas: string[], etiquetasSeleccionadas: string[]) => Promise<ResultadoPlanificador>
+  planificarSemanaConIA: (fechas: string[], etiquetasSeleccionadas: string[], comentario: string) => Promise<ResultadoPlanificador>
   setModificarEstado: (planificacionId: number) => Promise<void>
   removePlanificacion: (planificacionId: number) => Promise<boolean>
   getPlanificacionBetweenDates: (fechaInicio: string, fechaFin: string) => DataPlanificacion[]
@@ -146,6 +158,98 @@ const construirPlanificacion = async (): Promise<DataPlanificacion[]> => {
 
 async function trackDeletion(syncId: string, table: string) {
   await db.deletions.add({ syncId, table, deletedAt: nowISO() })
+}
+
+// ── Planificador de semana (local e IA) ──
+
+function construirMapaEtiquetas(etiquetas: Etiqueta[], platoEtiquetas: PlatoEtiqueta[]): Map<number, string[]> {
+  const mapa = new Map<number, string[]>()
+  for (const pe of platoEtiquetas) {
+    const etq = etiquetas.find((e) => e.id === pe.etiquetaId)
+    if (!etq || pe.platoId == null) continue
+    const lista = mapa.get(pe.platoId) ?? []
+    lista.push(etq.nombre)
+    mapa.set(pe.platoId, lista)
+  }
+  return mapa
+}
+
+// Un plato coincide si tiene ALGUNA de las etiquetas seleccionadas (OR, sin tildes)
+function filtrarCandidatosPorEtiquetas(
+  platos: Plato[],
+  mapaEtiquetas: Map<number, string[]>,
+  seleccion: string[]
+): { id: number; nombre: string }[] {
+  const claves = new Set(seleccion.map((e) => e.toLowerCase()))
+  return platos
+    .filter((p) => {
+      if (p.id == null) return false
+      const etqs = mapaEtiquetas.get(p.id) ?? []
+      return etqs.some((nombre) => claves.has(nombre.toLowerCase()))
+    })
+    .map((p) => ({ id: p.id as number, nombre: p.nombre }))
+}
+
+async function construirCandidatosIA(
+  candidatos: { id: number; nombre: string }[],
+  mapaEtiquetas: Map<number, string[]>,
+  platos: Plato[],
+  ingredientes: Ingrediente[]
+): Promise<PlatoParaIA[]> {
+  if (candidatos.length === 0) return []
+  const junctions = await db.platoIngredientes
+    .where('platoId')
+    .anyOf(candidatos.map((c) => c.id))
+    .toArray()
+  const ingPorId = new Map(ingredientes.map((i) => [i.id as number, i]))
+
+  return candidatos.map((c) => {
+    const nombres: string[] = []
+    const lineas: { nombre: string; cantidad: number; unidad: string; nutricion: NutricionIngrediente | null }[] = []
+    for (const pi of junctions) {
+      if (pi.platoId !== c.id) continue
+      const ing = ingPorId.get(pi.ingredienteId)
+      if (!ing) continue
+      nombres.push(ing.nombre)
+      lineas.push({ nombre: ing.nombre, cantidad: pi.cantidad, unidad: ing.unidad, nutricion: ing.nutricion ?? null })
+    }
+    const platoRow = platos.find((p) => p.id === c.id)
+    const calculo = calcularNutricionReceta(lineas, platoRow?.porciones)
+    return {
+      id: c.id,
+      nombre: c.nombre,
+      etiquetas: mapaEtiquetas.get(c.id) ?? [],
+      ingredientes: nombres,
+      nutricionPorPorcion: calculo.porPorcion ?? undefined,
+      porciones: platoRow?.porciones,
+    }
+  })
+}
+
+async function insertarPlanificaciones(
+  slots: SlotPlanSemanal[],
+  platos: Plato[],
+  refrescar: () => Promise<void>
+): Promise<{ dias: number; platosAsignados: number }> {
+  if (slots.length === 0) return { dias: 0, platosAsignados: 0 }
+  const ts = nowISO()
+  const registros: Planificacion[] = slots.map((s) => {
+    const plato = platos.find((p) => p.id === s.platoId)
+    return {
+      syncId: newSyncId(),
+      platoId: s.platoId,
+      platoSyncId: plato?.syncId ?? '',
+      fecha: s.fecha,
+      estado: 'pendiente' as EstadoPlato,
+      updatedAt: ts,
+    }
+  })
+  await db.planificaciones.bulkAdd(registros)
+  await refrescar()
+  return {
+    dias: new Set(slots.map((s) => s.fecha)).size,
+    platosAsignados: slots.length,
+  }
 }
 
 async function deleteTracked(table: 'platos' | 'ingredientes' | 'platoIngredientes' | 'planificaciones' | 'compras' | 'unidades' | 'etiquetas' | 'platoEtiquetas', id: number) {
@@ -238,24 +342,8 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
   // que tengan ALGUNA de las etiquetas seleccionadas. No toca dias ya planificados.
   planificarSemana: async (fechas, etiquetasSeleccionadas) => {
     const { platos, etiquetas, platoEtiquetas } = get()
-
-    const etiquetasPorPlato = new Map<number, string[]>()
-    for (const pe of platoEtiquetas) {
-      const etq = etiquetas.find((e) => e.id === pe.etiquetaId)
-      if (!etq || pe.platoId == null) continue
-      const lista = etiquetasPorPlato.get(pe.platoId) ?? []
-      lista.push(etq.nombre)
-      etiquetasPorPlato.set(pe.platoId, lista)
-    }
-
-    const seleccion = new Set(etiquetasSeleccionadas.map((e) => e.toLowerCase()))
-    const candidatos = platos
-      .filter((p) => {
-        if (p.id == null) return false
-        const etqs = etiquetasPorPlato.get(p.id) ?? []
-        return etqs.some((nombre) => seleccion.has(nombre.toLowerCase()))
-      })
-      .map((p) => ({ id: p.id as number, nombre: p.nombre }))
+    const mapaEtiquetas = construirMapaEtiquetas(etiquetas, platoEtiquetas)
+    const candidatos = filtrarCandidatosPorEtiquetas(platos, mapaEtiquetas, etiquetasSeleccionadas)
 
     if (candidatos.length === 0) {
       return { ok: false, dias: 0, platosAsignados: 0, error: 'No hay platos con las etiquetas seleccionadas' }
@@ -274,23 +362,62 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
       return { ok: true, dias: 0, platosAsignados: 0 }
     }
 
-    const ts = nowISO()
-    const registros: Planificacion[] = slots.map((s) => {
-      const plato = platos.find((p) => p.id === s.platoId)
-      return {
-        syncId: newSyncId(),
-        platoId: s.platoId,
-        platoSyncId: plato?.syncId ?? '',
-        fecha: s.fecha,
-        estado: 'pendiente' as EstadoPlato,
-        updatedAt: ts,
-      }
-    })
-    await db.planificaciones.bulkAdd(registros)
-    await get().initialize()
+    const { dias, platosAsignados } = await insertarPlanificaciones(slots, platos, get().initialize)
+    return { ok: true, dias, platosAsignados }
+  },
 
-    const dias = new Set(slots.map((s) => s.fecha)).size
-    return { ok: true, dias, platosAsignados: slots.length }
+  // Planificador con IA (Gemini): envia platos candidatos con ingredientes y
+  // nutricion aproximada; la IA decide cuantos platos por dia (1-3).
+  // Si la IA falla -> fallback automatico al planificador local con aviso.
+  planificarSemanaConIA: async (fechas, etiquetasSeleccionadas, comentario) => {
+    const key = (await db.config.get('aiApiKey'))?.value ?? ''
+    if (!key) {
+      return { ok: false, dias: 0, platosAsignados: 0, error: 'Configura tu API key de Gemini en Ajustes' }
+    }
+
+    const { platos, ingredientes, etiquetas, platoEtiquetas } = get()
+    const mapaEtiquetas = construirMapaEtiquetas(etiquetas, platoEtiquetas)
+    const candidatos = filtrarCandidatosPorEtiquetas(platos, mapaEtiquetas, etiquetasSeleccionadas)
+    if (candidatos.length === 0) {
+      return { ok: false, dias: 0, platosAsignados: 0, error: 'No hay platos con las etiquetas seleccionadas' }
+    }
+
+    const existentesPorFecha = new Map<string, number[]>()
+    const planes = await db.planificaciones.where('fecha').anyOf(fechas).toArray()
+    for (const plan of planes) {
+      const lista = existentesPorFecha.get(plan.fecha) ?? []
+      lista.push(plan.platoId)
+      existentesPorFecha.set(plan.fecha, lista)
+    }
+
+    if (comentario.trim()) {
+      await db.config.put({ key: 'aiComentario', value: comentario.trim() })
+    }
+    const candidatosIA = await construirCandidatosIA(candidatos, mapaEtiquetas, platos, ingredientes)
+
+    const ia = await planificarConIA({
+      candidatos: candidatosIA,
+      fechas,
+      existentesPorFecha,
+      comentario,
+      apiKey: key,
+    })
+
+    if (!ia.ok) {
+      // Fallback automatico al planificador local
+      const local = await get().planificarSemana(fechas, etiquetasSeleccionadas)
+      if (!local.ok) {
+        return { ...local, error: `${ia.error}. ${local.error ?? ''}`.trim() }
+      }
+      return { ...local, avisoLocal: `IA no disponible (${ia.error}). Se uso el plan local.` }
+    }
+
+    if (ia.slots.length === 0) {
+      return { ok: true, dias: 0, platosAsignados: 0 }
+    }
+
+    const { dias, platosAsignados } = await insertarPlanificaciones(ia.slots, platos, get().initialize)
+    return { ok: true, dias, platosAsignados, avisoLocal: ia.avisoLocal }
   },
 
   setModificarEstado: async (planificacionId: number) => {
