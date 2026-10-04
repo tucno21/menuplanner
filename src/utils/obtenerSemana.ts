@@ -9,7 +9,7 @@ export interface DiaSemana {
 
 const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado']
 
-const formatearFecha = (fecha: Date): string => {
+export const formatearFechaLocal = (fecha: Date): string => {
   const year = fecha.getFullYear()
   const month = String(fecha.getMonth() + 1).padStart(2, '0')
   const day = String(fecha.getDate()).padStart(2, '0')
@@ -27,7 +27,7 @@ const construirSemana = (lunes: Date, planificacion: DataPlanificacion[]): DiaSe
   for (let i = 0; i < 7; i++) {
     const fecha = new Date(lunes)
     fecha.setDate(lunes.getDate() + i)
-    const fechaStr = formatearFecha(fecha)
+    const fechaStr = formatearFechaLocal(fecha)
     const diaData = planificacion.find((p) => p.fecha === fechaStr)
     const cantidad = diaData ? diaData.platos.length : 0
     semana.push({
