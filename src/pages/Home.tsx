@@ -1,7 +1,9 @@
-import { useState } from 'react'
-import { CheckCircle, Circle } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router'
+import { CheckCircle, Circle, Sparkles } from 'lucide-react'
 import { usePlanificacionStore } from '../store/planificacionStore'
 import type { ListaItem, PlatoPlanificacion } from '../store/planificacionStore'
+import { useToastStore } from '../store/toastStore'
 import { obtenerSemanaActual, obtenerProximaSemana, obtenerNumeroSemana, parseFechaLocal } from '../utils/obtenerSemana'
 import { obtenerNombreDia } from '../utils/obtenerNombreDia'
 import CustomTab from '../components/CustomTab'
@@ -14,23 +16,79 @@ interface PlanificacionDia {
 }
 
 const Home = () => {
+  const navigate = useNavigate()
   const planificacion = usePlanificacionStore((s) => s.planificacion)
+  const platos = usePlanificacionStore((s) => s.platos)
+  const etiquetas = usePlanificacionStore((s) => s.etiquetas)
+  const platoEtiquetas = usePlanificacionStore((s) => s.platoEtiquetas)
+  const planificarSemana = usePlanificacionStore((s) => s.planificarSemana)
+  const loadEtiquetas = usePlanificacionStore((s) => s.loadEtiquetas)
   const calcularListaCompras = usePlanificacionStore((s) => s.calcularListaCompras)
   const loadCompras = usePlanificacionStore((s) => s.loadCompras)
   const toggleCompra = usePlanificacionStore((s) => s.toggleCompra)
   const getPlanificacionBetweenDates = usePlanificacionStore((s) => s.getPlanificacionBetweenDates)
   const compras = usePlanificacionStore((s) => s.compras)
+  const addToast = useToastStore((s) => s.addToast)
 
   const [activeTab, setActiveTab] = useState(0)
   const [showCompras, setShowCompras] = useState(false)
   const [showPlanificacion, setShowPlanificacion] = useState(false)
+  const [showPlanificar, setShowPlanificar] = useState(false)
+  const [seleccionEtiquetas, setSeleccionEtiquetas] = useState<string[]>([])
+  const [planificando, setPlanificando] = useState(false)
   const [listaCompras, setListaCompras] = useState<ListaItem[]>([])
   const [numeroSemana, setNumeroSemana] = useState(0)
   const [anio, setAnio] = useState(0)
   const [planificacionSemanal, setPlanificacionSemanal] = useState<PlanificacionDia[]>([])
 
+  useEffect(() => {
+    loadEtiquetas()
+  }, [loadEtiquetas])
+
   const semanaActual = obtenerSemanaActual(planificacion)
   const proximaSemana = obtenerProximaSemana(planificacion)
+
+  // Mapa platoId -> etiquetas para el contador de coincidencias del planificador
+  const etiquetasPorPlato = new Map<number, string[]>()
+  for (const pe of platoEtiquetas) {
+    const etq = etiquetas.find((e) => e.id === pe.etiquetaId)
+    if (!etq || pe.platoId == null) continue
+    const lista = etiquetasPorPlato.get(pe.platoId) ?? []
+    lista.push(etq.nombre)
+    etiquetasPorPlato.set(pe.platoId, lista)
+  }
+
+  const seleccionClaves = new Set(seleccionEtiquetas.map((e) => e.toLowerCase()))
+  const platosCoincidentes = platos.filter((p) => {
+    if (p.id == null) return false
+    const etqs = etiquetasPorPlato.get(p.id) ?? []
+    return etqs.some((n) => seleccionClaves.has(n.toLowerCase()))
+  }).length
+
+  const toggleEtiquetaSeleccion = (nombre: string) => {
+    setSeleccionEtiquetas((prev) =>
+      prev.includes(nombre) ? prev.filter((e) => e !== nombre) : [...prev, nombre]
+    )
+  }
+
+  const handlePlanificar = async () => {
+    const semana = activeTab === 0 ? semanaActual : proximaSemana
+    const fechas = semana.map((d) => d.fecha)
+    setPlanificando(true)
+    const resultado = await planificarSemana(fechas, seleccionEtiquetas)
+    setPlanificando(false)
+    if (!resultado.ok) {
+      addToast(resultado.error ?? 'No se pudo planificar', 'error')
+      return
+    }
+    if (resultado.dias === 0) {
+      addToast('Todos los dias de la semana ya tienen platos', 'info')
+    } else {
+      addToast(`Se planificaron ${resultado.dias} dia(s) (${resultado.platosAsignados} platos)`, 'success')
+    }
+    setShowPlanificar(false)
+    setSeleccionEtiquetas([])
+  }
 
   const handleListaComprasModal = async () => {
     const semana = activeTab === 0 ? semanaActual : proximaSemana
@@ -84,18 +142,25 @@ const Home = () => {
         <CustomTab tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
 
-      <div className="flex flex-row gap-3 py-3 px-4 w-full bg-backdrop border-t border-gray-300">
+      <div className="flex flex-row gap-2 py-3 px-3 w-full bg-backdrop border-t border-gray-300">
         <button
-          className="flex-1 bg-primary py-2.5 rounded-lg text-light text-sm sm:text-base font-semibold active:scale-95 transition-all"
+          className="flex-1 bg-primary py-2.5 rounded-lg text-light text-xs sm:text-sm font-semibold active:scale-95 transition-all"
           onClick={handleListaComprasModal}
         >
-          Ver Compras
+          Compras
         </button>
         <button
-          className="flex-1 bg-secondary py-2.5 rounded-lg text-light text-sm sm:text-base font-semibold active:scale-95 transition-all"
+          className="flex-1 bg-secondary py-2.5 rounded-lg text-light text-xs sm:text-sm font-semibold active:scale-95 transition-all"
           onClick={openModalPlanificacion}
         >
-          Ver Planificacion
+          Planificacion
+        </button>
+        <button
+          className="flex-1 flex items-center justify-center gap-1 bg-primary-dark py-2.5 rounded-lg text-light text-xs sm:text-sm font-semibold active:scale-95 transition-all"
+          onClick={() => { setSeleccionEtiquetas([]); setShowPlanificar(true) }}
+        >
+          <Sparkles size={15} />
+          Planificar
         </button>
       </div>
 
@@ -178,6 +243,66 @@ const Home = () => {
               )}
             </div>
           ))
+        )}
+      </BottomSheet>
+      <BottomSheet
+        isVisible={showPlanificar}
+        onClose={() => { setShowPlanificar(false); setSeleccionEtiquetas([]) }}
+        title="Planificar Semana"
+        height={0.75}
+      >
+        {etiquetas.length === 0 ? (
+          <div className="text-center py-6">
+            <p className="text-gray-500 mb-3">No tienes etiquetas creadas</p>
+            <button
+              onClick={() => navigate('/platos/etiquetas')}
+              className="bg-secondary py-2.5 px-5 rounded-lg text-light text-sm font-semibold active:scale-95 transition-all"
+            >
+              Crear etiquetas
+            </button>
+          </div>
+        ) : (
+          <>
+            <p className="text-sm text-gray-500 mb-3">Selecciona una o mas etiquetas:</p>
+            <div className="flex flex-wrap gap-2 mb-4">
+              {etiquetas.map((etq) => {
+                const selected = seleccionEtiquetas.includes(etq.nombre)
+                return (
+                  <button
+                    key={etq.id}
+                    onClick={() => toggleEtiquetaSeleccion(etq.nombre)}
+                    className={`px-3 py-1.5 rounded-full text-sm font-medium border active:scale-95 transition-all ${selected
+                      ? 'bg-secondary border-secondary text-light'
+                      : 'bg-white border-gray-300 text-gray-600'
+                      }`}
+                  >
+                    {etq.nombre}
+                  </button>
+                )
+              })}
+            </div>
+
+            <p className="text-sm text-center font-medium text-gray-700 mb-4">
+              {seleccionEtiquetas.length === 0
+                ? 'Elige etiquetas para ver cuantos platos coinciden'
+                : platosCoincidentes === 0
+                  ? 'Ningun plato coincide con esas etiquetas'
+                  : `${platosCoincidentes} plato(s) coinciden`}
+            </p>
+
+            <button
+              onClick={handlePlanificar}
+              disabled={planificando || seleccionEtiquetas.length === 0 || platosCoincidentes === 0}
+              className="w-full flex items-center justify-center gap-2 bg-primary py-3 rounded-lg text-light text-lg font-semibold active:scale-95 transition-all disabled:opacity-50"
+            >
+              <Sparkles size={18} />
+              {planificando ? 'Planificando...' : 'Planificar'}
+            </button>
+
+            <p className="text-[11px] text-gray-400 text-center mt-3">
+              Se llenaran los dias vacios de la semana con 2 platos por dia. Los platos ya asignados no se tocan.
+            </p>
+          </>
         )}
       </BottomSheet>
     </div>

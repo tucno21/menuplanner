@@ -11,6 +11,7 @@ import {
   type PlatoEtiqueta,
 } from '../db/dexie'
 import { validarNutricionReceta, validarNutricionIngrediente, type Nutricion, type NutricionIngrediente } from '../utils/nutricion'
+import { generarPlanSemanal } from '../utils/planificarSemana'
 
 const nowISO = () => new Date().toISOString()
 const newSyncId = () => crypto.randomUUID()
@@ -76,6 +77,7 @@ interface PlanificacionState {
 
   getPlatosFecha: (fecha: string) => DataPlanificacion | null
   addPlatoToFecha: (platoId: number, fecha: string, estado: EstadoPlato) => Promise<boolean>
+  planificarSemana: (fechas: string[], etiquetasSeleccionadas: string[]) => Promise<{ ok: boolean; dias: number; platosAsignados: number; error?: string }>
   setModificarEstado: (planificacionId: number) => Promise<void>
   removePlanificacion: (planificacionId: number) => Promise<boolean>
   getPlanificacionBetweenDates: (fechaInicio: string, fechaFin: string) => DataPlanificacion[]
@@ -230,6 +232,65 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
     }
 
     return true
+  },
+
+  // Planificador semanal local: llena los dias vacios de la semana con 2 platos
+  // que tengan ALGUNA de las etiquetas seleccionadas. No toca dias ya planificados.
+  planificarSemana: async (fechas, etiquetasSeleccionadas) => {
+    const { platos, etiquetas, platoEtiquetas } = get()
+
+    const etiquetasPorPlato = new Map<number, string[]>()
+    for (const pe of platoEtiquetas) {
+      const etq = etiquetas.find((e) => e.id === pe.etiquetaId)
+      if (!etq || pe.platoId == null) continue
+      const lista = etiquetasPorPlato.get(pe.platoId) ?? []
+      lista.push(etq.nombre)
+      etiquetasPorPlato.set(pe.platoId, lista)
+    }
+
+    const seleccion = new Set(etiquetasSeleccionadas.map((e) => e.toLowerCase()))
+    const candidatos = platos
+      .filter((p) => {
+        if (p.id == null) return false
+        const etqs = etiquetasPorPlato.get(p.id) ?? []
+        return etqs.some((nombre) => seleccion.has(nombre.toLowerCase()))
+      })
+      .map((p) => ({ id: p.id as number, nombre: p.nombre }))
+
+    if (candidatos.length === 0) {
+      return { ok: false, dias: 0, platosAsignados: 0, error: 'No hay platos con las etiquetas seleccionadas' }
+    }
+
+    const existentesPorFecha = new Map<string, number[]>()
+    const planes = await db.planificaciones.where('fecha').anyOf(fechas).toArray()
+    for (const plan of planes) {
+      const lista = existentesPorFecha.get(plan.fecha) ?? []
+      lista.push(plan.platoId)
+      existentesPorFecha.set(plan.fecha, lista)
+    }
+
+    const slots = generarPlanSemanal(candidatos, fechas, existentesPorFecha)
+    if (slots.length === 0) {
+      return { ok: true, dias: 0, platosAsignados: 0 }
+    }
+
+    const ts = nowISO()
+    const registros: Planificacion[] = slots.map((s) => {
+      const plato = platos.find((p) => p.id === s.platoId)
+      return {
+        syncId: newSyncId(),
+        platoId: s.platoId,
+        platoSyncId: plato?.syncId ?? '',
+        fecha: s.fecha,
+        estado: 'pendiente' as EstadoPlato,
+        updatedAt: ts,
+      }
+    })
+    await db.planificaciones.bulkAdd(registros)
+    await get().initialize()
+
+    const dias = new Set(slots.map((s) => s.fecha)).size
+    return { ok: true, dias, platosAsignados: slots.length }
   },
 
   setModificarEstado: async (planificacionId: number) => {

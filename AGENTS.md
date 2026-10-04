@@ -31,7 +31,7 @@ tsconfig: `target es2023`, `verbatimModuleSyntax`, `noUnusedLocals/Parameters`, 
 `BrowserRouter` con layout route `ProtectedRoute` (redirige a `/` si no autenticado; en mount llama `planificacionStore.initialize()` + `syncStore.startAutoSync()`, en unmount `stopAutoSync()`).
 
 - `/` → `Login` (pública; PIN de 4 dígitos, crear o entrar)
-- `/home` → `Home` (tabs Semana Actual/Próxima, bottom sheets de compras y plan semanal)
+- `/home` → `Home` (tabs Semana Actual/Próxima, bottom sheets de compras, plan semanal y **planificador de semana por etiquetas** — botón "Planificar")
 - `/home/dia/:fecha` → `Dia` (`:fecha` = `YYYY-MM-DD`; SwipeReveal: ojo=detalle, papelera=eliminar)
 - `/home/planificar/:fecha` → `Planificar` (multi-selección de platos)
 - `/platos`, `/platos/etiquetas` (CRUD de etiquetas), `/platos/plato/:platoId`, `/platos/crear-plato`, `/platos/actualizar-plato/:platoId`
@@ -94,6 +94,7 @@ Patrón `create<State>()`, sin middleware de persistencia. Acceso no-reactivo: `
 - **Check de compras**: `Compra` clave implícita `(ingredienteId, numeroSemana, anio)` — semana ISO del lunes de la semana. `toggleCompra` crea o invierte `estado`.
 - `utils/obtenerNombreDia.ts`: nombre del día vía `Intl` `es-ES`.
 - `utils/nutricion.ts`: interfaz `Nutricion` (calorias=kcal, resto=gramos; unidades NO se almacenan como texto), `NUTRICION_KEYS` y `validarNutricionReceta` (validador puro: porciones > 0, campos no numéricos/negativos rechazan, faltantes → 0). `Plato.porciones`/`Plato.nutricion` son opcionales — platos antiguos siguen válidos. También `NutricionIngrediente` ({base, unidadBase: 'gr'|'ml'|'unidad', 5 valores}) + `validarNutricionIngrediente` para el JSON de ingredientes.
+- `utils/planificarSemana.ts`: `generarPlanSemanal` (puro, `rng` inyectable para tests): llena SOLO los días sin planificaciones con 2 platos (candidatos ya filtrados por etiquetas con OR en el store/UI), evita duplicar el mismo día y repetir vs. día calendario anterior (calcula la fecha previa en UTC) mientras haya alternativas; tercer fallback rellena aunque haya menos candidatos que `porDia`. El store lo expone como `planificarSemana(fechas, etiquetasSeleccionadas)` (inserta `'pendiente'` con bulkAdd + `initialize()`).
 - `utils/busqueda.ts`: `normalizarTexto` (minúsculas + sin tildes via NFD), `coincideBusqueda` (TODAS las palabras de la query deben aparecer en cualquier orden) y `platoCoincideBusqueda` (nombre + etiquetas del plato como campo de búsqueda; usado por /platos y /planificar vía mapa `platoEtiquetas` del store). Los demás buscadores (Ingredientes/Unidades/Etiquetas/modales) usan `coincideBusqueda`.
 - `utils/calcularNutricion.ts`: `factorConversion` (masa gr/kg/libra/onza, volumen ml/L; identidad para el resto; **null si no es convertible — no se inventan conversiones**) y `calcularNutricionReceta` (puro): suma aportes = cantidad×factor/base por línea → `ResultadoCalculo {estado: calculado|parcial|sin-informacion, total, porPorcion, porciones, faltantes}`. El cálculo es DINÁMICO en UI (CrearPlato/ActualizarPlato/PlatoDetail); `Plato.nutricion` es solo fallback manual cuando el estado es `sin-informacion`. Valores del plato = POR PORCIÓN; los del ingrediente = por `base` de `unidadBase`. Crudo/cocido = ingredientes separados ("Arroz cocido"), sin campo extra.
 
