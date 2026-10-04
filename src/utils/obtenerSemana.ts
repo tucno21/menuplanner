@@ -43,15 +43,17 @@ const construirSemana = (lunes: Date, planificacion: DataPlanificacion[]): DiaSe
 
 export const obtenerSemanaActual = (planificacion: DataPlanificacion[]): DiaSemana[] => {
   const hoy = new Date()
+  const diasDesdeLunes = (hoy.getDay() + 6) % 7
   const lunes = new Date(hoy)
-  lunes.setDate(hoy.getDate() - hoy.getDay() + 1)
+  lunes.setDate(hoy.getDate() - diasDesdeLunes)
   return construirSemana(lunes, planificacion)
 }
 
 export const obtenerProximaSemana = (planificacion: DataPlanificacion[]): DiaSemana[] => {
   const hoy = new Date()
+  const diasDesdeLunes = (hoy.getDay() + 6) % 7
   const lunes = new Date(hoy)
-  lunes.setDate(hoy.getDate() - hoy.getDay() + 8)
+  lunes.setDate(hoy.getDate() - diasDesdeLunes + 7)
   return construirSemana(lunes, planificacion)
 }
 

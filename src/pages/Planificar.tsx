@@ -59,23 +59,39 @@ const Planificar = () => {
   }
 
   return (
-    <div className="flex flex-col flex-1 px-5 pt-3 pb-6 bg-backdrop min-h-full">
-      <div className="flex items-center gap-3 mb-3">
-        <BackButton />
-        <h1 className="text-2xl font-bold text-primary">Seleccione los Platos</h1>
-      </div>
+    <div className="flex flex-col flex-1 px-4 sm:px-5 pt-3 pb-6 bg-backdrop min-h-full">
+      {/* Cabecera fija superior */}
+      <div className="sticky top-0 z-20 bg-backdrop pt-1 pb-3 -mx-4 sm:-mx-5 px-4 sm:px-5 border-b border-gray-200/80 shadow-xs mb-3 space-y-2.5">
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <BackButton />
+            <div className="min-w-0">
+              <h1 className="text-xl sm:text-2xl font-bold text-primary leading-tight truncate">
+                Seleccionar Platos
+              </h1>
+              <p className="text-xs text-gray-500 font-medium">
+                Fecha: <span className="text-gray-700 font-semibold">{fechaStr}</span>
+              </p>
+            </div>
+          </div>
 
-      <div className="bg-white text-gray-700 text-center p-2 rounded-lg border border-primary-light mb-4">
-        {fechaStr}
-      </div>
+          <button
+            onClick={handleRegistrar}
+            disabled={selectedPlatos.size === 0}
+            className="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg text-sm sm:text-base font-semibold shrink-0 disabled:opacity-40 active:scale-95 transition-all shadow-sm"
+          >
+            Registrar {selectedPlatos.size > 0 ? `(${selectedPlatos.size})` : ''}
+          </button>
+        </div>
 
-      <input
-        type="text"
-        placeholder="Buscar platos"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        className="bg-white text-gray-700 p-2 rounded-lg border border-primary-light mb-4 outline-none"
-      />
+        <input
+          type="text"
+          placeholder="Buscar platos o etiquetas..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full bg-white text-gray-700 px-3.5 py-2 text-sm rounded-lg border border-primary-light outline-none focus:ring-2 focus:ring-primary/40 transition-all shadow-xs"
+        />
+      </div>
 
       <div className="flex-1">
         {filteredPlatos.length === 0 ? (
@@ -88,29 +104,21 @@ const Planificar = () => {
               <button
                 key={id}
                 onClick={() => togglePlatoSelection(id)}
-                className={`w-full p-4 mb-2 rounded-lg flex flex-row items-center transition-colors ${isSelected
+                className={`w-full p-3.5 mb-2 rounded-lg flex flex-row items-center transition-colors ${isSelected
                   ? 'bg-success-light/20 border border-primary'
-                  : 'bg-white border border-primary'
+                  : 'bg-white border border-gray-200 hover:border-primary-light'
                   }`}
               >
-                <div className={`rounded-full p-2 ${isSelected ? 'bg-primary-dark' : 'bg-primary'}`}>
-                  <UtensilsCrossed size={20} color="white" />
+                <div className={`rounded-full p-2 shrink-0 ${isSelected ? 'bg-primary-dark' : 'bg-primary'}`}>
+                  <UtensilsCrossed size={18} color="white" />
                 </div>
-                <span className="text-lg ml-4 flex-1 text-gray-800 text-left">{p.nombre}</span>
-                {isSelected && <CheckCircle2 size={24} className="text-primary" />}
+                <span className="text-base sm:text-lg ml-3.5 flex-1 text-gray-800 text-left font-medium">{p.nombre}</span>
+                {isSelected && <CheckCircle2 size={22} className="text-primary shrink-0" />}
               </button>
             )
           })
         )}
       </div>
-
-      <button
-        onClick={handleRegistrar}
-        disabled={selectedPlatos.size === 0}
-        className="bg-primary rounded-lg py-3 px-6 text-light text-lg font-semibold w-full mt-4 disabled:opacity-50 active:scale-95 transition-all"
-      >
-        Registrar
-      </button>
     </div>
   )
 }

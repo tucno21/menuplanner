@@ -71,6 +71,7 @@ const Dia = () => {
                 : 'linear-gradient(to right, #4ade80, #22c55e)'
             return (
               <SwipeReveal
+                key={plato.planificacionId}
                 className="mb-4 shadow-card"
                 isOpen={swipedOpenId === plato.planificacionId}
                 onOpenChange={(open) => setSwipedOpenId(open ? plato.planificacionId : null)}
@@ -110,8 +111,8 @@ const Dia = () => {
 
       <Modal isOpen={openModal} onClose={() => setOpenModal(false)}>
         {platoDetalle && (
-          <div className="bg-white rounded-2xl overflow-hidden shadow-xl">
-            <div className="relative bg-gradient-to-r from-primary to-primary-dark px-5 py-4">
+          <div className="w-full bg-white rounded-2xl overflow-hidden shadow-xl flex flex-col h-[88vh] max-h-[92vh]">
+            <div className="relative bg-gradient-to-r from-primary to-primary-dark px-5 py-4 shrink-0">
               <h2 className="text-xl font-bold text-white pr-8">{platoDetalle.nombre}</h2>
               <button
                 onClick={() => setOpenModal(false)}
@@ -121,7 +122,7 @@ const Dia = () => {
               </button>
             </div>
 
-            <div className="p-5 space-y-5">
+            <div className="p-5 space-y-5 overflow-y-auto flex-1">
               <div>
                 <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">
                   <span className="w-1 h-4 bg-primary rounded-full" />
