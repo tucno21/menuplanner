@@ -1,0 +1,4235 @@
+[
+    {
+        "nombre": "Guiso de lentejas con zapallo y espinaca",
+        "descripcion": "1. Remoja las lentejas la noche anterior y escúrrelas.\n2. Calienta el aceite y cocina la cebolla y el ajo picados hasta ablandarlos, sin quemarlos.\n3. Agrega el tomate, el ají amarillo y el comino; cocina unos minutos para formar el aderezo.\n4. Incorpora las lentejas, la zanahoria y 2 litros de agua. Cocina aproximadamente 25 minutos, hasta que las lentejas estén tiernas.\n5. Añade el zapallo en cubos y cocina 10 minutos más.\n6. Incorpora la espinaca y el culantro picado al final y cocina unos minutos más.\n7. Cocina el arroz por separado y sirve junto al guiso.",
+        "etiquetas": [
+            "Guisos",
+            "Platos principales",
+            "Desayuno y almuerzo",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 8,
+        "ingredientes": [
+            {
+                "nombre": "Lenteja",
+                "cantidad": 600,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Zapallo",
+                "cantidad": 600,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Espinaca",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 4,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Tomate",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Zanahoria",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Comino",
+                "cantidad": 10,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Ají amarillo",
+                "cantidad": 30,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 30,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Arroz blanco",
+                "cantidad": 370,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Culantro",
+                "cantidad": 20,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Pollo al horno con papa y ensalada de brócoli",
+        "descripcion": "1. Marina el pollo con ajo, jugo de limón, orégano, comino y poca sal durante al menos 30 minutos.\n2. Precalienta el horno a 200 °C.\n3. Coloca el pollo y las papas partidas en una fuente y hornea aproximadamente 40 minutos, hasta que el pollo esté completamente cocido.\n4. Cocina al vapor o sancocha el brócoli, la zanahoria y las vainitas durante 5 a 7 minutos, procurando que conserven su textura.\n5. Aliña las verduras con limón y sirve el pollo con las papas y las verduras.",
+        "etiquetas": [
+            "Platos principales",
+            "Desayuno y almuerzo",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 8,
+        "ingredientes": [
+            {
+                "nombre": "Pollo sin piel",
+                "cantidad": 1200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Papa blanca",
+                "cantidad": 800,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Brócoli",
+                "cantidad": 600,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Zanahoria",
+                "cantidad": 400,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Vainita",
+                "cantidad": 300,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 6,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 4,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Orégano",
+                "cantidad": 5,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Comino",
+                "cantidad": 5,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 30,
+                "unidad": "ml"
+            }
+        ]
+    },
+    {
+        "nombre": "Quinua graneada con tortilla de verduras al horno",
+        "descripcion": "1. Lava muy bien la quinua hasta que el agua salga clara.\n2. Cocina la quinua con aproximadamente el doble de agua durante 15 minutos; apaga el fuego y deja reposar tapada.\n3. Saltea ligeramente la cebolla, el tomate, la zanahoria y la espinaca con parte del aceite, evitando dorarlos en exceso.\n4. Bate los huevos y mézclalos con las verduras.\n5. Coloca la mezcla en un molde ligeramente engrasado y hornea a 180 °C durante unos 25 minutos, hasta que cuaje.\n6. Sirve la quinua graneada con la tortilla y palta en porciones moderadas.",
+        "etiquetas": [
+            "Platos principales",
+            "Desayuno y almuerzo",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 8,
+        "ingredientes": [
+            {
+                "nombre": "Quinua",
+                "cantidad": 510,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Huevo",
+                "cantidad": 12,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Espinaca",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Tomate",
+                "cantidad": 300,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Zanahoria",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Palta",
+                "cantidad": 300,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 30,
+                "unidad": "ml"
+            }
+        ]
+    },
+    {
+        "nombre": "Sopa espesa de morón con verduras y pollo",
+        "descripcion": "1. Sofríe suavemente la cebolla y el ajo con el aceite.\n2. Añade el pollo y aproximadamente 4 litros de agua; cocina unos 20 minutos y retira la espuma o grasa que pueda aparecer.\n3. Incorpora el morón y cocina unos 20 minutos.\n4. Agrega las papas, zanahorias, apio y habas y continúa la cocción unos 15 minutos, hasta que todo esté tierno.\n5. Retira la grasa visible de la superficie y termina con hierbabuena picada.\n6. Sirve caliente, procurando mantener una buena proporción de verduras frente al cereal.",
+        "etiquetas": [
+            "Sopas",
+            "Platos principales",
+            "Desayuno y almuerzo",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 8,
+        "ingredientes": [
+            {
+                "nombre": "Morón (trigo partido)",
+                "cantidad": 540,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Pollo sin piel",
+                "cantidad": 1000,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Papa blanca",
+                "cantidad": 800,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Zanahoria",
+                "cantidad": 400,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Habas frescas",
+                "cantidad": 400,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 4,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Apio",
+                "cantidad": 30,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Hierbabuena",
+                "cantidad": 20,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 30,
+                "unidad": "ml"
+            }
+        ]
+    },
+    {
+        "nombre": "Trucha al horno con camote y ensalada de col",
+        "descripcion": "1. Sazona los filetes de trucha con ajo, limón y poca sal.\n2. Precalienta el horno a 200 °C y hornea la trucha durante 15 a 18 minutos, hasta que esté cocida y se desmenuce fácilmente.\n3. Hornea o sancocha los camotes hasta que estén tiernos.\n4. Corta la col finamente y mézclala con la zanahoria rallada y el perejil.\n5. Aliña la ensalada con limón y una pequeña cantidad de aceite.\n6. Sirve la trucha con camote y la ensalada.",
+        "etiquetas": [
+            "Platos principales",
+            "Desayuno y almuerzo",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 8,
+        "ingredientes": [
+            {
+                "nombre": "Trucha",
+                "cantidad": 1200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Camote amarillo",
+                "cantidad": 800,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Col",
+                "cantidad": 300,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Zanahoria",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 6,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 4,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Perejil",
+                "cantidad": 15,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 15,
+                "unidad": "ml"
+            }
+        ]
+    },
+    {
+        "nombre": "Guiso de garbanzos con verduras",
+        "descripcion": "1. Deja los garbanzos en remojo la noche anterior y escúrrelos.\n2. Cocina los garbanzos en agua hasta que estén tiernos, aproximadamente 40 minutos o según el tipo de olla.\n3. Prepara un aderezo suave con cebolla, tomate, ají amarillo, cúrcuma y comino usando el aceite.\n4. Incorpora el aderezo a los garbanzos.\n5. Agrega la zanahoria, el zapallo y la coliflor y cocina unos 15 minutos más.\n6. Termina con culantro picado y sirve con el arroz cocido aparte.",
+        "etiquetas": [
+            "Guisos",
+            "Platos principales",
+            "Desayuno y almuerzo",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 8,
+        "ingredientes": [
+            {
+                "nombre": "Garbanzo",
+                "cantidad": 600,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Tomate",
+                "cantidad": 300,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Zapallo",
+                "cantidad": 600,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Zanahoria",
+                "cantidad": 400,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Coliflor",
+                "cantidad": 500,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Palillo / cúrcuma",
+                "cantidad": 5,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Comino",
+                "cantidad": 5,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Ají amarillo",
+                "cantidad": 30,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 30,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Arroz blanco",
+                "cantidad": 370,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Culantro",
+                "cantidad": 20,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Saltado ligero de res con verduras y yuca",
+        "descripcion": "1. Sancocha la yuca hasta que esté tierna y retira las fibras duras.\n2. Corta la carne en tiras y sécala para facilitar una cocción rápida.\n3. Calienta una sartén y sella la carne con ajo y kion; retírala temporalmente.\n4. Saltea rápidamente la cebolla, el pimiento, las vainitas y el tomate, buscando que las verduras mantengan parte de su textura.\n5. Devuelve la carne a la sartén, mezcla y agrega limón y cebollita china.\n6. Sirve con la yuca sancochada. No frías la preparación ni agregues salsas grasas.",
+        "etiquetas": [
+            "Platos principales",
+            "Desayuno y almuerzo",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 8,
+        "ingredientes": [
+            {
+                "nombre": "Carne de res magra",
+                "cantidad": 1000,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Tomate",
+                "cantidad": 300,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Pimiento",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Vainita",
+                "cantidad": 300,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 4,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Kion",
+                "cantidad": 20,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Yuca",
+                "cantidad": 1600,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 30,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Cebollita china",
+                "cantidad": 30,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Sopa de cebada con verduras y habas",
+        "descripcion": "1. Remoja la cebada la noche anterior y escúrrela.\n2. Cocina la cebada en abundante agua hasta que comience a ablandarse, aproximadamente 40 minutos.\n3. Prepara un aderezo ligero con cebolla y ajo.\n4. Agrega las verduras y las habas y cocina unos 20 minutos, hasta que estén tiernas.\n5. Escalfa los huevos directamente en la sopa durante 3 a 4 minutos, hasta que la clara esté cocida.\n6. Termina con hierbabuena y sirve caliente.",
+        "etiquetas": [
+            "Sopas",
+            "Platos principales",
+            "Desayuno y almuerzo",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 8,
+        "ingredientes": [
+            {
+                "nombre": "Cebada",
+                "cantidad": 600,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Habas frescas",
+                "cantidad": 600,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Papa blanca",
+                "cantidad": 800,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Zanahoria",
+                "cantidad": 400,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Col",
+                "cantidad": 300,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 4,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Apio",
+                "cantidad": 30,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Huevo",
+                "cantidad": 8,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Hierbabuena",
+                "cantidad": 20,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Bonito sudado con papa amarilla y ensalada de betarraga",
+        "descripcion": "1. Sancocha las papas amarillas hasta que estén tiernas.\n2. Prepara un aderezo suave con ajo, cebolla, tomate y ají amarillo usando el aceite.\n3. Añade un poco de agua y coloca los filetes de bonito encima del aderezo.\n4. Tapa y cocina a fuego bajo durante 8 a 10 minutos, hasta que el pescado esté cocido.\n5. Termina con limón y culantro.\n6. Para la ensalada, cocina la betarraga, déjala enfriar, córtala en cubos y mézclala con cebolla fina, limón y perejil.\n7. Sirve el pescado con las papas y la ensalada.",
+        "etiquetas": [
+            "Platos principales",
+            "Desayuno y almuerzo",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 8,
+        "ingredientes": [
+            {
+                "nombre": "Bonito",
+                "cantidad": 1200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Papa amarilla",
+                "cantidad": 800,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 400,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Tomate",
+                "cantidad": 450,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Ají amarillo",
+                "cantidad": 30,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 6,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 4,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Culantro",
+                "cantidad": 20,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 30,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Betarraga",
+                "cantidad": 400,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Perejil",
+                "cantidad": 15,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Frejoles guisados con arroz y ensalada criolla",
+        "descripcion": "1. Remoja los frejoles la noche anterior y escúrrelos.\n2. Cocina los frejoles hasta que estén tiernos, aproximadamente 45 minutos o según la olla.\n3. Prepara un aderezo ligero con cebolla, ajo, tomate, ají amarillo y comino.\n4. Incorpora el aderezo a los frejoles y cocina unos 10 minutos más para integrar y espesar ligeramente.\n5. Cocina el arroz por separado.\n6. Para la ensalada criolla, corta la cebolla en pluma, pásala brevemente por agua tibia y mézclala con tomate, limón y culantro, sin ají.\n7. Sirve una porción moderada de arroz junto con los frejoles y abundante ensalada.",
+        "etiquetas": [
+            "Guisos",
+            "Platos principales",
+            "Desayuno y almuerzo",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 8,
+        "ingredientes": [
+            {
+                "nombre": "Frejol",
+                "cantidad": 600,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 400,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 6,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Tomate",
+                "cantidad": 450,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Ají amarillo",
+                "cantidad": 30,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Comino",
+                "cantidad": 5,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 30,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Arroz blanco",
+                "cantidad": 370,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 4,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Culantro",
+                "cantidad": 20,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Olluquito con pollo desmenuzado y arroz",
+        "descripcion": "1. Cocina el pollo en agua hasta que esté completamente cocido; desmenúzalo y reserva parte del caldo.\n2. Prepara un aderezo con cebolla, ajo, ají amarillo y cúrcuma usando el aceite.\n3. Incorpora el olluco en tiras y la zanahoria.\n4. Añade aproximadamente una taza de caldo reservado, tapa y cocina unos 15 minutos, hasta que el olluco esté tierno.\n5. Agrega el pollo desmenuzado y mezcla suavemente.\n6. Termina con perejil y sirve con arroz cocido aparte.",
+        "etiquetas": [
+            "Guisos",
+            "Platos principales",
+            "Desayuno y almuerzo",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 8,
+        "ingredientes": [
+            {
+                "nombre": "Olluco",
+                "cantidad": 1200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Pollo sin piel",
+                "cantidad": 1000,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 6,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Ají amarillo",
+                "cantidad": 30,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Palillo / cúrcuma",
+                "cantidad": 5,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Arroz blanco",
+                "cantidad": 370,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Perejil",
+                "cantidad": 15,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 30,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Zanahoria",
+                "cantidad": 200,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Quinotto de quinua con verduras y pollo",
+        "descripcion": "1. Sella ligeramente el pollo en una olla con el aceite y retíralo.\n2. Sofríe la cebolla y el ajo a fuego medio sin quemarlos.\n3. Agrega la quinua previamente lavada y mezcla durante un minuto.\n4. Incorpora el caldo o agua, la zanahoria, las arvejas, el pimiento y el pollo reservado.\n5. Cocina durante 15 a 18 minutos, removiendo de vez en cuando, hasta que la quinua esté cocida y la preparación tenga una textura cremosa.\n6. Añade la espinaca y el perejil al final y cocina unos minutos más.\n7. Ajusta la sal con moderación y sirve inmediatamente.",
+        "etiquetas": [
+            "Platos principales",
+            "Desayuno y almuerzo",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 8,
+        "ingredientes": [
+            {
+                "nombre": "Quinua",
+                "cantidad": 510,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Pollo sin piel",
+                "cantidad": 800,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 4,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Zanahoria",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Alverja fresca",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Pimiento",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Espinaca",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 15,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Perejil",
+                "cantidad": 15,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Guiso de pallares con zapallo",
+        "descripcion": "1. Remoja los pallares la noche anterior y escúrrelos.\n2. Cocina los pallares hasta que estén tiernos, aproximadamente 40 minutos o según la olla.\n3. Prepara un aderezo suave con cebolla, ajo, tomate y comino.\n4. Incorpora el aderezo a los pallares.\n5. Agrega el zapallo y la zanahoria y cocina unos 15 minutos más.\n6. Perfuma con orégano y culantro al final.\n7. Cocina el arroz por separado y sirve una cantidad moderada acompañando el guiso.",
+        "etiquetas": [
+            "Guisos",
+            "Platos principales",
+            "Desayuno y almuerzo",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 8,
+        "ingredientes": [
+            {
+                "nombre": "Pallar",
+                "cantidad": 600,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Zapallo",
+                "cantidad": 800,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 4,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Tomate",
+                "cantidad": 300,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Orégano",
+                "cantidad": 5,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Comino",
+                "cantidad": 5,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 30,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Arroz blanco",
+                "cantidad": 370,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Zanahoria",
+                "cantidad": 400,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Culantro",
+                "cantidad": 20,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Fideos con salsa de tomate, atún y verduras",
+        "descripcion": "1. Cocina los fideos al dente según las indicaciones del producto.\n2. Durante los últimos minutos de cocción, incorpora el brócoli para que quede tierno pero firme; escurre todo.\n3. Prepara una salsa con cebolla, ajo y tomate triturado; cocina aproximadamente 10 minutos.\n4. Agrega la zanahoria rallada y el orégano y cocina unos minutos más.\n5. Incorpora el atún escurrido y enjuagado al final, calentándolo sin cocinarlo en exceso.\n6. Mezcla la salsa con los fideos y el brócoli.\n7. Mantén una proporción mayor de verduras que de fideos.",
+        "etiquetas": [
+            "Platos principales",
+            "Desayuno y almuerzo",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 8,
+        "ingredientes": [
+            {
+                "nombre": "Fideos",
+                "cantidad": 600,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Atún en agua",
+                "cantidad": 4,
+                "unidad": "lata"
+            },
+            {
+                "nombre": "Tomate",
+                "cantidad": 800,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 6,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Zanahoria",
+                "cantidad": 400,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Brócoli",
+                "cantidad": 600,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Orégano",
+                "cantidad": 5,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 30,
+                "unidad": "ml"
+            }
+        ]
+    },
+    {
+        "nombre": "Estofado ligero de res con arvejas, zanahoria y papa",
+        "descripcion": "1. Sella la carne en una olla caliente con el aceite, evitando freírla en abundante grasa.\n2. Añade la cebolla, el ajo, el tomate y el comino y cocina unos 5 minutos.\n3. Agrega el agua, tapa y cocina aproximadamente 40 minutos, o hasta que la carne esté tierna.\n4. Incorpora las papas, la zanahoria y las arvejas.\n5. Cocina unos 20 minutos más, hasta que las verduras estén tiernas.\n6. Retira la grasa visible de la superficie.\n7. Termina con perejil y sirve procurando que las verduras ocupen una parte importante del plato.",
+        "etiquetas": [
+            "Guisos",
+            "Platos principales",
+            "Desayuno y almuerzo",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 8,
+        "ingredientes": [
+            {
+                "nombre": "Carne de res magra",
+                "cantidad": 1000,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Papa blanca",
+                "cantidad": 800,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Alverja fresca",
+                "cantidad": 300,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Zanahoria",
+                "cantidad": 400,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 6,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Tomate",
+                "cantidad": 300,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Comino",
+                "cantidad": 5,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Orégano",
+                "cantidad": 5,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 15,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Perejil",
+                "cantidad": 15,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Sopa de verduras con huevo",
+        "descripcion": "1. Corta las papas, zanahorias y poro en trozos pequeños.\n2. Cocina las verduras y el ajo en aproximadamente 1,5 litros de agua durante 20 minutos, hasta que estén tiernas.\n3. Agrega los huevos directamente a la sopa y escálfalos durante 3 a 4 minutos, hasta que la clara esté cocida.\n4. Apaga el fuego y termina con perejil picado.\n5. Sirve caliente y evita añadir grasa adicional.",
+        "etiquetas": [
+            "Sopas",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Papa blanca",
+                "cantidad": 400,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Zanahoria",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Poro",
+                "cantidad": 150,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Apio",
+                "cantidad": 15,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Huevo",
+                "cantidad": 4,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 2,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Perejil",
+                "cantidad": 15,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 5,
+                "unidad": "ml"
+            }
+        ]
+    },
+    {
+        "nombre": "Ensalada tibia de pollo",
+        "descripcion": "1. Utiliza pollo cocido y desmenuzado, preferentemente sobrante del plato principal y sin piel.\n2. Lava y corta la lechuga, los tomates, el pepino y la palta.\n3. Coloca el pollo tibio sobre las verduras.\n4. Aliña con jugo de limón y una pequeña cantidad de aceite.\n5. Mezcla justo antes de servir para conservar la textura de las verduras.",
+        "etiquetas": [
+            "Ensaladas",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Pollo sin piel",
+                "cantidad": 250,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Lechuga",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Tomate",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Pepino",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Palta",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 5,
+                "unidad": "ml"
+            }
+        ]
+    },
+    {
+        "nombre": "Crema de zapallo con cúrcuma",
+        "descripcion": "1. Corta el zapallo y la papa en cubos y pica la cebolla y el ajo.\n2. Cocina todos los vegetales en aproximadamente 1 litro de agua durante 20 minutos, hasta que estén muy tiernos.\n3. Licúa la preparación hasta obtener una crema homogénea.\n4. Añade la cúrcuma y calienta nuevamente unos minutos.\n5. Sirve con una rebanada de pan integral por persona.",
+        "etiquetas": [
+            "Sopas",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Zapallo",
+                "cantidad": 500,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 150,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 2,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Palillo / cúrcuma",
+                "cantidad": 5,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Papa blanca",
+                "cantidad": 150,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 5,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Pan integral",
+                "cantidad": 4,
+                "unidad": "unidad"
+            }
+        ]
+    },
+    {
+        "nombre": "Yogur con avena y fruta",
+        "descripcion": "1. Lava y corta las manzanas en cubos pequeños.\n2. Reparte el yogur natural sin azúcar en cuatro vasos o recipientes.\n3. Añade la avena, la manzana y la chía.\n4. Espolvorea una pequeña cantidad de canela.\n5. Deja reposar unos 10 minutos para que la avena y la chía se hidraten.\n6. Sirve sin azúcar ni miel añadida.",
+        "etiquetas": [
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Yogur natural sin azúcar",
+                "cantidad": 750,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Avena en hojuelas",
+                "cantidad": 80,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Manzana",
+                "cantidad": 300,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Chía",
+                "cantidad": 20,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Canela",
+                "cantidad": 2,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Tortilla de espinaca y tomate con ensalada",
+        "descripcion": "1. Lava y pica la espinaca, el tomate y la cebolla.\n2. Saltea la cebolla, el tomate y la espinaca con el aceite hasta que estén tiernos.\n3. Bate los huevos y viértelos sobre las verduras.\n4. Cocina tapado a fuego bajo hasta que la tortilla cuaje, evitando que se dore demasiado.\n5. Sirve con lechuga y pepino aliñados con limón.\n6. Acompaña con una rebanada de pan integral por persona.",
+        "etiquetas": [
+            "Ensaladas",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Huevo",
+                "cantidad": 6,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Espinaca",
+                "cantidad": 100,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Tomate",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 100,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 15,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Lechuga",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Pepino",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Pan integral",
+                "cantidad": 4,
+                "unidad": "unidad"
+            }
+        ]
+    },
+    {
+        "nombre": "Ensalada de garbanzos",
+        "descripcion": "1. Utiliza garbanzos previamente cocidos y escurridos.\n2. Corta los tomates, el pepino y la cebolla en trozos pequeños.\n3. Mezcla los garbanzos con las verduras y el perejil.\n4. Añade el jugo de limón y el aceite.\n5. Deja reposar aproximadamente 10 minutos para integrar los sabores.\n6. Sirve fresca, sin mayonesa ni salsas comerciales.",
+        "etiquetas": [
+            "Ensaladas",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Garbanzo",
+                "cantidad": 165,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Tomate",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Pepino",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 75,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Perejil",
+                "cantidad": 15,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 5,
+                "unidad": "ml"
+            }
+        ]
+    },
+    {
+        "nombre": "Sopa de pollo con verduras",
+        "descripcion": "1. Coloca el pollo en una olla con aproximadamente 1,5 litros de agua y lleva a hervor suave.\n2. Añade las papas, zanahorias, apio, poro y ajo previamente cortados.\n3. Cocina durante unos 30 minutos, hasta que el pollo y las verduras estén completamente cocidos.\n4. Retira la grasa visible que flote en la superficie.\n5. Termina con culantro picado y sirve caliente.",
+        "etiquetas": [
+            "Sopas",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Pollo sin piel",
+                "cantidad": 300,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Papa blanca",
+                "cantidad": 400,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Zanahoria",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Apio",
+                "cantidad": 15,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Poro",
+                "cantidad": 100,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 4,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Culantro",
+                "cantidad": 15,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Ensalada de atún",
+        "descripcion": "1. Escurre y enjuaga el atún al natural para reducir el líquido y parte de la sal.\n2. Lava y corta la lechuga, tomates y pepino.\n3. Mezcla las verduras con el atún y las papas previamente sancochadas.\n4. Añade perejil picado.\n5. Aliña con limón y una pequeña cantidad de aceite.\n6. Sirve inmediatamente.",
+        "etiquetas": [
+            "Ensaladas",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Atún en agua",
+                "cantidad": 2,
+                "unidad": "lata"
+            },
+            {
+                "nombre": "Lechuga",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Tomate",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Pepino",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Papa blanca",
+                "cantidad": 300,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 5,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Perejil",
+                "cantidad": 15,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Revuelto de verduras con huevo",
+        "descripcion": "1. Lava y corta el brócoli en ramitos pequeños y ralla la zanahoria.\n2. Saltea la cebolla, el brócoli y la zanahoria durante unos 5 minutos con el aceite, hasta que estén tiernos pero firmes.\n3. Bate los huevos y agrégalos a las verduras.\n4. Revuelve suavemente hasta que el huevo esté completamente cuajado.\n5. Sirve con una rebanada de pan integral por persona.",
+        "etiquetas": [
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Huevo",
+                "cantidad": 6,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Brócoli",
+                "cantidad": 300,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Zanahoria",
+                "cantidad": 150,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 100,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 15,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Pan integral",
+                "cantidad": 4,
+                "unidad": "unidad"
+            }
+        ]
+    },
+    {
+        "nombre": "Sopa de coliflor y poro",
+        "descripcion": "1. Lava y corta la coliflor, los poros, la papa y el ajo.\n2. Cocina todos los ingredientes en aproximadamente 1 litro de agua durante 20 minutos, hasta que estén muy tiernos.\n3. Licúa hasta obtener una crema uniforme.\n4. Calienta nuevamente y termina con perejil picado.\n5. Sirve caliente y evita añadir crema, queso o mantequilla.",
+        "etiquetas": [
+            "Sopas",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Coliflor",
+                "cantidad": 500,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Poro",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Papa blanca",
+                "cantidad": 150,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 2,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 5,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Perejil",
+                "cantidad": 15,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Ensalada de betarraga, zanahoria y huevo",
+        "descripcion": "1. Cocina las betarragas hasta que estén tiernas y déjalas enfriar.\n2. Ralla las zanahorias y lava la lechuga.\n3. Corta las betarragas en cubos y los huevos duros en cuartos.\n4. Mezcla la betarraga, zanahoria y lechuga.\n5. Incorpora los huevos y aliña con limón y una pequeña cantidad de aceite.\n6. Sirve como una cena ligera.",
+        "etiquetas": [
+            "Ensaladas",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Betarraga",
+                "cantidad": 300,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Zanahoria",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Huevo",
+                "cantidad": 4,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Lechuga",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 5,
+                "unidad": "ml"
+            }
+        ]
+    },
+    {
+        "nombre": "Sopa de quinua con verduras",
+        "descripcion": "1. Lava la quinua cuidadosamente.\n2. Coloca la quinua, el zapallo, la zanahoria, el apio, la cebolla y el ajo en aproximadamente 1,5 litros de agua.\n3. Cocina durante unos 20 minutos, hasta que la quinua esté abierta y las verduras tiernas.\n4. Ajusta la sal con moderación.\n5. Termina con hierbabuena y sirve caliente.",
+        "etiquetas": [
+            "Sopas",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Quinua",
+                "cantidad": 85,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Zapallo",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Zanahoria",
+                "cantidad": 100,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Apio",
+                "cantidad": 15,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 75,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 2,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Hierbabuena",
+                "cantidad": 15,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Caigua con huevo",
+        "descripcion": "1. Lava y corta las caiguas en tiras.\n2. Saltea la cebolla y el tomate con el aceite durante unos minutos.\n3. Agrega la caigua y cocina aproximadamente 8 minutos, hasta que esté tierna.\n4. Bate los huevos y agrégalos a la preparación.\n5. Revuelve hasta que el huevo esté completamente cuajado.\n6. Termina con culantro picado y sirve caliente.",
+        "etiquetas": [
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Caigua",
+                "cantidad": 400,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Huevo",
+                "cantidad": 4,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Tomate",
+                "cantidad": 150,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 100,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 15,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Culantro",
+                "cantidad": 15,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Yogur con papaya, linaza y almendras",
+        "descripcion": "1. Corta la papaya en cubos pequeños.\n2. Reparte el yogur natural sin azúcar en cuatro vasos.\n3. Coloca la papaya sobre el yogur.\n4. Espolvorea la linaza molida y las almendras picadas.\n5. Sirve inmediatamente, sin azúcar, miel ni jarabes añadidos.",
+        "etiquetas": [
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Yogur natural sin azúcar",
+                "cantidad": 750,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Papaya",
+                "cantidad": 300,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Linaza molida",
+                "cantidad": 20,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Almendras",
+                "cantidad": 12,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Ensalada tibia de alcachofa y vainita",
+        "descripcion": "1. Cocina las alcachofas hasta que estén tiernas y retira las partes duras.\n2. Sancocha las vainitas durante unos 5 minutos y escúrrelas.\n3. Corta las alcachofas en cuartos y los tomates en trozos.\n4. Mezcla alcachofa, vainitas, tomate y huevos duros cortados en cuartos.\n5. Aliña con limón y una pequeña cantidad de aceite.\n6. Termina con perejil picado y sirve tibia.",
+        "etiquetas": [
+            "Ensaladas",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Alcachofa",
+                "cantidad": 600,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Vainita",
+                "cantidad": 150,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Tomate",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Huevo",
+                "cantidad": 4,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 5,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Perejil",
+                "cantidad": 15,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Ceviche clásico de pescado",
+        "descripcion": "1. Corta el pescado en cubos y mantenlo refrigerado.\n2. Corta la cebolla en pluma y enjuágala brevemente con agua fría.\n3. Mezcla el pescado con sal, ají limo y parte del culantro.\n4. Agrega el jugo de limón justo antes de servir y mezcla suavemente.\n5. Incorpora la cebolla al final.\n6. Sirve con camote y choclo sancochados.",
+        "etiquetas": [
+            "Platos principales",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Bonito",
+                "cantidad": 500,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla roja",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 8,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Ají limo",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Culantro",
+                "cantidad": 0.5,
+                "unidad": "manojo"
+            },
+            {
+                "nombre": "Camote amarillo",
+                "cantidad": 600,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Choclo",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 4,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Ceviche de bonito con camote",
+        "descripcion": "1. Corta el bonito en cubos uniformes y refrigéralo.\n2. Sazona con sal y ají limo.\n3. Añade limón recién exprimido y mezcla por unos minutos.\n4. Incorpora cebolla roja y culantro.\n5. Sirve inmediatamente con camote sancochado.",
+        "etiquetas": [
+            "Platos principales",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Bonito",
+                "cantidad": 600,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla roja",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 8,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Ají limo",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Culantro",
+                "cantidad": 0.5,
+                "unidad": "manojo"
+            },
+            {
+                "nombre": "Camote amarillo",
+                "cantidad": 600,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 4,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Tiradito de pescado al ají amarillo",
+        "descripcion": "1. Corta el pescado en láminas delgadas y mantenlo frío.\n2. Licúa ají amarillo sin venas con limón, una pequeña cantidad de agua y sal.\n3. Cuela la salsa y ajusta su acidez.\n4. Coloca el pescado en una fuente y vierte la salsa justo antes de servir.\n5. Termina con culantro picado.",
+        "etiquetas": [
+            "Platos principales",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Trucha",
+                "cantidad": 500,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Ají amarillo",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 7,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Culantro",
+                "cantidad": 0.5,
+                "unidad": "manojo"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 3,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Sudado de pescado",
+        "descripcion": "1. Sofríe ligeramente cebolla, ajo y tomate con una pequeña cantidad de aceite.\n2. Agrega ají amarillo y un poco de agua.\n3. Coloca los filetes de pescado sobre el aderezo.\n4. Tapa y cocina a fuego bajo hasta que el pescado esté cocido.\n5. Termina con limón y culantro.\n6. Sirve con papa sancochada.",
+        "etiquetas": [
+            "Guisos",
+            "Platos principales",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Bonito",
+                "cantidad": 600,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla roja",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Tomate",
+                "cantidad": 3,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 3,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Ají amarillo",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 15,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Culantro",
+                "cantidad": 0.5,
+                "unidad": "manojo"
+            },
+            {
+                "nombre": "Papa amarilla",
+                "cantidad": 600,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 4,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Escabeche ligero de pescado",
+        "descripcion": "1. Sazona los filetes con poca sal y cocínalos al horno o al vapor, sin freír.\n2. Cocina cebolla, ají amarillo, vinagre y orégano hasta que la cebolla quede tierna.\n3. Incorpora el pescado y deja reposar para que absorba el aderezo.\n4. Sirve con papa sancochada y lechuga.",
+        "etiquetas": [
+            "Platos principales",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Jurel",
+                "cantidad": 600,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla roja",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Ají amarillo",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Vinagre",
+                "cantidad": 40,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Orégano",
+                "cantidad": 3,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 10,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Papa blanca",
+                "cantidad": 600,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Lechuga",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 3,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Arroz con mariscos ligero",
+        "descripcion": "1. Cocina el arroz por separado y resérvalo.\n2. Saltea brevemente cebolla, ajo, tomate y ají amarillo con poco aceite.\n3. Agrega pescado en trozos y cocínalo hasta que esté hecho.\n4. Incorpora el arroz y mezcla suavemente.\n5. Termina con culantro y limón.",
+        "etiquetas": [
+            "Platos principales",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Arroz blanco",
+                "cantidad": 400,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Bonito",
+                "cantidad": 300,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla roja",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Tomate",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 3,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Ají amarillo",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 15,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Culantro",
+                "cantidad": 0.5,
+                "unidad": "manojo"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 4,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Chupe ligero de pescado",
+        "descripcion": "1. Cocina papa, choclo, cebolla, ajo y zapallo en agua hasta ablandar.\n2. Agrega el pescado en trozos y cocina a fuego suave.\n3. Añade leche semidescremada y calienta sin hervir fuertemente.\n4. Termina con perejil y ajusta la sal.",
+        "etiquetas": [
+            "Sopas",
+            "Platos principales",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Jurel",
+                "cantidad": 400,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Papa blanca",
+                "cantidad": 400,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Choclo",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Zapallo",
+                "cantidad": 300,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 2,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Leche semidescremada",
+                "cantidad": 300,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Perejil",
+                "cantidad": 0.5,
+                "unidad": "manojo"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 3,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Ají de gallina ligero",
+        "descripcion": "1. Cocina el pollo y deshiláchalo; reserva parte del caldo.\n2. Remoja el pan integral en leche y tritúralo.\n3. Cocina cebolla, ajo y ají amarillo con poco aceite.\n4. Añade el pan licuado y caldo hasta obtener una crema espesa.\n5. Incorpora el pollo y cocina unos minutos.\n6. Sirve con papa sancochada y arroz en porción moderada.",
+        "etiquetas": [
+            "Guisos",
+            "Platos principales",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Pechuga de pollo",
+                "cantidad": 600,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Pan integral",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Leche semidescremada",
+                "cantidad": 250,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 3,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Ají amarillo",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 15,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Papa amarilla",
+                "cantidad": 500,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Arroz blanco",
+                "cantidad": 250,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 4,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Lomo saltado ligero",
+        "descripcion": "1. Corta la carne en tiras.\n2. Calienta una sartén y sella la carne rápidamente con poco aceite; retírala.\n3. Saltea cebolla, tomate y pimiento manteniendo textura firme.\n4. Devuelve la carne y agrega un pequeño chorrito de salsa de soya y vinagre.\n5. Mezcla y termina con cebollita china.\n6. Acompaña con papa sancochada u horneada y arroz moderado.",
+        "etiquetas": [
+            "Platos principales",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Carne de res magra",
+                "cantidad": 600,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla roja",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Tomate",
+                "cantidad": 3,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Pimiento",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Cebollita china",
+                "cantidad": 0.5,
+                "unidad": "manojo"
+            },
+            {
+                "nombre": "Salsa de soya",
+                "cantidad": 20,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Vinagre",
+                "cantidad": 10,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 15,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Papa blanca",
+                "cantidad": 500,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Arroz blanco",
+                "cantidad": 250,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 2,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Arroz con pollo peruano ligero",
+        "descripcion": "1. Licúa o tritura culantro con un poco de agua.\n2. Cocina cebolla, ajo y ají amarillo con poco aceite.\n3. Agrega el pollo y sella ligeramente.\n4. Incorpora culantro, zanahoria, alverja y agua.\n5. Añade el arroz lavado y cocina tapado hasta que esté graneado.\n6. Deja reposar antes de servir.",
+        "etiquetas": [
+            "Platos principales",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Pollo sin piel",
+                "cantidad": 700,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Arroz blanco",
+                "cantidad": 400,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Culantro",
+                "cantidad": 1,
+                "unidad": "manojo"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 3,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Ají amarillo",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Zanahoria",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Alverja fresca",
+                "cantidad": 150,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 15,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 4,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Estofado de res peruano",
+        "descripcion": "1. Sella la carne con poco aceite.\n2. Agrega cebolla, ajo, tomate, comino y orégano.\n3. Incorpora agua y cocina tapado hasta ablandar la carne.\n4. Añade zanahoria y papa y cocina hasta que estén tiernas.\n5. Termina con perejil y retira la grasa visible antes de servir.",
+        "etiquetas": [
+            "Guisos",
+            "Platos principales",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Carne de res magra",
+                "cantidad": 600,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 3,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Tomate",
+                "cantidad": 3,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Comino",
+                "cantidad": 3,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Orégano",
+                "cantidad": 3,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Zanahoria",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Papa blanca",
+                "cantidad": 600,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 15,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Perejil",
+                "cantidad": 0.5,
+                "unidad": "manojo"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 4,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Seco de pollo ligero",
+        "descripcion": "1. Licúa culantro con un poco de agua.\n2. Cocina cebolla, ajo, ají amarillo y comino con poco aceite.\n3. Agrega el pollo y dora ligeramente.\n4. Incorpora el culantro licuado y agua suficiente.\n5. Cocina tapado hasta que el pollo esté tierno y la salsa espese.\n6. Sirve con yuca sancochada y ensalada.",
+        "etiquetas": [
+            "Guisos",
+            "Platos principales",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Pollo sin piel",
+                "cantidad": 700,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Culantro",
+                "cantidad": 1,
+                "unidad": "manojo"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 3,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Ají amarillo",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Comino",
+                "cantidad": 2,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 15,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Yuca",
+                "cantidad": 600,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 4,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Carapulcra ligera de pollo",
+        "descripcion": "1. Tuesta ligeramente la papa seca si se dispone de ella; en esta versión usa papa blanca en cubos como base.\n2. Cocina cebolla, ajo, ají panca y ají mirasol con poco aceite.\n3. Añade pollo deshilachado y agua.\n4. Incorpora la papa y cocina hasta espesar.\n5. Agrega maní molido y mezcla hasta integrar.\n6. Sirve con una pequeña porción de arroz.",
+        "etiquetas": [
+            "Guisos",
+            "Platos principales",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Papa blanca",
+                "cantidad": 800,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Pechuga de pollo",
+                "cantidad": 500,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 3,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Ají panca",
+                "cantidad": 10,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Ají mirasol",
+                "cantidad": 10,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Maní sin sal",
+                "cantidad": 40,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 15,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Arroz blanco",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 4,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Tacu tacu de frejoles y arroz",
+        "descripcion": "1. Cocina los frejoles hasta que estén suaves y escúrrelos bien.\n2. Mezcla frejoles cocidos con arroz cocido.\n3. Prepara un aderezo ligero con cebolla, ajo y ají amarillo.\n4. Integra el aderezo con la mezcla y forma porciones compactas.\n5. Dora en sartén antiadherente con poca cantidad de aceite, evitando freír en exceso.",
+        "etiquetas": [
+            "Platos principales",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Frejol",
+                "cantidad": 300,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Arroz blanco",
+                "cantidad": 300,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 2,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Ají amarillo",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Aceite de oliva",
+                "cantidad": 10,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 3,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Tacu tacu de lentejas",
+        "descripcion": "1. Cocina las lentejas hasta que estén tiernas y escúrrelas.\n2. Mezcla con arroz cocido.\n3. Prepara cebolla, ajo y ají amarillo con poco aceite.\n4. Integra todo y forma porciones.\n5. Dora ligeramente en sartén antiadherente.",
+        "etiquetas": [
+            "Platos principales",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Lenteja",
+                "cantidad": 300,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Arroz blanco",
+                "cantidad": 300,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 2,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Ají amarillo",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Aceite de oliva",
+                "cantidad": 10,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 3,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Tacu tacu de pallares",
+        "descripcion": "1. Cocina los pallares hasta que estén suaves.\n2. Mezcla con arroz cocido.\n3. Sofríe cebolla, ajo y ají amarillo con poco aceite.\n4. Une el aderezo con los pallares y el arroz.\n5. Forma una masa compacta y dórala ligeramente en sartén antiadherente.",
+        "etiquetas": [
+            "Platos principales",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Pallar",
+                "cantidad": 300,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Arroz blanco",
+                "cantidad": 300,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 2,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Ají amarillo",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Aceite de oliva",
+                "cantidad": 10,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 3,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Causa limeña de pollo ligera",
+        "descripcion": "1. Sancocha las papas y prénsalas aún calientes.\n2. Mezcla con ají amarillo, limón y una pequeña cantidad de aceite.\n3. Cocina el pollo, deshiláchalo y mézclalo con palta y un poco de yogur natural.\n4. Forma una primera capa de papa, coloca el relleno y cubre con otra capa.\n5. Refrigera unos minutos y sirve con lechuga.",
+        "etiquetas": [
+            "Platos principales",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Papa amarilla",
+                "cantidad": 1000,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Pechuga de pollo",
+                "cantidad": 400,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Ají amarillo",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 4,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Aceite de oliva",
+                "cantidad": 15,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Palta",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Yogur natural sin azúcar",
+                "cantidad": 100,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Lechuga",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 3,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Causa de atún ligera",
+        "descripcion": "1. Sancocha y prensa la papa amarilla.\n2. Sazona con ají amarillo, limón y poco aceite.\n3. Escurre el atún y mézclalo con palta y yogur natural.\n4. Coloca capas de papa y relleno.\n5. Refrigera antes de servir.",
+        "etiquetas": [
+            "Platos principales",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Papa amarilla",
+                "cantidad": 1000,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Atún en agua",
+                "cantidad": 2,
+                "unidad": "lata"
+            },
+            {
+                "nombre": "Ají amarillo",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 4,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Aceite de oliva",
+                "cantidad": 15,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Palta",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Yogur natural sin azúcar",
+                "cantidad": 100,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Lechuga",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 3,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Pollo a la brasa casero saludable",
+        "descripcion": "1. Retira toda la piel visible del pollo.\n2. Marina con ajo, comino, pimienta, orégano, limón y poca sal.\n3. Deja reposar refrigerado.\n4. Hornea a temperatura alta hasta que esté completamente cocido y dorado.\n5. Sirve con papas al horno y ensalada abundante, evitando mayonesa y frituras.",
+        "etiquetas": [
+            "Platos principales",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Pollo sin piel",
+                "cantidad": 1000,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 4,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Comino",
+                "cantidad": 3,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Pimienta",
+                "cantidad": 2,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Orégano",
+                "cantidad": 3,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 3,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Papa blanca",
+                "cantidad": 800,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Lechuga",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Tomate",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 10,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 4,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Pachamanca saludable al horno",
+        "descripcion": "1. Marina pollo y carne magra con chincho, huacatay, comino, ajo y poca sal.\n2. Lava papas, camote y choclo.\n3. Coloca los alimentos en una fuente de horno, agrupando carnes y tubérculos.\n4. Cubre y hornea hasta que las carnes estén completamente cocidas.\n5. Sirve con abundantes vegetales y sin salsas grasas.",
+        "etiquetas": [
+            "Platos principales",
+            "Saludable",
+            "Fiesta"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Pollo sin piel",
+                "cantidad": 500,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Carne de res magra",
+                "cantidad": 400,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Papa blanca",
+                "cantidad": 500,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Camote amarillo",
+                "cantidad": 400,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Choclo",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 3,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Huacatay",
+                "cantidad": 0.5,
+                "unidad": "manojo"
+            },
+            {
+                "nombre": "Chincho",
+                "cantidad": 0.5,
+                "unidad": "manojo"
+            },
+            {
+                "nombre": "Comino",
+                "cantidad": 2,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 4,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Cuy al horno con papa y ensalada",
+        "descripcion": "1. Limpia el cuy y sazónalo con ajo, comino, pimienta y poca sal.\n2. Déjalo reposar para que absorba los condimentos.\n3. Hornea hasta que esté completamente cocido y la piel quede dorada.\n4. Sirve con papa sancochada y ensalada fresca.",
+        "etiquetas": [
+            "Platos principales",
+            "Fiesta"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Cuy",
+                "cantidad": 800,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 4,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Comino",
+                "cantidad": 3,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Pimienta",
+                "cantidad": 2,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Papa blanca",
+                "cantidad": 600,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Lechuga",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Tomate",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 4,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Olluquito con pollo",
+        "descripcion": "1. Cocina el pollo, deshiláchalo y reserva.\n2. Prepara un aderezo ligero con cebolla, ajo, ají amarillo y cúrcuma.\n3. Agrega el olluco cortado y un poco de caldo o agua.\n4. Cocina tapado hasta que el olluco esté tierno.\n5. Incorpora el pollo y perejil.\n6. Sirve con una porción moderada de arroz.",
+        "etiquetas": [
+            "Guisos",
+            "Platos principales",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Olluco",
+                "cantidad": 800,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Pechuga de pollo",
+                "cantidad": 500,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 3,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Ají amarillo",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Palillo / cúrcuma",
+                "cantidad": 2,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Perejil",
+                "cantidad": 0.5,
+                "unidad": "manojo"
+            },
+            {
+                "nombre": "Arroz blanco",
+                "cantidad": 250,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 15,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 4,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Locro de zapallo",
+        "descripcion": "1. Cocina cebolla, ajo y ají amarillo con poco aceite.\n2. Añade zapallo, papa y agua.\n3. Cocina hasta que las verduras estén muy tiernas.\n4. Aplasta parte del zapallo para espesar naturalmente.\n5. Agrega queso fresco y huacatay al final.\n6. Sirve caliente.",
+        "etiquetas": [
+            "Guisos",
+            "Platos principales",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Zapallo macre",
+                "cantidad": 800,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Papa amarilla",
+                "cantidad": 500,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 2,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Ají amarillo",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Queso fresco light",
+                "cantidad": 100,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Huacatay",
+                "cantidad": 0.5,
+                "unidad": "manojo"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 10,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 3,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Chupe de quinua",
+        "descripcion": "1. Lava la quinua varias veces.\n2. Cocina cebolla, ajo, papa, zapallo y quinua en agua.\n3. Agrega leche semidescremada cuando los granos estén cocidos.\n4. Incorpora huevo y queso fresco en pequeñas cantidades.\n5. Termina con perejil y sirve caliente.",
+        "etiquetas": [
+            "Sopas",
+            "Platos principales",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Quinua",
+                "cantidad": 180,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Papa blanca",
+                "cantidad": 400,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Zapallo",
+                "cantidad": 300,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 2,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Leche semidescremada",
+                "cantidad": 400,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Huevo",
+                "cantidad": 4,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Queso fresco light",
+                "cantidad": 80,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Perejil",
+                "cantidad": 0.5,
+                "unidad": "manojo"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 3,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Aguadito de pollo ligero",
+        "descripcion": "1. Licúa culantro con agua.\n2. Cocina cebolla, ajo y ají amarillo con poco aceite.\n3. Agrega pollo, culantro y agua.\n4. Incorpora arroz, papa, zanahoria y choclo.\n5. Cocina hasta que el arroz y las verduras estén tiernos.\n6. Ajusta la sal y sirve caliente.",
+        "etiquetas": [
+            "Sopas",
+            "Platos principales",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Pollo sin piel",
+                "cantidad": 600,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Arroz blanco",
+                "cantidad": 220,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Papa amarilla",
+                "cantidad": 400,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Choclo",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Zanahoria",
+                "cantidad": 150,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Culantro",
+                "cantidad": 1,
+                "unidad": "manojo"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 3,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Ají amarillo",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 10,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 4,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Sopa criolla ligera",
+        "descripcion": "1. Cocina cebolla, ajo y tomate con poco aceite.\n2. Agrega carne magra en tiras y cocina brevemente.\n3. Incorpora agua y fideos en cantidad moderada.\n4. Añade huevo al final y cocina hasta que cuaje.\n5. Termina con orégano y perejil.",
+        "etiquetas": [
+            "Sopas",
+            "Platos principales"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Carne de res magra",
+                "cantidad": 350,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Fideos",
+                "cantidad": 150,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 2,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Tomate",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Huevo",
+                "cantidad": 4,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Orégano",
+                "cantidad": 2,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Perejil",
+                "cantidad": 0.5,
+                "unidad": "manojo"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 10,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 3,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Chairo andino ligero",
+        "descripcion": "1. Cocina cebada, papa, zapallo, zanahoria y habas en abundante agua.\n2. Agrega cebolla, ajo y comino previamente cocinados con poco aceite.\n3. Incorpora carne magra en cubos.\n4. Cocina a fuego suave hasta que todos los ingredientes estén tiernos.\n5. Termina con hierbabuena.",
+        "etiquetas": [
+            "Sopas",
+            "Platos principales",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Cebada",
+                "cantidad": 150,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Carne de res magra",
+                "cantidad": 350,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Papa blanca",
+                "cantidad": 400,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Zapallo",
+                "cantidad": 250,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Zanahoria",
+                "cantidad": 150,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Habas frescas",
+                "cantidad": 150,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 2,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Comino",
+                "cantidad": 2,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Hierbabuena",
+                "cantidad": 0.5,
+                "unidad": "manojo"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 10,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 3,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Juane saludable de pollo",
+        "descripcion": "1. Cocina el arroz con poca sal y déjalo enfriar ligeramente.\n2. Cocina el pollo y deshiláchalo.\n3. Mezcla arroz, pollo, huevo cocido, aceituna y condimentos.\n4. Envuelve porciones en hojas adecuadas para juane y ata bien.\n5. Cocina al vapor hasta que quede firme y completamente cocido.",
+        "etiquetas": [
+            "Platos principales",
+            "Fiesta"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Arroz blanco",
+                "cantidad": 450,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Pechuga de pollo",
+                "cantidad": 450,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Huevo",
+                "cantidad": 4,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Aceituna negra",
+                "cantidad": 8,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 2,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Comino",
+                "cantidad": 2,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Pimienta",
+                "cantidad": 1,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 4,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Tacacho ligero con pollo",
+        "descripcion": "1. Cocina el plátano al horno o sancochado, evitando freírlo.\n2. Machaca el plátano caliente hasta formar una masa.\n3. Mezcla con una pequeña cantidad de aceite de oliva y sal.\n4. Cocina el pollo a la plancha u horno y córtalo en trozos.\n5. Sirve el tacacho con el pollo y ensalada.",
+        "etiquetas": [
+            "Platos principales",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Plátano",
+                "cantidad": 800,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Pechuga de pollo",
+                "cantidad": 500,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Aceite de oliva",
+                "cantidad": 15,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Lechuga",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Tomate",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 3,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Malarrabia ligera con pescado",
+        "descripcion": "1. Sancocha el plátano maduro y machácalo.\n2. Cocina cebolla, tomate y ajo con poco aceite.\n3. Mezcla el plátano con el aderezo y queso fresco light.\n4. Cocina el pescado al horno o al vapor.\n5. Sirve con una porción moderada de arroz y menestra.",
+        "etiquetas": [
+            "Platos principales",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Plátano",
+                "cantidad": 600,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla roja",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Tomate",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 2,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Queso fresco light",
+                "cantidad": 80,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Bonito",
+                "cantidad": 500,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Arroz blanco",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Frejol",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 10,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 4,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Seco norteño de res ligero",
+        "descripcion": "1. Marina la carne con culantro, ajo y comino.\n2. Sella la carne con poco aceite.\n3. Agrega cebolla y el culantro licuado con agua.\n4. Cocina tapado hasta ablandar.\n5. Sirve con yuca sancochada y ensalada.",
+        "etiquetas": [
+            "Guisos",
+            "Platos principales",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Carne de res magra",
+                "cantidad": 600,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Culantro",
+                "cantidad": 1,
+                "unidad": "manojo"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 3,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Comino",
+                "cantidad": 2,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Yuca",
+                "cantidad": 600,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Tomate",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Lechuga",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 10,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 4,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Cau cau vegetal de papa y verduras",
+        "descripcion": "1. Cocina papa, zanahoria y vainita en cubos hasta que estén tiernas.\n2. Prepara un aderezo con cebolla, ajo, ají amarillo, cúrcuma y hierbabuena.\n3. Incorpora las verduras y mezcla suavemente.\n4. Cocina unos minutos para integrar sabores.\n5. Sirve con una pequeña porción de arroz.",
+        "etiquetas": [
+            "Guisos",
+            "Platos principales",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Papa blanca",
+                "cantidad": 700,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Zanahoria",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Vainita",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Cebolla",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Ajo",
+                "cantidad": 2,
+                "unidad": "diente"
+            },
+            {
+                "nombre": "Ají amarillo",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Palillo / cúrcuma",
+                "cantidad": 2,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Hierbabuena",
+                "cantidad": 0.5,
+                "unidad": "manojo"
+            },
+            {
+                "nombre": "Arroz blanco",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Aceite vegetal",
+                "cantidad": 10,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 3,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Papa a la huancaína ligera",
+        "descripcion": "1. Sancocha las papas y déjalas enfriar ligeramente.\n2. Licúa ají amarillo con queso fresco light, leche y un poco de aceite.\n3. Ajusta la textura con leche y sazona con poca sal.\n4. Sirve sobre las papas con lechuga y aceituna negra.",
+        "etiquetas": [
+            "Acompañamientos",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Papa amarilla",
+                "cantidad": 800,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Ají amarillo",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Queso fresco light",
+                "cantidad": 150,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Leche semidescremada",
+                "cantidad": 150,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Aceite de oliva",
+                "cantidad": 10,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Lechuga",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Aceituna negra",
+                "cantidad": 8,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 3,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Ocopa arequipeña ligera",
+        "descripcion": "1. Sancocha las papas.\n2. Licúa huacatay, queso fresco light, leche, maní y ají amarillo.\n3. Ajusta con poca leche hasta lograr una salsa cremosa.\n4. Sirve sobre las papas y acompaña con lechuga.",
+        "etiquetas": [
+            "Acompañamientos",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Papa amarilla",
+                "cantidad": 800,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Huacatay",
+                "cantidad": 0.5,
+                "unidad": "manojo"
+            },
+            {
+                "nombre": "Queso fresco light",
+                "cantidad": 120,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Leche semidescremada",
+                "cantidad": 150,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Maní sin sal",
+                "cantidad": 40,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Ají amarillo",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Lechuga",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 3,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Solterito de queso ligero",
+        "descripcion": "1. Sancocha el choclo y las habas.\n2. Corta tomate, cebolla y queso fresco en cubos.\n3. Mezcla con habas y choclo.\n4. Aliña con limón, perejil y una pequeña cantidad de aceite de oliva.",
+        "etiquetas": [
+            "Ensaladas",
+            "Acompañamientos",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Choclo",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Habas frescas",
+                "cantidad": 250,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Tomate",
+                "cantidad": 3,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Cebolla roja",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Queso fresco light",
+                "cantidad": 150,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Perejil",
+                "cantidad": 0.5,
+                "unidad": "manojo"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 3,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Aceite de oliva",
+                "cantidad": 10,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 3,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Ensalada criolla peruana",
+        "descripcion": "1. Corta la cebolla en pluma y enjuágala brevemente.\n2. Corta el tomate y mezcla con la cebolla.\n3. Añade limón, culantro y una pizca de sal.\n4. Reposa unos minutos antes de servir.",
+        "etiquetas": [
+            "Ensaladas",
+            "Acompañamientos",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Cebolla roja",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Tomate",
+                "cantidad": 3,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 3,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Culantro",
+                "cantidad": 0.5,
+                "unidad": "manojo"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 2,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Ensalada de pallares estilo peruano",
+        "descripcion": "1. Cocina los pallares hasta que estén suaves y enfríalos.\n2. Mezcla con tomate, cebolla y perejil.\n3. Aliña con limón y aceite de oliva.\n4. Sirve fría o a temperatura ambiente.",
+        "etiquetas": [
+            "Ensaladas",
+            "Acompañamientos",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Pallar",
+                "cantidad": 300,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Tomate",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Cebolla roja",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Perejil",
+                "cantidad": 0.5,
+                "unidad": "manojo"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 3,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Aceite de oliva",
+                "cantidad": 10,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 2,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Ensalada de quinua peruana",
+        "descripcion": "1. Lava y cocina la quinua; enfríala.\n2. Añade pepino, tomate, zanahoria y palta en cubos.\n3. Mezcla suavemente.\n4. Aliña con limón y aceite de oliva.",
+        "etiquetas": [
+            "Ensaladas",
+            "Acompañamientos",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Quinua",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Pepino",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Tomate",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Zanahoria",
+                "cantidad": 150,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Palta",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 3,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Aceite de oliva",
+                "cantidad": 10,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 2,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Ensalada de betarraga y zanahoria",
+        "descripcion": "1. Sancocha las betarragas y déjalas enfriar.\n2. Córtalas en cubos y mezcla con zanahoria rallada.\n3. Añade limón y una pequeña cantidad de aceite de oliva.\n4. Sirve fresca.",
+        "etiquetas": [
+            "Ensaladas",
+            "Acompañamientos",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Betarraga",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Zanahoria",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Aceite de oliva",
+                "cantidad": 10,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 2,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Ensalada de palta y tomate",
+        "descripcion": "1. Corta la palta y el tomate.\n2. Mezcla con cuidado para no deshacer la palta.\n3. Añade limón, culantro y una pizca de sal.",
+        "etiquetas": [
+            "Ensaladas",
+            "Acompañamientos",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Palta",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Tomate",
+                "cantidad": 3,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Culantro",
+                "cantidad": 0.25,
+                "unidad": "manojo"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 2,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Choclo con queso fresco",
+        "descripcion": "1. Sancocha los choclos hasta que estén tiernos.\n2. Corta el queso fresco en porciones.\n3. Sirve el choclo con queso y, si se desea, una pequeña porción de salsa de ají amarillo casera.",
+        "etiquetas": [
+            "Acompañamientos",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Choclo",
+                "cantidad": 4,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Queso fresco light",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Ají amarillo",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 2,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Papas doradas al horno con ají amarillo",
+        "descripcion": "1. Corta las papas en gajos.\n2. Mézclalas con una pequeña cantidad de aceite, ají amarillo y comino.\n3. Hornea hasta que estén tiernas y ligeramente doradas, volteándolas a mitad de cocción.",
+        "etiquetas": [
+            "Acompañamientos",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Papa blanca",
+                "cantidad": 800,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Ají amarillo",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Comino",
+                "cantidad": 2,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Aceite de oliva",
+                "cantidad": 15,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Sal",
+                "cantidad": 3,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Quinua atamalada con manzana y canela",
+        "descripcion": "1. Lava la quinua.\n2. Cocina con leche semidescremada hasta que quede cremosa.\n3. Añade manzana picada y canela.\n4. Cocina unos minutos más y sirve tibia, sin azúcar añadida.",
+        "etiquetas": [
+            "Desayuno y almuerzo",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Quinua",
+                "cantidad": 120,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Leche semidescremada",
+                "cantidad": 500,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Manzana",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Canela",
+                "cantidad": 2,
+                "unidad": "rama"
+            }
+        ]
+    },
+    {
+        "nombre": "Avena con plátano y canela",
+        "descripcion": "1. Cocina la avena con leche semidescremada.\n2. Agrega plátano en rodajas.\n3. Perfuma con canela y sirve sin azúcar añadida.",
+        "etiquetas": [
+            "Desayuno y almuerzo",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Avena en hojuelas",
+                "cantidad": 120,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Leche semidescremada",
+                "cantidad": 500,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Plátano",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Canela",
+                "cantidad": 2,
+                "unidad": "rama"
+            }
+        ]
+    },
+    {
+        "nombre": "Kiwicha con leche y fruta",
+        "descripcion": "1. Cocina la kiwicha hasta que esté suave.\n2. Agrega leche semidescremada y calienta.\n3. Incorpora papaya o manzana picada y canela.\n4. Sirve tibia.",
+        "etiquetas": [
+            "Desayuno y almuerzo",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Kiwicha",
+                "cantidad": 120,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Leche semidescremada",
+                "cantidad": 500,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Papaya",
+                "cantidad": 300,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Canela",
+                "cantidad": 2,
+                "unidad": "rama"
+            }
+        ]
+    },
+    {
+        "nombre": "Emoliente peruano sin azúcar",
+        "descripcion": "1. Hierve agua con cebada y canela durante varios minutos.\n2. Cuela el líquido.\n3. Agrega unas gotas de limón al servir.\n4. No añadas azúcar ni miel.",
+        "etiquetas": [
+            "Bebidas",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Cebada",
+                "cantidad": 50,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Canela",
+                "cantidad": 1,
+                "unidad": "rama"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 2,
+                "unidad": "unidad"
+            }
+        ]
+    },
+    {
+        "nombre": "Chicha morada sin azúcar",
+        "descripcion": "1. Hierve maíz morado con canela y agua hasta extraer el color y sabor.\n2. Cuela y deja enfriar.\n3. Agrega limón al gusto.\n4. Sirve sin azúcar; si se requiere dulzor, prioriza fruta entera en lugar de azúcar añadida.",
+        "etiquetas": [
+            "Bebidas",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Maíz morado",
+                "cantidad": 150,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Canela",
+                "cantidad": 2,
+                "unidad": "rama"
+            },
+            {
+                "nombre": "Limón",
+                "cantidad": 3,
+                "unidad": "unidad"
+            }
+        ]
+    },
+    {
+        "nombre": "Ensalada de frutas peruana con yogur",
+        "descripcion": "1. Lava y corta las frutas en trozos.\n2. Mezcla con yogur natural sin azúcar.\n3. Añade chía o linaza molida.\n4. Sirve inmediatamente.",
+        "etiquetas": [
+            "Postres",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Papaya",
+                "cantidad": 200,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Manzana",
+                "cantidad": 1,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Fresa",
+                "cantidad": 150,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Yogur natural sin azúcar",
+                "cantidad": 400,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Chía",
+                "cantidad": 20,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Mazamorra de quinua con manzana",
+        "descripcion": "1. Cocina la quinua hasta que esté tierna.\n2. Añade manzana picada y canela.\n3. Cocina hasta que espese naturalmente.\n4. Sirve tibia sin azúcar añadida.",
+        "etiquetas": [
+            "Postres",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Quinua",
+                "cantidad": 100,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Manzana",
+                "cantidad": 2,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Canela",
+                "cantidad": 2,
+                "unidad": "rama"
+            }
+        ]
+    },
+    {
+        "nombre": "Compota de manzana y canela sin azúcar",
+        "descripcion": "1. Pela y corta las manzanas.\n2. Cocina con poca agua y canela hasta que estén muy tiernas.\n3. Tritura ligeramente dejando algo de textura.\n4. Sirve tibia o fría.",
+        "etiquetas": [
+            "Postres",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Manzana",
+                "cantidad": 6,
+                "unidad": "unidad"
+            },
+            {
+                "nombre": "Canela",
+                "cantidad": 2,
+                "unidad": "rama"
+            }
+        ]
+    },
+    {
+        "nombre": "Yogur con papaya y linaza",
+        "descripcion": "1. Coloca yogur natural en vasos.\n2. Añade papaya en cubos.\n3. Espolvorea linaza molida.\n4. Sirve sin azúcar.",
+        "etiquetas": [
+            "Postres",
+            "Saludable",
+            "Hígado graso"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Yogur natural sin azúcar",
+                "cantidad": 500,
+                "unidad": "ml"
+            },
+            {
+                "nombre": "Papaya",
+                "cantidad": 400,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Linaza molida",
+                "cantidad": 20,
+                "unidad": "gr"
+            }
+        ]
+    },
+    {
+        "nombre": "Batido de papaya con yogur sin azúcar",
+        "descripcion": "1. Coloca papaya y yogur en la licuadora.\n2. Licúa hasta obtener una textura uniforme.\n3. Sirve inmediatamente sin añadir azúcar ni miel.",
+        "etiquetas": [
+            "Bebidas",
+            "Saludable"
+        ],
+        "porciones": 4,
+        "ingredientes": [
+            {
+                "nombre": "Papaya",
+                "cantidad": 400,
+                "unidad": "gr"
+            },
+            {
+                "nombre": "Yogur natural sin azúcar",
+                "cantidad": 400,
+                "unidad": "ml"
+            }
+        ]
+    }
+]

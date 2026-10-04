@@ -1,0 +1,122 @@
+[
+    {
+        "nombre": "gr",
+        "descripcion": "Gramo"
+    },
+    {
+        "nombre": "kg",
+        "descripcion": "Kilogramo"
+    },
+    {
+        "nombre": "ml",
+        "descripcion": "Mililitro"
+    },
+    {
+        "nombre": "L",
+        "descripcion": "Litro"
+    },
+    {
+        "nombre": "unidad",
+        "descripcion": "Unidad"
+    },
+    {
+        "nombre": "lata",
+        "descripcion": "Lata"
+    },
+    {
+        "nombre": "diente",
+        "descripcion": "Diente"
+    },
+    {
+        "nombre": "ramillete",
+        "descripcion": "Ramillete"
+    },
+    {
+        "nombre": "hoja",
+        "descripcion": "Hoja"
+    },
+    {
+        "nombre": "cucharada",
+        "descripcion": "Cucharada"
+    },
+    {
+        "nombre": "cucharadita",
+        "descripcion": "Cucharadita"
+    },
+    {
+        "nombre": "taza",
+        "descripcion": "Taza"
+    },
+    {
+        "nombre": "paquete",
+        "descripcion": "Paquete"
+    },
+    {
+        "nombre": "atado",
+        "descripcion": "Atado"
+    },
+    {
+        "nombre": "pizca",
+        "descripcion": "Pizca"
+    },
+    {
+        "nombre": "sobre",
+        "descripcion": "Sobre"
+    },
+    {
+        "nombre": "rodaja",
+        "descripcion": "Rodaja"
+    },
+    {
+        "nombre": "rama",
+        "descripcion": "Rama"
+    },
+    {
+        "nombre": "cabeza",
+        "descripcion": "Cabeza"
+    },
+    {
+        "nombre": "bolsa",
+        "descripcion": "Bolsa"
+    },
+    {
+        "nombre": "frasco",
+        "descripcion": "Frasco"
+    },
+    {
+        "nombre": "botella",
+        "descripcion": "Botella"
+    },
+    {
+        "nombre": "trozo",
+        "descripcion": "Trozo"
+    },
+    {
+        "nombre": "onza",
+        "descripcion": "Onza"
+    },
+    {
+        "nombre": "libra",
+        "descripcion": "Libra"
+    },
+    {
+        "nombre": "filete",
+        "descripcion": "Filete"
+    },
+    {
+        "nombre": "rebanada",
+        "descripcion": "Rebanada"
+    },
+    {
+        "nombre": "porción",
+        "descripcion": "Porción"
+    },
+    {
+        "nombre": "manojo",
+        "descripcion": "Manojo"
+    },
+    {
+        "nombre": "chorrito",
+        "descripcion": "Chorrito"
+    }
+]

@@ -1,0 +1,2277 @@
+[
+    {
+        "nombre": "Arroz blanco",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 358,
+            "proteinas": 7.8,
+            "carbohidratos": 77.6,
+            "grasas": 0.7,
+            "fibra": 0.5
+        }
+    },
+    {
+        "nombre": "Quinua",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 351,
+            "proteinas": 13.6,
+            "carbohidratos": 66.6,
+            "grasas": 5.8,
+            "fibra": 5.9
+        }
+    },
+    {
+        "nombre": "Kiwicha",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 351,
+            "proteinas": 12.8,
+            "carbohidratos": 69.1,
+            "grasas": 6.6,
+            "fibra": 9.3
+        }
+    },
+    {
+        "nombre": "Cebada",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 354,
+            "proteinas": 10.4,
+            "carbohidratos": 73.5,
+            "grasas": 1.2,
+            "fibra": 17.3
+        }
+    },
+    {
+        "nombre": "Avena en hojuelas",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 380,
+            "proteinas": 13.7,
+            "carbohidratos": 71.3,
+            "grasas": 4.7,
+            "fibra": 4.2
+        }
+    },
+    {
+        "nombre": "Morón (trigo partido)",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 340,
+            "proteinas": 12.0,
+            "carbohidratos": 71.0,
+            "grasas": 2.0,
+            "fibra": 10.0
+        }
+    },
+    {
+        "nombre": "Fideos",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 350,
+            "proteinas": 12.0,
+            "carbohidratos": 72.0,
+            "grasas": 1.5,
+            "fibra": 3.0
+        }
+    },
+    {
+        "nombre": "Pan integral",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 1,
+            "unidadBase": "unidad",
+            "calorias": 148.2,
+            "proteinas": 7.8,
+            "carbohidratos": 24.6,
+            "grasas": 2.5,
+            "fibra": 4.2
+        }
+    },
+    {
+        "nombre": "Maíz choclo",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 86,
+            "proteinas": 3.4,
+            "carbohidratos": 19.0,
+            "grasas": 1.2,
+            "fibra": 2.7
+        }
+    },
+    {
+        "nombre": "Maíz morado",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 95,
+            "proteinas": 3.4,
+            "carbohidratos": 20.5,
+            "grasas": 1.2,
+            "fibra": 2.4
+        }
+    },
+    {
+        "nombre": "Cancha de maíz",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 365,
+            "proteinas": 9.0,
+            "carbohidratos": 74.0,
+            "grasas": 4.5,
+            "fibra": 7.0
+        }
+    },
+    {
+        "nombre": "Cañihua",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 343,
+            "proteinas": 14.0,
+            "carbohidratos": 64.0,
+            "grasas": 4.9,
+            "fibra": 9.8
+        }
+    },
+    {
+        "nombre": "Harina de maíz",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 361,
+            "proteinas": 9.0,
+            "carbohidratos": 76.0,
+            "grasas": 3.9,
+            "fibra": 7.3
+        }
+    },
+    {
+        "nombre": "Harina de quinua",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 337,
+            "proteinas": 12.4,
+            "carbohidratos": 67.2,
+            "grasas": 6.0,
+            "fibra": 9.3
+        }
+    },
+    {
+        "nombre": "Chochoca",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 350,
+            "proteinas": 8.0,
+            "carbohidratos": 76.0,
+            "grasas": 2.0,
+            "fibra": 6.0
+        }
+    },
+    {
+        "nombre": "Tarwi (chocho)",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 350,
+            "proteinas": 44.0,
+            "carbohidratos": 27.0,
+            "grasas": 16.0,
+            "fibra": 7.0
+        }
+    },
+    {
+        "nombre": "Papa blanca",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 87,
+            "proteinas": 2.1,
+            "carbohidratos": 22.3,
+            "grasas": 0.1,
+            "fibra": 2.4
+        }
+    },
+    {
+        "nombre": "Papa amarilla",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 101,
+            "proteinas": 2.0,
+            "carbohidratos": 23.3,
+            "grasas": 0.4,
+            "fibra": 0.4
+        }
+    },
+    {
+        "nombre": "Olluco",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 59,
+            "proteinas": 1.1,
+            "carbohidratos": 14.3,
+            "grasas": 0.1,
+            "fibra": 1.0
+        }
+    },
+    {
+        "nombre": "Camote amarillo",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 95,
+            "proteinas": 2.0,
+            "carbohidratos": 23.4,
+            "grasas": 0.0,
+            "fibra": 2.9
+        }
+    },
+    {
+        "nombre": "Camote morado",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 110,
+            "proteinas": 1.6,
+            "carbohidratos": 25.0,
+            "grasas": 0.2,
+            "fibra": 3.0
+        }
+    },
+    {
+        "nombre": "Yuca",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 115,
+            "proteinas": 0.7,
+            "carbohidratos": 31.8,
+            "grasas": 0.5,
+            "fibra": 3.5
+        }
+    },
+    {
+        "nombre": "Oca",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 61,
+            "proteinas": 1.0,
+            "carbohidratos": 13.5,
+            "grasas": 0.3,
+            "fibra": 2.0
+        }
+    },
+    {
+        "nombre": "Mashua",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 52,
+            "proteinas": 1.5,
+            "carbohidratos": 11.8,
+            "grasas": 0.6,
+            "fibra": 3.0
+        }
+    },
+    {
+        "nombre": "Arracacha",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 97,
+            "proteinas": 1.5,
+            "carbohidratos": 22.9,
+            "grasas": 0.3,
+            "fibra": 3.4
+        }
+    },
+    {
+        "nombre": "Yacón",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 54,
+            "proteinas": 0.3,
+            "carbohidratos": 12.5,
+            "grasas": 0.3,
+            "fibra": 2.0
+        }
+    },
+    {
+        "nombre": "Maca",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 325,
+            "proteinas": 10.2,
+            "carbohidratos": 59.0,
+            "grasas": 2.2,
+            "fibra": 8.5
+        }
+    },
+    {
+        "nombre": "Sachapapa",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 110,
+            "proteinas": 1.5,
+            "carbohidratos": 25.0,
+            "grasas": 0.2,
+            "fibra": 2.5
+        }
+    },
+    {
+        "nombre": "Lenteja",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 352,
+            "proteinas": 24.6,
+            "carbohidratos": 63.4,
+            "grasas": 1.1,
+            "fibra": 10.7
+        }
+    },
+    {
+        "nombre": "Garbanzo",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 364,
+            "proteinas": 19.3,
+            "carbohidratos": 60.7,
+            "grasas": 6.0,
+            "fibra": 17.4
+        }
+    },
+    {
+        "nombre": "Pallar",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 335,
+            "proteinas": 21.5,
+            "carbohidratos": 60.0,
+            "grasas": 1.0,
+            "fibra": 15.0
+        }
+    },
+    {
+        "nombre": "Frejol",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 337,
+            "proteinas": 21.4,
+            "carbohidratos": 61.3,
+            "grasas": 1.2,
+            "fibra": 15.5
+        }
+    },
+    {
+        "nombre": "Alverja fresca",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 81,
+            "proteinas": 5.4,
+            "carbohidratos": 14.5,
+            "grasas": 0.4,
+            "fibra": 5.7
+        }
+    },
+    {
+        "nombre": "Habas frescas",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 88,
+            "proteinas": 7.9,
+            "carbohidratos": 16.2,
+            "grasas": 0.7,
+            "fibra": 5.4
+        }
+    },
+    {
+        "nombre": "Frejol canario",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 337,
+            "proteinas": 21.4,
+            "carbohidratos": 61.3,
+            "grasas": 1.2,
+            "fibra": 15.5
+        }
+    },
+    {
+        "nombre": "Frejol castilla",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 335,
+            "proteinas": 23.4,
+            "carbohidratos": 60.0,
+            "grasas": 1.3,
+            "fibra": 10.4
+        }
+    },
+    {
+        "nombre": "Frejol panamito",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 337,
+            "proteinas": 21.4,
+            "carbohidratos": 61.3,
+            "grasas": 1.2,
+            "fibra": 15.5
+        }
+    },
+    {
+        "nombre": "Tomate",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 15,
+            "proteinas": 0.8,
+            "carbohidratos": 4.3,
+            "grasas": 0.2,
+            "fibra": 1.2
+        }
+    },
+    {
+        "nombre": "Lechuga",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 15,
+            "proteinas": 1.4,
+            "carbohidratos": 2.9,
+            "grasas": 0.2,
+            "fibra": 1.3
+        }
+    },
+    {
+        "nombre": "Pepino",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 15,
+            "proteinas": 0.7,
+            "carbohidratos": 3.6,
+            "grasas": 0.1,
+            "fibra": 0.5
+        }
+    },
+    {
+        "nombre": "Brócoli",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 32,
+            "proteinas": 3.9,
+            "carbohidratos": 4.0,
+            "grasas": 1.3,
+            "fibra": 0.7
+        }
+    },
+    {
+        "nombre": "Coliflor",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 25,
+            "proteinas": 1.9,
+            "carbohidratos": 5.0,
+            "grasas": 0.3,
+            "fibra": 2.0
+        }
+    },
+    {
+        "nombre": "Col",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 25,
+            "proteinas": 1.3,
+            "carbohidratos": 5.8,
+            "grasas": 0.1,
+            "fibra": 2.5
+        }
+    },
+    {
+        "nombre": "Zanahoria",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 19,
+            "proteinas": 1.0,
+            "carbohidratos": 7.6,
+            "grasas": 0.3,
+            "fibra": 4.1
+        }
+    },
+    {
+        "nombre": "Betarraga",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 18,
+            "proteinas": 2.0,
+            "carbohidratos": 5.4,
+            "grasas": 0.3,
+            "fibra": 2.7
+        }
+    },
+    {
+        "nombre": "Rabanito",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 16,
+            "proteinas": 0.7,
+            "carbohidratos": 3.4,
+            "grasas": 0.1,
+            "fibra": 1.6
+        }
+    },
+    {
+        "nombre": "Espinaca",
+        "unidad": "manojo",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 30,
+            "proteinas": 4.8,
+            "carbohidratos": 4.7,
+            "grasas": 1.4,
+            "fibra": 2.8
+        }
+    },
+    {
+        "nombre": "Apio",
+        "unidad": "rama",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 16,
+            "proteinas": 0.7,
+            "carbohidratos": 3.0,
+            "grasas": 0.2,
+            "fibra": 1.6
+        }
+    },
+    {
+        "nombre": "Poro",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 61,
+            "proteinas": 1.5,
+            "carbohidratos": 14.2,
+            "grasas": 0.3,
+            "fibra": 1.8
+        }
+    },
+    {
+        "nombre": "Zapallo",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 26,
+            "proteinas": 1.0,
+            "carbohidratos": 6.5,
+            "grasas": 0.1,
+            "fibra": 1.1
+        }
+    },
+    {
+        "nombre": "Vainita",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 31,
+            "proteinas": 1.8,
+            "carbohidratos": 7.0,
+            "grasas": 0.2,
+            "fibra": 3.4
+        }
+    },
+    {
+        "nombre": "Caigua",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 15,
+            "proteinas": 0.5,
+            "carbohidratos": 3.3,
+            "grasas": 0.2,
+            "fibra": 1.0
+        }
+    },
+    {
+        "nombre": "Pimiento",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 19,
+            "proteinas": 1.1,
+            "carbohidratos": 5.1,
+            "grasas": 0.1,
+            "fibra": 0.7
+        }
+    },
+    {
+        "nombre": "Alcachofa",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 47,
+            "proteinas": 3.3,
+            "carbohidratos": 10.5,
+            "grasas": 0.2,
+            "fibra": 5.4
+        }
+    },
+    {
+        "nombre": "Rocoto",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 40,
+            "proteinas": 1.9,
+            "carbohidratos": 8.8,
+            "grasas": 0.4,
+            "fibra": 1.5
+        }
+    },
+    {
+        "nombre": "Ají limo",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 40,
+            "proteinas": 1.9,
+            "carbohidratos": 9.5,
+            "grasas": 0.4,
+            "fibra": 1.5
+        }
+    },
+    {
+        "nombre": "Ají amarillo",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 40,
+            "proteinas": 1.9,
+            "carbohidratos": 9.5,
+            "grasas": 0.4,
+            "fibra": 1.5
+        }
+    },
+    {
+        "nombre": "Choclo",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 86,
+            "proteinas": 3.4,
+            "carbohidratos": 19.0,
+            "grasas": 1.2,
+            "fibra": 2.7
+        }
+    },
+    {
+        "nombre": "Tomate de árbol / sachatomate",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 31,
+            "proteinas": 1.2,
+            "carbohidratos": 6.0,
+            "grasas": 0.4,
+            "fibra": 1.5
+        }
+    },
+    {
+        "nombre": "Cebolla roja",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 40,
+            "proteinas": 1.1,
+            "carbohidratos": 9.3,
+            "grasas": 0.1,
+            "fibra": 1.7
+        }
+    },
+    {
+        "nombre": "Cebolla blanca",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 40,
+            "proteinas": 1.1,
+            "carbohidratos": 9.3,
+            "grasas": 0.1,
+            "fibra": 1.7
+        }
+    },
+    {
+        "nombre": "Zapallo loche",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 26,
+            "proteinas": 1.0,
+            "carbohidratos": 6.5,
+            "grasas": 0.1,
+            "fibra": 1.1
+        }
+    },
+    {
+        "nombre": "Zapallo macre",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 26,
+            "proteinas": 1.0,
+            "carbohidratos": 6.5,
+            "grasas": 0.1,
+            "fibra": 1.1
+        }
+    },
+    {
+        "nombre": "Chonta / palmito",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 28,
+            "proteinas": 2.5,
+            "carbohidratos": 5.2,
+            "grasas": 0.6,
+            "fibra": 2.4
+        }
+    },
+    {
+        "nombre": "Ajo",
+        "unidad": "diente",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 149,
+            "proteinas": 6.4,
+            "carbohidratos": 33.1,
+            "grasas": 0.5,
+            "fibra": 2.1
+        }
+    },
+    {
+        "nombre": "Cebolla",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 40,
+            "proteinas": 1.1,
+            "carbohidratos": 9.3,
+            "grasas": 0.1,
+            "fibra": 1.7
+        }
+    },
+    {
+        "nombre": "Cebollita china",
+        "unidad": "manojo",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 32,
+            "proteinas": 1.8,
+            "carbohidratos": 7.3,
+            "grasas": 0.2,
+            "fibra": 2.6
+        }
+    },
+    {
+        "nombre": "Perejil",
+        "unidad": "manojo",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 36,
+            "proteinas": 3.0,
+            "carbohidratos": 6.3,
+            "grasas": 0.8,
+            "fibra": 3.3
+        }
+    },
+    {
+        "nombre": "Culantro",
+        "unidad": "manojo",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 23,
+            "proteinas": 2.1,
+            "carbohidratos": 3.7,
+            "grasas": 0.5,
+            "fibra": 2.8
+        }
+    },
+    {
+        "nombre": "Hierbabuena",
+        "unidad": "manojo",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 44,
+            "proteinas": 3.3,
+            "carbohidratos": 8.4,
+            "grasas": 0.7,
+            "fibra": 6.8
+        }
+    },
+    {
+        "nombre": "Muña",
+        "unidad": "manojo",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 45,
+            "proteinas": 3.0,
+            "carbohidratos": 8.0,
+            "grasas": 0.8,
+            "fibra": 4.0
+        }
+    },
+    {
+        "nombre": "Orégano",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 265,
+            "proteinas": 9.0,
+            "carbohidratos": 69.0,
+            "grasas": 4.3,
+            "fibra": 42.5
+        }
+    },
+    {
+        "nombre": "Kion",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 80,
+            "proteinas": 1.8,
+            "carbohidratos": 17.8,
+            "grasas": 0.8,
+            "fibra": 2.0
+        }
+    },
+    {
+        "nombre": "Palillo / cúrcuma",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 312,
+            "proteinas": 9.7,
+            "carbohidratos": 67.1,
+            "grasas": 3.2,
+            "fibra": 22.7
+        }
+    },
+    {
+        "nombre": "Comino",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 375,
+            "proteinas": 17.8,
+            "carbohidratos": 44.2,
+            "grasas": 17.8,
+            "fibra": 10.5
+        }
+    },
+    {
+        "nombre": "Canela",
+        "unidad": "rama",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 247,
+            "proteinas": 4.0,
+            "carbohidratos": 80.6,
+            "grasas": 1.2,
+            "fibra": 53.1
+        }
+    },
+    {
+        "nombre": "Limón",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 29,
+            "proteinas": 1.1,
+            "carbohidratos": 9.3,
+            "grasas": 0.3,
+            "fibra": 2.8
+        }
+    },
+    {
+        "nombre": "Ají panca",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 282,
+            "proteinas": 14.0,
+            "carbohidratos": 56.6,
+            "grasas": 12.0,
+            "fibra": 25.0
+        }
+    },
+    {
+        "nombre": "Ají mirasol",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 282,
+            "proteinas": 14.0,
+            "carbohidratos": 56.6,
+            "grasas": 12.0,
+            "fibra": 25.0
+        }
+    },
+    {
+        "nombre": "Huacatay",
+        "unidad": "manojo",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 40,
+            "proteinas": 2.5,
+            "carbohidratos": 7.0,
+            "grasas": 0.8,
+            "fibra": 3.5
+        }
+    },
+    {
+        "nombre": "Paico",
+        "unidad": "manojo",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 45,
+            "proteinas": 4.0,
+            "carbohidratos": 7.0,
+            "grasas": 0.8,
+            "fibra": 3.8
+        }
+    },
+    {
+        "nombre": "Chincho",
+        "unidad": "manojo",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 40,
+            "proteinas": 2.5,
+            "carbohidratos": 7.0,
+            "grasas": 0.8,
+            "fibra": 3.5
+        }
+    },
+    {
+        "nombre": "Hierba luisa",
+        "unidad": "manojo",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 40,
+            "proteinas": 2.0,
+            "carbohidratos": 8.0,
+            "grasas": 0.5,
+            "fibra": 4.0
+        }
+    },
+    {
+        "nombre": "Sal",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 0,
+            "proteinas": 0,
+            "carbohidratos": 0,
+            "grasas": 0,
+            "fibra": 0
+        }
+    },
+    {
+        "nombre": "Pimienta",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 251,
+            "proteinas": 10.4,
+            "carbohidratos": 63.9,
+            "grasas": 3.3,
+            "fibra": 25.3
+        }
+    },
+    {
+        "nombre": "Aceite vegetal",
+        "unidad": "ml",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "ml",
+            "calorias": 884,
+            "proteinas": 0,
+            "carbohidratos": 0,
+            "grasas": 100,
+            "fibra": 0
+        }
+    },
+    {
+        "nombre": "Aceite de oliva",
+        "unidad": "ml",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "ml",
+            "calorias": 884,
+            "proteinas": 0,
+            "carbohidratos": 0,
+            "grasas": 100,
+            "fibra": 0
+        }
+    },
+    {
+        "nombre": "Naranja",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 47,
+            "proteinas": 0.9,
+            "carbohidratos": 11.8,
+            "grasas": 0.1,
+            "fibra": 2.4
+        }
+    },
+    {
+        "nombre": "Mandarina",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 53,
+            "proteinas": 0.8,
+            "carbohidratos": 13.3,
+            "grasas": 0.3,
+            "fibra": 1.8
+        }
+    },
+    {
+        "nombre": "Manzana",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 52,
+            "proteinas": 0.3,
+            "carbohidratos": 13.8,
+            "grasas": 0.2,
+            "fibra": 2.4
+        }
+    },
+    {
+        "nombre": "Pera",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 57,
+            "proteinas": 0.4,
+            "carbohidratos": 15.2,
+            "grasas": 0.1,
+            "fibra": 3.1
+        }
+    },
+    {
+        "nombre": "Papaya",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 43,
+            "proteinas": 0.5,
+            "carbohidratos": 10.8,
+            "grasas": 0.3,
+            "fibra": 1.7
+        }
+    },
+    {
+        "nombre": "Plátano",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 89,
+            "proteinas": 1.1,
+            "carbohidratos": 22.8,
+            "grasas": 0.3,
+            "fibra": 2.6
+        }
+    },
+    {
+        "nombre": "Durazno",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 39,
+            "proteinas": 0.9,
+            "carbohidratos": 9.5,
+            "grasas": 0.3,
+            "fibra": 1.5
+        }
+    },
+    {
+        "nombre": "Membrillo",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 57,
+            "proteinas": 0.4,
+            "carbohidratos": 15.3,
+            "grasas": 0.1,
+            "fibra": 1.9
+        }
+    },
+    {
+        "nombre": "Uva",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 69,
+            "proteinas": 0.7,
+            "carbohidratos": 18.1,
+            "grasas": 0.2,
+            "fibra": 0.9
+        }
+    },
+    {
+        "nombre": "Mango",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 60,
+            "proteinas": 0.8,
+            "carbohidratos": 15.0,
+            "grasas": 0.4,
+            "fibra": 1.6
+        }
+    },
+    {
+        "nombre": "Piña",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 50,
+            "proteinas": 0.5,
+            "carbohidratos": 13.1,
+            "grasas": 0.1,
+            "fibra": 1.4
+        }
+    },
+    {
+        "nombre": "Sandía",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 30,
+            "proteinas": 0.6,
+            "carbohidratos": 7.6,
+            "grasas": 0.2,
+            "fibra": 0.4
+        }
+    },
+    {
+        "nombre": "Melón",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 34,
+            "proteinas": 0.8,
+            "carbohidratos": 8.2,
+            "grasas": 0.2,
+            "fibra": 0.9
+        }
+    },
+    {
+        "nombre": "Chirimoya",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 75,
+            "proteinas": 1.6,
+            "carbohidratos": 17.7,
+            "grasas": 0.7,
+            "fibra": 3.0
+        }
+    },
+    {
+        "nombre": "Lúcuma",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 99,
+            "proteinas": 1.5,
+            "carbohidratos": 25.0,
+            "grasas": 0.2,
+            "fibra": 1.0
+        }
+    },
+    {
+        "nombre": "Granadilla",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 97,
+            "proteinas": 2.2,
+            "carbohidratos": 23.4,
+            "grasas": 0.7,
+            "fibra": 10.4
+        }
+    },
+    {
+        "nombre": "Maracuyá",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 97,
+            "proteinas": 2.2,
+            "carbohidratos": 23.4,
+            "grasas": 0.7,
+            "fibra": 10.4
+        }
+    },
+    {
+        "nombre": "Tumbo",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 36,
+            "proteinas": 0.8,
+            "carbohidratos": 8.0,
+            "grasas": 0.3,
+            "fibra": 1.5
+        }
+    },
+    {
+        "nombre": "Aguaymanto",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 53,
+            "proteinas": 1.9,
+            "carbohidratos": 11.2,
+            "grasas": 0.7,
+            "fibra": 4.9
+        }
+    },
+    {
+        "nombre": "Tuna",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 41,
+            "proteinas": 0.7,
+            "carbohidratos": 9.6,
+            "grasas": 0.5,
+            "fibra": 3.6
+        }
+    },
+    {
+        "nombre": "Capulí",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 63,
+            "proteinas": 1.0,
+            "carbohidratos": 15.0,
+            "grasas": 0.3,
+            "fibra": 2.0
+        }
+    },
+    {
+        "nombre": "Fresa",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 32,
+            "proteinas": 0.7,
+            "carbohidratos": 7.7,
+            "grasas": 0.3,
+            "fibra": 2.0
+        }
+    },
+    {
+        "nombre": "Mora",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 43,
+            "proteinas": 1.4,
+            "carbohidratos": 9.6,
+            "grasas": 0.5,
+            "fibra": 5.3
+        }
+    },
+    {
+        "nombre": "Arándano",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 57,
+            "proteinas": 0.7,
+            "carbohidratos": 14.5,
+            "grasas": 0.3,
+            "fibra": 2.4
+        }
+    },
+    {
+        "nombre": "Palta",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 160,
+            "proteinas": 2.0,
+            "carbohidratos": 8.5,
+            "grasas": 14.7,
+            "fibra": 6.7
+        }
+    },
+    {
+        "nombre": "Guanábana",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 66,
+            "proteinas": 1.0,
+            "carbohidratos": 16.8,
+            "grasas": 0.3,
+            "fibra": 3.3
+        }
+    },
+    {
+        "nombre": "Guayaba",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 68,
+            "proteinas": 2.6,
+            "carbohidratos": 14.3,
+            "grasas": 1.0,
+            "fibra": 5.4
+        }
+    },
+    {
+        "nombre": "Cocona",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 35,
+            "proteinas": 1.2,
+            "carbohidratos": 7.0,
+            "grasas": 0.3,
+            "fibra": 1.5
+        }
+    },
+    {
+        "nombre": "Camu camu",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 24,
+            "proteinas": 0.5,
+            "carbohidratos": 5.9,
+            "grasas": 0.1,
+            "fibra": 1.1
+        }
+    },
+    {
+        "nombre": "Aguaje",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 120,
+            "proteinas": 2.0,
+            "carbohidratos": 31.0,
+            "grasas": 8.0,
+            "fibra": 6.0
+        }
+    },
+    {
+        "nombre": "Arazá",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 50,
+            "proteinas": 0.8,
+            "carbohidratos": 12.0,
+            "grasas": 0.3,
+            "fibra": 5.0
+        }
+    },
+    {
+        "nombre": "Taperibá",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 60,
+            "proteinas": 1.0,
+            "carbohidratos": 14.0,
+            "grasas": 0.5,
+            "fibra": 2.0
+        }
+    },
+    {
+        "nombre": "Pacay / guaba",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 57,
+            "proteinas": 1.5,
+            "carbohidratos": 14.0,
+            "grasas": 0.2,
+            "fibra": 1.0
+        }
+    },
+    {
+        "nombre": "Pepino dulce",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 26,
+            "proteinas": 0.4,
+            "carbohidratos": 6.4,
+            "grasas": 0.1,
+            "fibra": 1.0
+        }
+    },
+    {
+        "nombre": "Higo",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 74,
+            "proteinas": 0.8,
+            "carbohidratos": 19.2,
+            "grasas": 0.3,
+            "fibra": 2.9
+        }
+    },
+    {
+        "nombre": "Pollo sin piel",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 165,
+            "proteinas": 31.0,
+            "carbohidratos": 0,
+            "grasas": 3.6,
+            "fibra": 0
+        }
+    },
+    {
+        "nombre": "Pechuga de pollo",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 165,
+            "proteinas": 31.0,
+            "carbohidratos": 0,
+            "grasas": 3.6,
+            "fibra": 0
+        }
+    },
+    {
+        "nombre": "Carne de res magra",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 170,
+            "proteinas": 26.0,
+            "carbohidratos": 0,
+            "grasas": 7.0,
+            "fibra": 0
+        }
+    },
+    {
+        "nombre": "Huevo",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 1,
+            "unidadBase": "unidad",
+            "calorias": 71.5,
+            "proteinas": 6.3,
+            "carbohidratos": 0.3,
+            "grasas": 4.8,
+            "fibra": 0.0
+        }
+    },
+    {
+        "nombre": "Trucha",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 148,
+            "proteinas": 20.5,
+            "carbohidratos": 0,
+            "grasas": 6.5,
+            "fibra": 0
+        }
+    },
+    {
+        "nombre": "Bonito",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 144,
+            "proteinas": 23.0,
+            "carbohidratos": 0,
+            "grasas": 5.0,
+            "fibra": 0
+        }
+    },
+    {
+        "nombre": "Jurel",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 158,
+            "proteinas": 20.0,
+            "carbohidratos": 0,
+            "grasas": 7.0,
+            "fibra": 0
+        }
+    },
+    {
+        "nombre": "Atún en agua",
+        "unidad": "lata",
+        "nutricion": {
+            "base": 1,
+            "unidadBase": "unidad",
+            "calorias": 150.8,
+            "proteinas": 33.8,
+            "carbohidratos": 0.0,
+            "grasas": 1.0,
+            "fibra": 0.0
+        }
+    },
+    {
+        "nombre": "Anchoveta",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 131,
+            "proteinas": 20.4,
+            "carbohidratos": 0,
+            "grasas": 4.8,
+            "fibra": 0
+        }
+    },
+    {
+        "nombre": "Caballa",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 205,
+            "proteinas": 18.6,
+            "carbohidratos": 0,
+            "grasas": 13.9,
+            "fibra": 0
+        }
+    },
+    {
+        "nombre": "Sardina",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 208,
+            "proteinas": 24.6,
+            "carbohidratos": 0,
+            "grasas": 11.5,
+            "fibra": 0
+        }
+    },
+    {
+        "nombre": "Paiche",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 116,
+            "proteinas": 22.0,
+            "carbohidratos": 0,
+            "grasas": 2.5,
+            "fibra": 0
+        }
+    },
+    {
+        "nombre": "Cuy",
+        "unidad": "unidad",
+        "nutricion": {
+            "base": 1,
+            "unidadBase": "unidad",
+            "calorias": 600.0,
+            "proteinas": 100.0,
+            "carbohidratos": 0.0,
+            "grasas": 20.0,
+            "fibra": 0.0
+        }
+    },
+    {
+        "nombre": "Pavo",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 135,
+            "proteinas": 29.0,
+            "carbohidratos": 0,
+            "grasas": 1.6,
+            "fibra": 0
+        }
+    },
+    {
+        "nombre": "Carne de cerdo magra",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 143,
+            "proteinas": 21.0,
+            "carbohidratos": 0,
+            "grasas": 5.5,
+            "fibra": 0
+        }
+    },
+    {
+        "nombre": "Leche semidescremada",
+        "unidad": "ml",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "ml",
+            "calorias": 50,
+            "proteinas": 3.4,
+            "carbohidratos": 4.8,
+            "grasas": 1.7,
+            "fibra": 0
+        }
+    },
+    {
+        "nombre": "Yogur natural sin azúcar",
+        "unidad": "ml",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "ml",
+            "calorias": 61,
+            "proteinas": 3.5,
+            "carbohidratos": 4.7,
+            "grasas": 3.3,
+            "fibra": 0
+        }
+    },
+    {
+        "nombre": "Leche evaporada",
+        "unidad": "ml",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "ml",
+            "calorias": 134,
+            "proteinas": 6.8,
+            "carbohidratos": 10.0,
+            "grasas": 7.6,
+            "fibra": 0
+        }
+    },
+    {
+        "nombre": "Queso fresco",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 264,
+            "proteinas": 18.0,
+            "carbohidratos": 4.0,
+            "grasas": 20.0,
+            "fibra": 0
+        }
+    },
+    {
+        "nombre": "Queso fresco light",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 180,
+            "proteinas": 25.0,
+            "carbohidratos": 4.0,
+            "grasas": 7.0,
+            "fibra": 0
+        }
+    },
+    {
+        "nombre": "Queso paria",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 320,
+            "proteinas": 22.0,
+            "carbohidratos": 2.0,
+            "grasas": 25.0,
+            "fibra": 0
+        }
+    },
+    {
+        "nombre": "Queso fresco pasteurizado",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 264,
+            "proteinas": 18.0,
+            "carbohidratos": 4.0,
+            "grasas": 20.0,
+            "fibra": 0
+        }
+    },
+    {
+        "nombre": "Nueces",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 654,
+            "proteinas": 15.2,
+            "carbohidratos": 13.7,
+            "grasas": 65.2,
+            "fibra": 6.7
+        }
+    },
+    {
+        "nombre": "Maní sin sal",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 567,
+            "proteinas": 25.8,
+            "carbohidratos": 16.1,
+            "grasas": 49.2,
+            "fibra": 8.5
+        }
+    },
+    {
+        "nombre": "Almendras",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 579,
+            "proteinas": 21.2,
+            "carbohidratos": 21.6,
+            "grasas": 49.9,
+            "fibra": 12.5
+        }
+    },
+    {
+        "nombre": "Castañas",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 553,
+            "proteinas": 20.0,
+            "carbohidratos": 30.0,
+            "grasas": 43.0,
+            "fibra": 3.0
+        }
+    },
+    {
+        "nombre": "Pepas de zapallo",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 559,
+            "proteinas": 30.2,
+            "carbohidratos": 10.7,
+            "grasas": 49.0,
+            "fibra": 6.0
+        }
+    },
+    {
+        "nombre": "Ajonjolí",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 573,
+            "proteinas": 17.7,
+            "carbohidratos": 23.5,
+            "grasas": 49.7,
+            "fibra": 11.8
+        }
+    },
+    {
+        "nombre": "Chía",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 486,
+            "proteinas": 16.5,
+            "carbohidratos": 42.1,
+            "grasas": 30.7,
+            "fibra": 34.4
+        }
+    },
+    {
+        "nombre": "Linaza molida",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 534,
+            "proteinas": 18.3,
+            "carbohidratos": 28.9,
+            "grasas": 42.2,
+            "fibra": 27.3
+        }
+    },
+    {
+        "nombre": "Sacha inchi",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 567,
+            "proteinas": 27.0,
+            "carbohidratos": 12.0,
+            "grasas": 45.0,
+            "fibra": 8.0
+        }
+    },
+    {
+        "nombre": "Semillas de zapallo",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 559,
+            "proteinas": 30.2,
+            "carbohidratos": 10.7,
+            "grasas": 49.0,
+            "fibra": 6.0
+        }
+    },
+    {
+        "nombre": "Semillas de girasol",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 584,
+            "proteinas": 20.8,
+            "carbohidratos": 20.0,
+            "grasas": 51.5,
+            "fibra": 8.6
+        }
+    },
+    {
+        "nombre": "Té verde",
+        "unidad": "sobre",
+        "nutricion": {
+            "base": 1,
+            "unidadBase": "unidad",
+            "calorias": 0.0,
+            "proteinas": 0.0,
+            "carbohidratos": 0.0,
+            "grasas": 0.0,
+            "fibra": 0.0
+        }
+    },
+    {
+        "nombre": "Manzanilla",
+        "unidad": "sobre",
+        "nutricion": {
+            "base": 1,
+            "unidadBase": "unidad",
+            "calorias": 0.0,
+            "proteinas": 0.0,
+            "carbohidratos": 0.0,
+            "grasas": 0.0,
+            "fibra": 0.0
+        }
+    },
+    {
+        "nombre": "Anís",
+        "unidad": "sobre",
+        "nutricion": {
+            "base": 1,
+            "unidadBase": "unidad",
+            "calorias": 0.0,
+            "proteinas": 0.0,
+            "carbohidratos": 0.0,
+            "grasas": 0.0,
+            "fibra": 0.0
+        }
+    },
+    {
+        "nombre": "Cedrón",
+        "unidad": "rama",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 1,
+            "proteinas": 0,
+            "carbohidratos": 0.2,
+            "grasas": 0,
+            "fibra": 0
+        }
+    },
+    {
+        "nombre": "Toronjil",
+        "unidad": "rama",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 1,
+            "proteinas": 0,
+            "carbohidratos": 0.2,
+            "grasas": 0,
+            "fibra": 0
+        }
+    },
+    {
+        "nombre": "Harina de trigo",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 364,
+            "proteinas": 10.3,
+            "carbohidratos": 76.3,
+            "grasas": 1.0,
+            "fibra": 2.7
+        }
+    },
+    {
+        "nombre": "Chuño",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 333,
+            "proteinas": 0.5,
+            "carbohidratos": 83.0,
+            "grasas": 0.1,
+            "fibra": 2.0
+        }
+    },
+    {
+        "nombre": "Chuño negro",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 333,
+            "proteinas": 0.5,
+            "carbohidratos": 83.0,
+            "grasas": 0.1,
+            "fibra": 2.0
+        }
+    },
+    {
+        "nombre": "Chancaca",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 370,
+            "proteinas": 0,
+            "carbohidratos": 92.0,
+            "grasas": 0,
+            "fibra": 0
+        }
+    },
+    {
+        "nombre": "Miel",
+        "unidad": "ml",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "ml",
+            "calorias": 304,
+            "proteinas": 0.3,
+            "carbohidratos": 82.4,
+            "grasas": 0,
+            "fibra": 0.2
+        }
+    },
+    {
+        "nombre": "Azúcar",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 387,
+            "proteinas": 0,
+            "carbohidratos": 100,
+            "grasas": 0,
+            "fibra": 0
+        }
+    },
+    {
+        "nombre": "Vinagre",
+        "unidad": "ml",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "ml",
+            "calorias": 21,
+            "proteinas": 0,
+            "carbohidratos": 0.9,
+            "grasas": 0,
+            "fibra": 0
+        }
+    },
+    {
+        "nombre": "Vinagre de manzana",
+        "unidad": "ml",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "ml",
+            "calorias": 21,
+            "proteinas": 0,
+            "carbohidratos": 0.9,
+            "grasas": 0,
+            "fibra": 0
+        }
+    },
+    {
+        "nombre": "Salsa de soya",
+        "unidad": "ml",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "ml",
+            "calorias": 53,
+            "proteinas": 8.1,
+            "carbohidratos": 4.9,
+            "grasas": 0.6,
+            "fibra": 0.8
+        }
+    },
+    {
+        "nombre": "Leche de coco",
+        "unidad": "ml",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "ml",
+            "calorias": 230,
+            "proteinas": 2.3,
+            "carbohidratos": 5.5,
+            "grasas": 23.8,
+            "fibra": 2.2
+        }
+    },
+    {
+        "nombre": "Coco rallado",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 354,
+            "proteinas": 3.3,
+            "carbohidratos": 15.2,
+            "grasas": 33.5,
+            "fibra": 9.0
+        }
+    },
+    {
+        "nombre": "Pasas",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 299,
+            "proteinas": 3.1,
+            "carbohidratos": 79.2,
+            "grasas": 0.5,
+            "fibra": 3.7
+        }
+    },
+    {
+        "nombre": "Aceituna negra",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 115,
+            "proteinas": 0.8,
+            "carbohidratos": 6.3,
+            "grasas": 10.9,
+            "fibra": 3.2
+        }
+    },
+    {
+        "nombre": "Aceituna verde",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 145,
+            "proteinas": 1.0,
+            "carbohidratos": 3.8,
+            "grasas": 15.3,
+            "fibra": 3.3
+        }
+    },
+    {
+        "nombre": "Alcaparras",
+        "unidad": "gr",
+        "nutricion": {
+            "base": 100,
+            "unidadBase": "gr",
+            "calorias": 23,
+            "proteinas": 2.4,
+            "carbohidratos": 4.9,
+            "grasas": 0.9,
+            "fibra": 3.2
+        }
+    }
+]
