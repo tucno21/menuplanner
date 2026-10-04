@@ -617,7 +617,8 @@
             "carbohidratos": 4.7,
             "grasas": 1.4,
             "fibra": 2.8
-        }
+        },
+        "pesoPorUnidad": 100
     },
     {
         "nombre": "Apio",
@@ -630,7 +631,8 @@
             "carbohidratos": 3.0,
             "grasas": 0.2,
             "fibra": 1.6
-        }
+        },
+        "pesoPorUnidad": 15
     },
     {
         "nombre": "Poro",
@@ -862,7 +864,8 @@
             "carbohidratos": 33.1,
             "grasas": 0.5,
             "fibra": 2.1
-        }
+        },
+        "pesoPorUnidad": 3
     },
     {
         "nombre": "Cebolla",
@@ -889,7 +892,8 @@
             "carbohidratos": 7.3,
             "grasas": 0.2,
             "fibra": 2.6
-        }
+        },
+        "pesoPorUnidad": 120
     },
     {
         "nombre": "Perejil",
@@ -902,7 +906,8 @@
             "carbohidratos": 6.3,
             "grasas": 0.8,
             "fibra": 3.3
-        }
+        },
+        "pesoPorUnidad": 60
     },
     {
         "nombre": "Culantro",
@@ -915,7 +920,8 @@
             "carbohidratos": 3.7,
             "grasas": 0.5,
             "fibra": 2.8
-        }
+        },
+        "pesoPorUnidad": 80
     },
     {
         "nombre": "Hierbabuena",
@@ -928,7 +934,8 @@
             "carbohidratos": 8.4,
             "grasas": 0.7,
             "fibra": 6.8
-        }
+        },
+        "pesoPorUnidad": 80
     },
     {
         "nombre": "Muña",
@@ -941,7 +948,8 @@
             "carbohidratos": 8.0,
             "grasas": 0.8,
             "fibra": 4.0
-        }
+        },
+        "pesoPorUnidad": 50
     },
     {
         "nombre": "Orégano",
@@ -1006,7 +1014,8 @@
             "carbohidratos": 80.6,
             "grasas": 1.2,
             "fibra": 53.1
-        }
+        },
+        "pesoPorUnidad": 1
     },
     {
         "nombre": "Limón",
@@ -1059,7 +1068,8 @@
             "carbohidratos": 7.0,
             "grasas": 0.8,
             "fibra": 3.5
-        }
+        },
+        "pesoPorUnidad": 80
     },
     {
         "nombre": "Paico",
@@ -1072,7 +1082,8 @@
             "carbohidratos": 7.0,
             "grasas": 0.8,
             "fibra": 3.8
-        }
+        },
+        "pesoPorUnidad": 80
     },
     {
         "nombre": "Chincho",
@@ -1085,7 +1096,8 @@
             "carbohidratos": 7.0,
             "grasas": 0.8,
             "fibra": 3.5
-        }
+        },
+        "pesoPorUnidad": 80
     },
     {
         "nombre": "Hierba luisa",
@@ -1098,7 +1110,8 @@
             "carbohidratos": 8.0,
             "grasas": 0.5,
             "fibra": 4.0
-        }
+        },
+        "pesoPorUnidad": 50
     },
     {
         "nombre": "Sal",
@@ -2113,7 +2126,8 @@
             "carbohidratos": 0.2,
             "grasas": 0,
             "fibra": 0
-        }
+        },
+        "pesoPorUnidad": 20
     },
     {
         "nombre": "Toronjil",
@@ -2126,7 +2140,8 @@
             "carbohidratos": 0.2,
             "grasas": 0,
             "fibra": 0
-        }
+        },
+        "pesoPorUnidad": 20
     },
     {
         "nombre": "Harina de trigo",
