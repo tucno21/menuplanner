@@ -47,8 +47,8 @@ BD **`MenuPlannerDB`**, singleton `db`, **versión 6** (v1–v6 retenidas; v3–
 
 | Tabla | PK | Índices / campos clave |
 |---|---|---|
-| `platos` | `++id` | `syncId, nombre, descripcion, updatedAt` |
-| `ingredientes` | `++id` | `syncId, nombre, unidad, updatedAt` |
+| `platos` | `++id` | `syncId, nombre, descripcion, updatedAt` + `porciones?`/`nutricion?` opcionales (NO indexados: no requieren nueva versión de BD) |
+| `ingredientes` | `++id` | `syncId, nombre, unidad, updatedAt` + `nutricion?` opcional (base/unidadBase gr\|ml\|unidad; NO indexado) |
 | `platoIngredientes` | `++id` | `syncId, platoId, ingredienteId, platoSyncId, ingredienteSyncId, cantidad(number), updatedAt` |
 | `planificaciones` | `++id` | `syncId, platoId, platoSyncId, fecha('YYYY-MM-DD'), estado, updatedAt` |
 | `compras` | `++id` | `syncId, ingredienteId, ingredienteSyncId, cantidad(string), estado, numeroSemana, anio, updatedAt` |
@@ -82,7 +82,8 @@ Patrón `create<State>()`, sin middleware de persistencia. Acceso no-reactivo: `
 1. **Pull** `GET` con axios (timeout 60s, `transformResponse` identity para parsear JSON manualmente) → `{ data: {tabla: filas}, deletions }`.
 2. **Merge** (`mergeRemoteData`): tombstones remotos aplican si `updatedAt <= deletedAt`; upsert solo si remoto más nuevo; remapeo de FKs por syncId; `planificaciones.fecha` se normaliza a 10 chars (defensa contra serialización de fechas de Sheets).
 3. **Rehidrata UI**: `planificacionStore.initialize()`.
-4. **Push**: `gatherLocalData(sinceTs)` = filas con `updatedAt > config['lastSyncPushTs']` + deletions; se Strippa el `id` local; `POST` con `Content-Type: text/plain` (**evita preflight CORS** — Apps Script no responde OPTIONS). 120s timeout. Al éxito se guarda `lastSyncPushTs`.
+4. **Push**: `gatherLocalData(sinceTs)` = filas con `updatedAt > config['lastSyncPushTs']` + deletions; se Strippa el `id` local; **en `platos` se aplasta `nutricion` a columnas planas** (`porciones, calorias, proteinas, carbohidratos, grasas, fibra`) porque la hoja solo guarda columnas whitelist (`TABLE_FIELDS`); `POST` con `Content-Type: text/plain` (**evita preflight CORS** — Apps Script no responde OPTIONS). 120s timeout. Al éxito se guarda `lastSyncPushTs`.
+- `TABLE_FIELDS` vive DUPLICADO en `GOOGLE_APPS_SCRIPT.md` y en `APPS_SCRIPT_CODE` (Settings.tsx). Al agregar columnas a platos, re-desplegar el script; `ensureSheets` repara cabeceras de hojas viejas. En pull, `reconstruirPlato` re-arma `nutricion` y coercenta números (Sheets devuelve strings).
 - Auto-sync: interval 120s (solo si `navigator.onLine`) + listener del evento `online`. Guard `syncInProgress` module-level evita solapamiento.
 - Errores mapeados a mensajes en español. Logs con prefijo `[Sync]`.
 
@@ -92,6 +93,8 @@ Patrón `create<State>()`, sin middleware de persistencia. Acceso no-reactivo: `
 - **Lista de compras** (`calcularListaCompras`): planificaciones por rango de fechas → platos únicos → ingredientes × veces que aparece el plato en el rango → redondeo 2 decimales → **agrupación por clave `${ingredienteId}-${unidad}`** (mismo ingrediente en distinta unidad = línea aparte). Devuelve `ListaItem[]` con `cantidad_total: string`.
 - **Check de compras**: `Compra` clave implícita `(ingredienteId, numeroSemana, anio)` — semana ISO del lunes de la semana. `toggleCompra` crea o invierte `estado`.
 - `utils/obtenerNombreDia.ts`: nombre del día vía `Intl` `es-ES`.
+- `utils/nutricion.ts`: interfaz `Nutricion` (calorias=kcal, resto=gramos; unidades NO se almacenan como texto), `NUTRICION_KEYS` y `validarNutricionReceta` (validador puro: porciones > 0, campos no numéricos/negativos rechazan, faltantes → 0). `Plato.porciones`/`Plato.nutricion` son opcionales — platos antiguos siguen válidos. También `NutricionIngrediente` ({base, unidadBase: 'gr'|'ml'|'unidad', 5 valores}) + `validarNutricionIngrediente` para el JSON de ingredientes.
+- `utils/calcularNutricion.ts`: `factorConversion` (masa gr/kg/libra/onza, volumen ml/L; identidad para el resto; **null si no es convertible — no se inventan conversiones**) y `calcularNutricionReceta` (puro): suma aportes = cantidad×factor/base por línea → `ResultadoCalculo {estado: calculado|parcial|sin-informacion, total, porPorcion, porciones, faltantes}`. El cálculo es DINÁMICO en UI (CrearPlato/ActualizarPlato/PlatoDetail); `Plato.nutricion` es solo fallback manual cuando el estado es `sin-informacion`. Valores del plato = POR PORCIÓN; los del ingrediente = por `base` de `unidadBase`. Crudo/cocido = ingredientes separados ("Arroz cocido"), sin campo extra.
 
 ## 4. Convenciones de código
 

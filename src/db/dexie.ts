@@ -1,10 +1,15 @@
 import Dexie, { type Table } from 'dexie'
+import type { Nutricion, NutricionIngrediente } from '../utils/nutricion'
+
+export type { Nutricion, NutricionIngrediente }
 
 export interface Plato {
   id?: number
   syncId: string
   nombre: string
   descripcion: string
+  porciones?: number
+  nutricion?: Nutricion
   updatedAt: string
 }
 
@@ -13,6 +18,7 @@ export interface Ingrediente {
   syncId: string
   nombre: string
   unidad: string
+  nutricion?: NutricionIngrediente
   updatedAt: string
 }
 

@@ -6,12 +6,13 @@ import { useSyncStore } from '../store/syncStore'
 import { usePlanificacionStore, type ImportResult, type IngredienteImport, type PlatoReceta } from '../store/planificacionStore'
 import { useToastStore } from '../store/toastStore'
 import { db, ingredientesSeed, unidadesSeed, withSeedSync } from '../db/dexie'
+import { NUTRICION_KEYS, type Nutricion } from '../utils/nutricion'
 import Modal from '../components/ui/Modal'
 import AlertCustom from '../components/ui/AlertCustom'
 
 const APPS_SCRIPT_CODE = `var TABLE_FIELDS = {
-  platos:            ['syncId', 'nombre', 'descripcion', 'updatedAt'],
-  ingredientes:      ['syncId', 'nombre', 'unidad', 'updatedAt'],
+  platos:            ['syncId', 'nombre', 'descripcion', 'porciones', 'calorias', 'proteinas', 'carbohidratos', 'grasas', 'fibra', 'updatedAt'],
+  ingredientes:      ['syncId', 'nombre', 'unidad', 'nutBase', 'nutUnidadBase', 'nutCalorias', 'nutProteinas', 'nutCarbohidratos', 'nutGrasas', 'nutFibra', 'updatedAt'],
   platoIngredientes: ['syncId', 'platoSyncId', 'platoId', 'ingredienteSyncId', 'ingredienteId', 'cantidad', 'updatedAt'],
   planificaciones:   ['syncId', 'platoSyncId', 'platoId', 'fecha', 'estado', 'updatedAt'],
   compras:           ['syncId', 'ingredienteSyncId', 'ingredienteId', 'cantidad', 'estado', 'numeroSemana', 'anio', 'updatedAt'],
@@ -27,7 +28,19 @@ function ensureSheets() {
   for (var table in TABLE_FIELDS) {
     var sheet = ss.getSheetByName(table)
     if (!sheet) sheet = ss.insertSheet(table)
-    if (sheet.getLastRow() === 0) sheet.appendRow(TABLE_FIELDS[table])
+    var fields = TABLE_FIELDS[table]
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow(fields)
+    } else {
+      // Repara cabeceras de hojas creadas con una version anterior del script
+      var headers = sheet.getRange(1, 1, 1, fields.length).getValues()[0]
+      for (var i = 0; i < fields.length; i++) {
+        if (headers[i] !== fields[i]) {
+          sheet.getRange(1, 1, 1, fields.length).setValues([fields])
+          break
+        }
+      }
+    }
   }
   var del = ss.getSheetByName('deletions')
   if (!del) del = ss.insertSheet('deletions')
@@ -363,7 +376,11 @@ const Settings = () => {
       downloadJson(data, 'etiquetas')
       addToast('Etiquetas descargadas (' + data.length + ')', 'success')
     } else if (target === 'ingredientes') {
-      const data = (await db.ingredientes.toArray()).map((i) => ({ nombre: i.nombre, unidad: i.unidad }))
+      const data = (await db.ingredientes.toArray()).map((i) => ({
+        nombre: i.nombre,
+        unidad: i.unidad,
+        ...(i.nutricion ? { nutricion: i.nutricion } : {}),
+      }))
       downloadJson(data, 'ingredientes')
       addToast('Ingredientes descargados (' + data.length + ')', 'success')
     } else {
@@ -383,6 +400,8 @@ const Settings = () => {
           .filter((pe) => pe.platoId === p.id)
           .map((pe) => etqById.get(pe.etiquetaId)?.nombre ?? '')
           .filter((n) => n !== ''),
+        ...(p.porciones !== undefined ? { porciones: p.porciones } : {}),
+        ...(p.nutricion ? { nutricion: p.nutricion } : {}),
         ingredientes: platoIngredientes
           .filter((pi) => pi.platoId === p.id)
           .map((pi) => ({
@@ -435,8 +454,12 @@ const Settings = () => {
         if (typeof item === 'string') {
           items.push({ nombre: item })
         } else if (item && typeof item === 'object' && typeof (item as { nombre?: unknown }).nombre === 'string') {
-          const obj = item as { nombre: string; unidad?: unknown }
-          items.push({ nombre: obj.nombre, unidad: typeof obj.unidad === 'string' ? obj.unidad : undefined })
+          const obj = item as { nombre: string; unidad?: unknown; nutricion?: unknown }
+          items.push({
+            nombre: obj.nombre,
+            unidad: typeof obj.unidad === 'string' ? obj.unidad : undefined,
+            nutricion: obj.nutricion,
+          })
         }
       }
       const validos = items.filter((i) => i.nombre.trim().length > 0)
@@ -448,10 +471,24 @@ const Settings = () => {
     for (const item of lista) {
       if (item && typeof item === 'object' && typeof (item as { nombre?: unknown }).nombre === 'string') {
         const obj = item as Record<string, unknown>
+        let nutricion: Nutricion | undefined
+        if (obj.nutricion && typeof obj.nutricion === 'object' && !Array.isArray(obj.nutricion)) {
+          const rawNut = obj.nutricion as Record<string, unknown>
+          nutricion = { calorias: 0, proteinas: 0, carbohidratos: 0, grasas: 0, fibra: 0 }
+          for (const key of NUTRICION_KEYS) {
+            const v = rawNut[key]
+            nutricion[key] = v === undefined || v === null || v === '' ? 0 : Number(v)
+          }
+        }
         recetas.push({
           nombre: obj.nombre as string,
           descripcion: typeof obj.descripcion === 'string' ? obj.descripcion : '',
           etiquetas: Array.isArray(obj.etiquetas) ? obj.etiquetas.map(String) : [],
+          porciones:
+            obj.porciones === undefined || obj.porciones === null || obj.porciones === ''
+              ? undefined
+              : Number(obj.porciones),
+          nutricion,
           ingredientes: Array.isArray(obj.ingredientes)
             ? obj.ingredientes
                 .filter((ri): ri is Record<string, unknown> => ri !== null && typeof ri === 'object')
@@ -525,7 +562,7 @@ const Settings = () => {
   return (
     <div className="flex flex-col flex-1 px-5 py-5 bg-backdrop min-h-full">
       <div className="flex justify-between items-center mb-6">
-        <span className="text-gray-400 text-xs font-medium">V 1.9</span>
+        <span className="text-gray-400 text-xs font-medium">V 2.1</span>
         <button
           onClick={handleLogout}
           className="flex items-center gap-2 bg-danger/10 border border-danger/30 py-2 px-4 rounded-lg text-danger text-sm font-medium hover:bg-danger/20 active:scale-95 transition-all"

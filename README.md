@@ -9,8 +9,8 @@ PWA **offline-first** para planificar menús semanales con generación automáti
 
 - **Planificación semanal**: vista de semana actual y próxima (inicio lunes), con estado por plato (`pendiente` / `preparado`).
 - **Planificación diaria**: asigna varios platos a una fecha, acciones de deslizar (ver detalle / eliminar).
-- **CRUD de platos** con ingredientes y cantidades (relación muchos-a-muchos) y **etiquetas** de clasificación (ej: "nutritivo", "gustos").
-- **CRUD de ingredientes y unidades** (24 unidades precargadas, ~76 ingredientes seed).
+- **CRUD de platos** con ingredientes y cantidades (relación muchos-a-muchos), **etiquetas** de clasificación e **información nutricional** (porciones + kcal/proteínas/carbohidratos/grasas/fibra) — calculada **automáticamente** desde los ingredientes (o manual como fallback).
+- **CRUD de ingredientes y unidades** (24 unidades precargadas, ~76 ingredientes seed) con **nutrición opcional por 100 g / 100 ml / unidad**, cargable masivamente por JSON.
 - **Backup JSON** desde Ajustes: exportar/importar unidades, etiquetas, ingredientes y platos con recetas completas (validación all-or-nothing al importar platos).
 - **Lista de compras automática**: agrega ingredientes de la semana, suma cantidades por ingrediente+unidad y permite marcar ítems como comprados (por semana ISO y año).
 - **Autenticación local por PIN** (se guarda en IndexedDB, no hay servidor de auth).
@@ -108,8 +108,8 @@ Base de datos **`MenuPlannerDB`** (Dexie/IndexedDB), versión 6:
 
 | Tabla | Clave | Notas |
 |---|---|---|
-| `platos` | `++id` | `syncId, nombre, descripcion, updatedAt` |
-| `ingredientes` | `++id` | `syncId, nombre, unidad, updatedAt` |
+| `platos` | `++id` | `syncId, nombre, descripcion, updatedAt` + `porciones`/`nutricion` opcionales (no indexados) |
+| `ingredientes` | `++id` | `syncId, nombre, unidad, updatedAt` + `nutricion` opcional (por 100 g/100 ml/unidad, no indexado) |
 | `platoIngredientes` | `++id` | Junction plato↔ingrediente con `cantidad`; guarda ids locales **y** `platoSyncId`/`ingredienteSyncId` |
 | `planificaciones` | `++id` | `fecha` (`YYYY-MM-DD`), `estado` (`pendiente\|preparado`) |
 | `compras` | `++id` | `numeroSemana`, `anio`, `estado` (`comprado\|pendiente`) |

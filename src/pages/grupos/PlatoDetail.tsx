@@ -3,8 +3,10 @@ import { useNavigate, useParams } from 'react-router'
 import { Tag } from 'lucide-react'
 import { usePlanificacionStore } from '../../store/planificacionStore'
 import type { PlatoWithIngredientes } from '../../store/planificacionStore'
+import { calcularNutricionReceta } from '../../utils/calcularNutricion'
 import BackButton from '../../components/ui/BackButton'
 import AlertCustom from '../../components/ui/AlertCustom'
+import PanelNutricionCalculada from '../../components/ui/PanelNutricionCalculada'
 
 const PlatoDetail = () => {
   const navigate = useNavigate()
@@ -43,6 +45,18 @@ const PlatoDetail = () => {
     )
   }
 
+  // Cálculo dinámico a partir de los ingredientes; el valor manual del plato es solo fallback
+  const calculoNutricion = calcularNutricionReceta(
+    plato.ingredientes.map((ing) => ({
+      nombre: ing.nombre,
+      cantidad: Number(ing.cantidad) || 0,
+      unidad: ing.unidad,
+      nutricion: ing.nutricion ?? null,
+    })),
+    plato.porciones
+  )
+  const mostrarCalculo = calculoNutricion.estado !== 'sin-informacion'
+
   return (
     <div className="flex flex-col flex-1 bg-backdrop min-h-full">
       <div className="flex-1 px-3 sm:px-4 py-4 sm:py-6 overflow-y-auto">
@@ -62,6 +76,48 @@ const PlatoDetail = () => {
                 {etq.nombre}
               </span>
             ))}
+          </div>
+        )}
+
+        {mostrarCalculo ? (
+          <div className="mb-4">
+            <PanelNutricionCalculada calculo={calculoNutricion} />
+            {plato.porciones !== undefined && (
+              <p className="text-sm text-gray-500 mt-2">
+                Receta para {plato.porciones} {plato.porciones === 1 ? 'porcion' : 'porciones'}
+              </p>
+            )}
+          </div>
+        ) : (plato.porciones !== undefined || plato.nutricion) && (
+          <div className="bg-white rounded-xl p-4 sm:p-6 mb-4 shadow-card">
+            <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
+              <span className="w-1 h-5 bg-primary rounded-full inline-block" />
+              Informacion nutricional
+            </h2>
+
+            {plato.porciones !== undefined && (
+              <p className="text-sm text-gray-500 mb-3">
+                Receta para {plato.porciones} {plato.porciones === 1 ? 'porcion' : 'porciones'}
+              </p>
+            )}
+
+            {plato.nutricion && (
+              <ul className="space-y-1.5 text-sm sm:text-base text-gray-700">
+                <li>🔥 {plato.nutricion.calorias} kcal</li>
+                <li>🥩 {plato.nutricion.proteinas} g proteinas</li>
+                <li>🍚 {plato.nutricion.carbohidratos} g carbohidratos</li>
+                <li>🥑 {plato.nutricion.grasas} g grasas</li>
+                <li>🌱 {plato.nutricion.fibra} g fibra</li>
+              </ul>
+            )}
+
+            {plato.porciones !== undefined && plato.nutricion && (
+              <p className="text-xs text-gray-400 mt-3">Valores por porcion</p>
+            )}
+
+            {plato.nutricion && (
+              <p className="text-[11px] text-gray-400 mt-1">Valores manuales. Agrega informacion nutricional a los ingredientes para calcular automaticamente.</p>
+            )}
           </div>
         )}
 

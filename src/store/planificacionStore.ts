@@ -9,6 +9,7 @@ import {
   type Unidad,
   type Etiqueta,
 } from '../db/dexie'
+import { validarNutricionReceta, validarNutricionIngrediente, type Nutricion, type NutricionIngrediente } from '../utils/nutricion'
 
 const nowISO = () => new Date().toISOString()
 const newSyncId = () => crypto.randomUUID()
@@ -16,12 +17,15 @@ const newSyncId = () => crypto.randomUUID()
 export interface IngredienteImport {
   nombre: string
   unidad?: string
+  nutricion?: unknown
 }
 
 export interface PlatoReceta {
   nombre: string
   descripcion?: string
   etiquetas?: string[]
+  porciones?: number
+  nutricion?: Nutricion
   ingredientes: { nombre: string; cantidad: number; unidad: string }[]
 }
 
@@ -44,7 +48,9 @@ export interface PlatoWithIngredientes {
   id: number
   nombre: string
   descripcion: string
-  ingredientes: { id: number; nombre: string; cantidad: string; unidad: string }[]
+  porciones?: number
+  nutricion?: Nutricion
+  ingredientes: { id: number; nombre: string; cantidad: string; unidad: string; nutricion?: NutricionIngrediente }[]
   etiquetas: { id: number; nombre: string }[]
 }
 
@@ -73,14 +79,14 @@ interface PlanificacionState {
   getPlanificacionBetweenDates: (fechaInicio: string, fechaFin: string) => DataPlanificacion[]
 
   loadPlatos: () => Promise<void>
-  createPlato: (data: { nombre: string; descripcion: string; ingredientes: { id: number; cantidad: number }[]; etiquetas: number[] }) => Promise<void>
-  updatePlato: (id: number, data: { nombre: string; descripcion: string; ingredientes: { id: number; cantidad: number }[]; etiquetas: number[] }) => Promise<void>
+  createPlato: (data: { nombre: string; descripcion: string; ingredientes: { id: number; cantidad: number }[]; etiquetas: number[]; porciones?: number; nutricion?: Nutricion }) => Promise<void>
+  updatePlato: (id: number, data: { nombre: string; descripcion: string; ingredientes: { id: number; cantidad: number }[]; etiquetas: number[]; porciones?: number; nutricion?: Nutricion }) => Promise<void>
   deletePlato: (id: number) => Promise<void>
   getPlatoById: (id: number) => Promise<PlatoWithIngredientes | null>
 
   loadIngredientes: () => Promise<void>
-  createIngrediente: (data: { nombre: string; unidad: string }) => Promise<void>
-  updateIngrediente: (id: number, data: { nombre: string; unidad: string }) => Promise<void>
+  createIngrediente: (data: { nombre: string; unidad: string; nutricion?: NutricionIngrediente }) => Promise<void>
+  updateIngrediente: (id: number, data: { nombre: string; unidad: string; nutricion?: NutricionIngrediente }) => Promise<void>
   deleteIngrediente: (id: number) => Promise<void>
   importarIngredientes: (items: IngredienteImport[]) => Promise<ImportResult>
 
@@ -267,12 +273,15 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
   createPlato: async (data) => {
     const ts = nowISO()
     const platoSyncId = newSyncId()
-    const platoId = await db.platos.add({
+    const nuevoPlato: Plato = {
       syncId: platoSyncId,
       nombre: data.nombre,
       descripcion: data.descripcion,
       updatedAt: ts,
-    })
+    }
+    if (data.porciones !== undefined) nuevoPlato.porciones = data.porciones
+    if (data.nutricion) nuevoPlato.nutricion = data.nutricion
+    const platoId = await db.platos.add(nuevoPlato)
 
     for (const ing of data.ingredientes) {
       const ingrediente = await db.ingredientes.get(ing.id)
@@ -307,7 +316,21 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
     const plato = await db.platos.get(id)
     const platoSyncId = plato?.syncId ?? newSyncId()
 
-    await db.platos.update(id, { nombre: data.nombre, descripcion: data.descripcion, updatedAt: ts })
+    if (plato) {
+      const actualizado: Plato = {
+        ...plato,
+        nombre: data.nombre,
+        descripcion: data.descripcion,
+        updatedAt: ts,
+      }
+      if (data.porciones !== undefined) actualizado.porciones = data.porciones
+      else delete actualizado.porciones
+      if (data.nutricion) actualizado.nutricion = data.nutricion
+      else delete actualizado.nutricion
+      await db.platos.put(actualizado)
+    } else {
+      await db.platos.update(id, { nombre: data.nombre, descripcion: data.descripcion, updatedAt: ts })
+    }
 
     const oldIngredientes = await db.platoIngredientes.where('platoId').equals(id).toArray()
     for (const old of oldIngredientes) {
@@ -380,6 +403,7 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
           nombre: ing?.nombre ?? '',
           cantidad: String(pi.cantidad),
           unidad: ing?.unidad ?? '',
+          nutricion: ing?.nutricion,
         }
       })
     )
@@ -396,6 +420,8 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
       id,
       nombre: plato.nombre,
       descripcion: plato.descripcion,
+      porciones: plato.porciones,
+      nutricion: plato.nutricion,
       ingredientes: ingredientesData,
       etiquetas: etiquetasData,
     }
@@ -407,17 +433,27 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
   },
 
   createIngrediente: async (data) => {
-    await db.ingredientes.add({
+    const nuevo: Ingrediente = {
       syncId: newSyncId(),
       nombre: data.nombre,
       unidad: data.unidad,
       updatedAt: nowISO(),
-    })
+    }
+    if (data.nutricion) nuevo.nutricion = data.nutricion
+    await db.ingredientes.add(nuevo)
     await get().loadIngredientes()
   },
 
   updateIngrediente: async (id, data) => {
-    await db.ingredientes.update(id, { nombre: data.nombre, unidad: data.unidad, updatedAt: nowISO() })
+    const actual = await db.ingredientes.get(id)
+    if (actual) {
+      const actualizado: Ingrediente = { ...actual, nombre: data.nombre, unidad: data.unidad, updatedAt: nowISO() }
+      if (data.nutricion) actualizado.nutricion = data.nutricion
+      else delete actualizado.nutricion
+      await db.ingredientes.put(actualizado)
+    } else {
+      await db.ingredientes.update(id, { nombre: data.nombre, unidad: data.unidad, updatedAt: nowISO() })
+    }
     await get().loadIngredientes()
   },
 
@@ -561,7 +597,7 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
   },
 
   importarIngredientes: async (items) => {
-    const limpios: { nombre: string; unidad: string }[] = []
+    const limpios: { nombre: string; unidad: string; nutricion?: NutricionIngrediente }[] = []
     const vistas = new Set<string>()
     for (const it of items) {
       const nombre = (it?.nombre ?? '').trim()
@@ -569,7 +605,9 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
       const clave = nombre.toLowerCase()
       if (vistas.has(clave)) continue
       vistas.add(clave)
-      limpios.push({ nombre, unidad: (it.unidad ?? '').trim() || 'unidad' })
+      const nutri = validarNutricionIngrediente(it.nutricion, nombre)
+      if (!nutri.ok) return { ok: false, error: nutri.error }
+      limpios.push({ nombre, unidad: (it.unidad ?? '').trim() || 'unidad', nutricion: nutri.nutricion })
     }
     if (limpios.length === 0) {
       return { ok: false, error: 'El archivo no contiene ingredientes validos' }
@@ -593,8 +631,14 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
 
     for (const l of limpios) {
       const actual = actuales.find((a) => a.nombre.toLowerCase() === l.nombre.toLowerCase())
-      if (actual?.id && actual.unidad !== l.unidad) {
-        await db.ingredientes.update(actual.id, { unidad: l.unidad, updatedAt: ts })
+      if (actual?.id) {
+        const nutricionCambia = JSON.stringify(actual.nutricion ?? null) !== JSON.stringify(l.nutricion ?? null)
+        if (actual.unidad !== l.unidad || nutricionCambia) {
+          const actualizado: Ingrediente = { ...actual, unidad: l.unidad, updatedAt: ts }
+          if (l.nutricion) actualizado.nutricion = l.nutricion
+          else delete actualizado.nutricion
+          await db.ingredientes.put(actualizado)
+        }
       }
     }
 
@@ -606,7 +650,11 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
 
     const nuevas: Ingrediente[] = limpios
       .filter((l) => !actualesClaves.has(l.nombre.toLowerCase()))
-      .map((l) => ({ syncId: newSyncId(), nombre: l.nombre, unidad: l.unidad, updatedAt: ts }))
+      .map((l) => {
+        const nueva: Ingrediente = { syncId: newSyncId(), nombre: l.nombre, unidad: l.unidad, updatedAt: ts }
+        if (l.nutricion) nueva.nutricion = l.nutricion
+        return nueva
+      })
     if (nuevas.length > 0) {
       await db.ingredientes.bulkAdd(nuevas)
     }
@@ -631,6 +679,8 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
       nombre: string
       descripcion: string
       etiquetaIds: number[]
+      porciones?: number
+      nutricion?: Nutricion
       ings: { ing: Ingrediente; cantidad: number }[]
     }
 
@@ -678,7 +728,12 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
         etiquetaIds.push(etq.id as number)
       }
 
-      resueltas.push({ nombre, descripcion: (r.descripcion ?? '').trim(), etiquetaIds, ings })
+      const nutri = validarNutricionReceta(r, nombre)
+      if (!nutri.ok) {
+        return { ok: false, error: nutri.error }
+      }
+
+      resueltas.push({ nombre, descripcion: (r.descripcion ?? '').trim(), etiquetaIds, porciones: nutri.porciones, nutricion: nutri.nutricion, ings })
     }
 
     const platosActuales = await db.platos.toArray()
@@ -692,15 +747,28 @@ export const usePlanificacionStore = create<PlanificacionState>((set, get) => ({
       if (existente?.id) {
         platoId = existente.id
         platoSyncId = existente.syncId
-        await db.platos.update(platoId, { nombre: r.nombre, descripcion: r.descripcion, updatedAt: ts })
+        const platoActualizado: Plato = {
+          ...existente,
+          nombre: r.nombre,
+          descripcion: r.descripcion,
+          updatedAt: ts,
+        }
+        if (r.porciones !== undefined) platoActualizado.porciones = r.porciones
+        else delete platoActualizado.porciones
+        if (r.nutricion) platoActualizado.nutricion = r.nutricion
+        else delete platoActualizado.nutricion
+        await db.platos.put(platoActualizado)
       } else {
         platoSyncId = newSyncId()
-        platoId = (await db.platos.add({
+        const nuevoPlato: Plato = {
           syncId: platoSyncId,
           nombre: r.nombre,
           descripcion: r.descripcion,
           updatedAt: ts,
-        })) as number
+        }
+        if (r.porciones !== undefined) nuevoPlato.porciones = r.porciones
+        if (r.nutricion) nuevoPlato.nutricion = r.nutricion
+        platoId = (await db.platos.add(nuevoPlato)) as number
       }
 
       const oldIngs = await db.platoIngredientes.where('platoId').equals(platoId).toArray()

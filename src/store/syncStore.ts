@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import axios from 'axios'
 import { db, SYNC_TABLES, type SyncTable } from '../db/dexie'
 import { usePlanificacionStore } from './planificacionStore'
+import { NUTRICION_KEYS, NUTRICION_ING_SYNC_FIELDS, UNIDADES_BASE, type UnidadBase } from '../utils/nutricion'
 
 const SYNC_INTERVAL = 120_000
 const GET_TIMEOUT = 60_000
@@ -30,6 +31,87 @@ interface RemotePayload {
 }
 
 type FkMaps = { plato: Map<string, number>; ing: Map<string, number>; etq: Map<string, number> }
+
+// La hoja de Google Sheets guarda columnas planas (TABLE_FIELDS), sin objetos anidados.
+// Push: nutricion {calorias,...} -> calorias, proteinas, carbohidratos, grasas, fibra
+function aplastarPlato(row: Record<string, unknown>): Record<string, unknown> {
+  const nutricion = row.nutricion
+  if (nutricion && typeof nutricion === 'object' && !Array.isArray(nutricion)) {
+    const n = nutricion as Record<string, unknown>
+    for (const key of NUTRICION_KEYS) {
+      row[key] = n[key] ?? ''
+    }
+  }
+  delete row.nutricion
+  return row
+}
+
+// Pull: columnas planas -> nutricion {}; Sheets puede devolver numeros como string
+function reconstruirPlato(resolved: Record<string, unknown>): void {
+  if (resolved.porciones === undefined || resolved.porciones === null || resolved.porciones === '') {
+    delete resolved.porciones
+  } else {
+    const n = Number(resolved.porciones)
+    if (Number.isFinite(n) && n > 0) resolved.porciones = n
+    else delete resolved.porciones
+  }
+
+  let conDatos = false
+  const nutricion: Record<string, number> = {}
+  for (const key of NUTRICION_KEYS) {
+    const raw = resolved[key]
+    delete resolved[key]
+    if (raw === '' || raw === undefined || raw === null) continue
+    const n = Number(raw)
+    if (Number.isFinite(n) && n >= 0) {
+      nutricion[key] = n
+      conDatos = true
+    }
+  }
+  if (conDatos) resolved.nutricion = nutricion
+  else delete resolved.nutricion
+}
+
+// Push: ingrediente.nutricion {base, unidadBase, ...} -> columnas nutBase, nutUnidadBase, nut*
+function aplastarIngrediente(row: Record<string, unknown>): void {
+  const nutricion = row.nutricion
+  if (nutricion && typeof nutricion === 'object' && !Array.isArray(nutricion)) {
+    const n = nutricion as Record<string, unknown>
+    row.nutBase = n.base ?? ''
+    row.nutUnidadBase = n.unidadBase ?? ''
+    row.nutCalorias = n.calorias ?? ''
+    row.nutProteinas = n.proteinas ?? ''
+    row.nutCarbohidratos = n.carbohidratos ?? ''
+    row.nutGrasas = n.grasas ?? ''
+    row.nutFibra = n.fibra ?? ''
+  }
+  delete row.nutricion
+}
+
+// Pull: columnas nut* -> nutricion {} (o nada si base/unidadBase son invalidos)
+function reconstruirIngrediente(resolved: Record<string, unknown>): void {
+  const rawBase = resolved.nutBase
+  const base = Number(rawBase)
+  const unidadBase = String(resolved.nutUnidadBase ?? '').trim().toLowerCase()
+  const valido =
+    rawBase !== '' && rawBase !== undefined && rawBase !== null &&
+    Number.isFinite(base) && base > 0 &&
+    UNIDADES_BASE.includes(unidadBase as UnidadBase)
+
+  if (!valido) {
+    delete resolved.nutricion
+  } else {
+    const nutricion: Record<string, unknown> = { base, unidadBase, calorias: 0, proteinas: 0, carbohidratos: 0, grasas: 0, fibra: 0 }
+    for (const key of NUTRICION_KEYS) {
+      const campo = 'nut' + key.charAt(0).toUpperCase() + key.slice(1)
+      const raw = resolved[campo]
+      const n = Number(raw)
+      nutricion[key] = raw === '' || raw === undefined || raw === null || !Number.isFinite(n) || n < 0 ? 0 : n
+    }
+    resolved.nutricion = nutricion
+  }
+  for (const campo of NUTRICION_ING_SYNC_FIELDS) delete resolved[campo]
+}
 
 async function mergeRemoteData(remote: RemotePayload): Promise<void> {
   let added = 0
@@ -114,6 +196,14 @@ async function mergeRemoteData(remote: RemotePayload): Promise<void> {
         }
       }
 
+      if (tableName === 'platos') {
+        reconstruirPlato(resolved)
+      }
+
+      if (tableName === 'ingredientes') {
+        reconstruirIngrediente(resolved)
+      }
+
       const localRec = localMap.get(sid)
       const remoteMs = new Date(remoteRec.updatedAt as string).getTime()
 
@@ -188,6 +278,8 @@ async function gatherLocalData(
       })
       .map((r) => {
         const { id: _id, ...rest } = r
+        if (table === 'platos') aplastarPlato(rest)
+        if (table === 'ingredientes') aplastarIngrediente(rest)
         return rest
       })
   }

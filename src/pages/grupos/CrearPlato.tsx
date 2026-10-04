@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
-import { Trash2, Salad, X, Tag } from 'lucide-react'
+import { Trash2, Salad, X, Tag, Flame } from 'lucide-react'
 import { usePlanificacionStore } from '../../store/planificacionStore'
 import { useToastStore } from '../../store/toastStore'
+import type { Nutricion, NutricionKey } from '../../utils/nutricion'
+import { calcularNutricionReceta } from '../../utils/calcularNutricion'
 import BackButton from '../../components/ui/BackButton'
 import Modal from '../../components/ui/Modal'
+import PanelNutricionCalculada from '../../components/ui/PanelNutricionCalculada'
 
 interface IngredienteSeleccionado {
   id: number
@@ -12,6 +15,32 @@ interface IngredienteSeleccionado {
   unidad: string
   cantidad: string
 }
+
+interface NutricionForm {
+  porciones: string
+  calorias: string
+  proteinas: string
+  carbohidratos: string
+  grasas: string
+  fibra: string
+}
+
+const NUTRICION_FORM_VACIO: NutricionForm = {
+  porciones: '',
+  calorias: '',
+  proteinas: '',
+  carbohidratos: '',
+  grasas: '',
+  fibra: '',
+}
+
+const CAMPOS_NUTRICION: { key: NutricionKey; label: string }[] = [
+  { key: 'calorias', label: 'Calorias (kcal)' },
+  { key: 'proteinas', label: 'Proteinas (g)' },
+  { key: 'carbohidratos', label: 'Carbohidratos (g)' },
+  { key: 'grasas', label: 'Grasas (g)' },
+  { key: 'fibra', label: 'Fibra (g)' },
+]
 
 const CrearPlato = () => {
   const navigate = useNavigate()
@@ -27,6 +56,7 @@ const CrearPlato = () => {
   const [descripcion, setDescripcion] = useState('')
   const [selectedIngredientes, setSelectedIngredientes] = useState<IngredienteSeleccionado[]>([])
   const [selectedEtiquetas, setSelectedEtiquetas] = useState<number[]>([])
+  const [nutricionForm, setNutricionForm] = useState<NutricionForm>(NUTRICION_FORM_VACIO)
   const [showModal, setShowModal] = useState(false)
   const [searchIngredientes, setSearchIngredientes] = useState('')
 
@@ -37,6 +67,18 @@ const CrearPlato = () => {
 
   const filteredIngredientes = ingredientes.filter((ing) =>
     ing.nombre.toLowerCase().includes(searchIngredientes.toLowerCase())
+  )
+
+  // Cálculo nutricional en vivo: se recalcula al cambiar ingredientes, cantidades o porciones
+  const mapaNutricionIng = new Map(ingredientes.map((i) => [i.id as number, i.nutricion ?? null]))
+  const calculoNutricion = calcularNutricionReceta(
+    selectedIngredientes.map((sel) => ({
+      nombre: sel.nombre,
+      cantidad: Number(sel.cantidad) || 0,
+      unidad: sel.unidad,
+      nutricion: mapaNutricionIng.get(sel.id) ?? null,
+    })),
+    nutricionForm.porciones.trim() ? Number(nutricionForm.porciones) : undefined
   )
 
   const isIngredienteSelected = (id: number) =>
@@ -69,6 +111,28 @@ const CrearPlato = () => {
     )
   }
 
+  // Devuelve porciones/nutricion para guardar, o un string con el error de validacion
+  const construirNutricion = (): { porciones?: number; nutricion?: Nutricion } | string => {
+    const porcStr = nutricionForm.porciones.trim()
+    let porciones: number | undefined
+    if (porcStr) {
+      const n = Number(porcStr)
+      if (!Number.isFinite(n) || n <= 0) return 'Las porciones deben ser un numero mayor a 0'
+      porciones = n
+    }
+    const conDatos = CAMPOS_NUTRICION.some((c) => nutricionForm[c.key].trim() !== '')
+    if (!conDatos) return { porciones }
+    const nutricion: Nutricion = { calorias: 0, proteinas: 0, carbohidratos: 0, grasas: 0, fibra: 0 }
+    for (const { key } of CAMPOS_NUTRICION) {
+      const s = nutricionForm[key].trim()
+      if (!s) continue
+      const n = Number(s)
+      if (!Number.isFinite(n) || n < 0) return 'Los valores nutricionales deben ser numeros mayores o iguales a 0'
+      nutricion[key] = n
+    }
+    return { porciones, nutricion }
+  }
+
   const handleGuardar = async () => {
     if (!nombre.trim()) {
       addToast('El nombre del plato es obligatorio', 'warning')
@@ -87,11 +151,19 @@ const CrearPlato = () => {
       return
     }
 
+    const nutri = construirNutricion()
+    if (typeof nutri === 'string') {
+      addToast(nutri, 'warning')
+      return
+    }
+
     await createPlato({
       nombre,
       descripcion,
       ingredientes: selectedIngredientes.map((i) => ({ id: i.id, cantidad: Number(i.cantidad) })),
       etiquetas: selectedEtiquetas,
+      porciones: nutri.porciones,
+      nutricion: nutri.nutricion,
     })
     addToast('Plato creado correctamente', 'success')
     navigate(-1)
@@ -119,6 +191,44 @@ const CrearPlato = () => {
           onChange={(e) => setDescripcion(e.target.value)}
           className="bg-gray-100 text-lg mb-4 text-dark p-2 rounded-lg border border-primary-light w-full outline-none min-h-[100px] resize-none"
         />
+
+        <div className="bg-white rounded-xl p-4 shadow-card mb-4">
+          <h2 className="text-base font-bold mb-0.5 text-dark flex items-center gap-1.5">
+            <Flame size={16} className="text-primary" />
+            Informacion nutricional
+          </h2>
+          <p className="text-xs text-gray-400 mb-3">Valores por porcion (opcional). Se usan solo si los ingredientes no tienen datos.</p>
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <label className="text-xs text-gray-500 mb-1 block">Porciones</label>
+              <input
+                type="number"
+                min="0"
+                step="1"
+                inputMode="numeric"
+                value={nutricionForm.porciones}
+                onChange={(e) => setNutricionForm({ ...nutricionForm, porciones: e.target.value })}
+                className="bg-gray-100 text-dark text-sm p-2 rounded-lg border border-gray-300 w-full outline-none"
+                placeholder="0"
+              />
+            </div>
+            {CAMPOS_NUTRICION.map(({ key, label }) => (
+              <div key={key}>
+                <label className="text-xs text-gray-500 mb-1 block">{label}</label>
+                <input
+                  type="number"
+                  min="0"
+                  step="any"
+                  inputMode="decimal"
+                  value={nutricionForm[key]}
+                  onChange={(e) => setNutricionForm({ ...nutricionForm, [key]: e.target.value })}
+                  className="bg-gray-100 text-dark text-sm p-2 rounded-lg border border-gray-300 w-full outline-none"
+                  placeholder="0"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
 
         {etiquetas.length > 0 && (
           <div className="mb-4">
@@ -185,6 +295,12 @@ const CrearPlato = () => {
               </div>
             </div>
           ))
+        )}
+
+        {selectedIngredientes.length > 0 && (
+          <div className="mt-4">
+            <PanelNutricionCalculada calculo={calculoNutricion} />
+          </div>
         )}
       </div>
 

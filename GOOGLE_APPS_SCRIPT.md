@@ -19,8 +19,8 @@
 
 ```javascript
 var TABLE_FIELDS = {
-  platos:            ['syncId', 'nombre', 'descripcion', 'updatedAt'],
-  ingredientes:      ['syncId', 'nombre', 'unidad', 'updatedAt'],
+  platos:            ['syncId', 'nombre', 'descripcion', 'porciones', 'calorias', 'proteinas', 'carbohidratos', 'grasas', 'fibra', 'updatedAt'],
+  ingredientes:      ['syncId', 'nombre', 'unidad', 'nutBase', 'nutUnidadBase', 'nutCalorias', 'nutProteinas', 'nutCarbohidratos', 'nutGrasas', 'nutFibra', 'updatedAt'],
   platoIngredientes: ['syncId', 'platoSyncId', 'platoId', 'ingredienteSyncId', 'ingredienteId', 'cantidad', 'updatedAt'],
   planificaciones:   ['syncId', 'platoSyncId', 'platoId', 'fecha', 'estado', 'updatedAt'],
   compras:           ['syncId', 'ingredienteSyncId', 'ingredienteId', 'cantidad', 'estado', 'numeroSemana', 'anio', 'updatedAt'],
@@ -36,7 +36,19 @@ function ensureSheets() {
   for (var table in TABLE_FIELDS) {
     var sheet = ss.getSheetByName(table)
     if (!sheet) sheet = ss.insertSheet(table)
-    if (sheet.getLastRow() === 0) sheet.appendRow(TABLE_FIELDS[table])
+    var fields = TABLE_FIELDS[table]
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow(fields)
+    } else {
+      // Repara cabeceras de hojas creadas con una version anterior del script
+      var headers = sheet.getRange(1, 1, 1, fields.length).getValues()[0]
+      for (var i = 0; i < fields.length; i++) {
+        if (headers[i] !== fields[i]) {
+          sheet.getRange(1, 1, 1, fields.length).setValues([fields])
+          break
+        }
+      }
+    }
   }
   var del = ss.getSheetByName('deletions')
   if (!del) del = ss.insertSheet('deletions')
