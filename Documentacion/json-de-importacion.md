@@ -124,6 +124,7 @@ También es válido `[ { "nombre": "nutritivo" }, ... ]`.
   { "nombre": "Huevos", "unidad": "unidad", "nutricion": { "base": 1, "unidadBase": "unidad", "calorias": 70, "proteinas": 6, "carbohidratos": 0.5, "grasas": 5, "fibra": 0 } },
   { "nombre": "Leche", "unidad": "ml", "nutricion": { "base": 100, "unidadBase": "ml", "calorias": 60, "proteinas": 3, "carbohidratos": 5, "grasas": 3, "fibra": 0 } },
   { "nombre": "Brocoli", "unidad": "unidad", "pesoPorUnidad": 600, "nutricion": { "base": 100, "unidadBase": "gr", "calorias": 34, "proteinas": 2.8, "carbohidratos": 6.6, "grasas": 0.4, "fibra": 2.6 } },
+  { "nombre": "Ajo", "unidad": "diente", "pesoPorUnidad": 3, "nutricion": { "base": 100, "unidadBase": "gr", "calorias": 149, "proteinas": 6.4, "carbohidratos": 33, "grasas": 0.5, "fibra": 2.1 } },
   { "nombre": "Tomate", "unidad": "unidad" },
   { "nombre": "Cebolla", "unidad": "unidad" }
 ]
@@ -131,11 +132,12 @@ También es válido `[ { "nombre": "nutritivo" }, ... ]`.
 
 **Sobre `pesoPorUnidad` (OPCIONAL, gramos):**
 
-- Cuánto pesa fisicamente **1 unidad** del ingrediente (ej: Brocoli = 600).
-- **SOLO** se usa cuando la unidad del ingrediente es `"unidad"` y su nutricion esta expresada en `"gr"`: la app calcula `cantidad × pesoPorUnidad` gramos para la nutricion (1 brocoli de 600 g, 2 = 1200 g).
-- **NO afecta la lista de compras ni las recetas**: siguen mostrando "1 unidad", no gramos.
+- Cuánto pesa fisicamente **1 unidad de la unidad del ingrediente** (ej: Brocoli unidad = 600, Ajo diente = 3, Espinaca manojo = 100).
+- **SOLO** se usa cuando la unidad del ingrediente **NO es** de peso/volumen directo (`gr`, `kg`, `ml`, `L`) y su nutricion esta expresada en `"gr"`: la app calcula `cantidad × pesoPorUnidad` gramos para la nutricion (2 dientes de ajo de 3 g = 6 g, 1 brocoli de 600 g).
+- Sirve para cualquier unidad contable: unidad, diente, rama, hoja, manojo, ramillete, cabeza, rodaja, trozo, lata, etc.
+- **NO afecta la lista de compras ni las recetas**: siguen mostrando "6 dientes", no gramos.
 - Debe ser un **numero > 0** (`"600"` como texto es invalido). Sin este campo, no se asume ningun peso.
-- No aplica a otras unidades comerciales (lata, paquete, bolsa...) salvo que su nutricion este definida en esa misma unidad.
+- Las conversiones exactas tienen prioridad: kg->gr, L->ml y libra/onza funcionan siempre, con o sin pesoPorUnidad.
 
 **Sobre `nutricion` (OPCIONAL):**
 

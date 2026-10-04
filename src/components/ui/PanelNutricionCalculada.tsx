@@ -55,6 +55,12 @@ const PanelNutricionCalculada = ({ calculo }: PanelNutricionCalculadaProps) => {
         </>
       )}
 
+      {calculo.sinEquivalencia.length > 0 && (
+        <p className="text-xs text-danger mt-3">
+          ⚠ Falta indicar el peso de 1 unidad para: {calculo.sinEquivalencia.join(', ')}
+        </p>
+      )}
+
       {calculo.faltantes.length > 0 && (
         <p className="text-xs text-danger mt-3">
           ⚠ Falta informacion nutricional para: {calculo.faltantes.join(', ')}

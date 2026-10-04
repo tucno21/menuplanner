@@ -43,6 +43,16 @@ const UNIDADES_BASE_FORM: { valor: UnidadBase; label: string; baseSugerida: stri
   { valor: 'unidad', label: 'unidad (pieza)', baseSugerida: '1' },
 ]
 
+// Unidades de peso/volumen directas: NO necesitan equivalencia en gramos
+// (kg ya es peso, L ya es volumen). Cualquier otra unidad contable
+// (unidad, diente, rama, hoja, manojo, lata...) puede definir pesoPorUnidad.
+const UNIDADES_DIRECTAS = ['gr', 'kg', 'ml', 'l']
+
+const unidadUsaPeso = (unidad: string) => {
+  const u = unidad.trim().toLowerCase()
+  return u !== '' && !UNIDADES_DIRECTAS.includes(u)
+}
+
 const Ingredientes = () => {
   const navigate = useNavigate()
 
@@ -103,10 +113,11 @@ const Ingredientes = () => {
   }
 
   // Devuelve peso/nutricion para guardar, o un string con el error de validacion
-  const construirFormulario = (): { peso?: number; nutricion?: NutricionIngrediente } | string => {
-    // pesoPorUnidad SOLO aplica cuando la unidad es 'unidad'; campo vacio = sin peso
+  const construirFormulario = (): { peso?: number; nutricion?: NutricionIngrediente; aviso?: string } | string => {
+    // pesoPorUnidad aplica a unidades contables (unidad, diente, rama, manojo...)
+    // cuando la unidad no es gr/kg/ml/L; campo vacio = sin peso
     let peso: number | undefined
-    if (formUnidad.trim().toLowerCase() === 'unidad' && formPeso.trim()) {
+    if (unidadUsaPeso(formUnidad) && formPeso.trim()) {
       const n = Number(formPeso)
       if (!Number.isFinite(n) || n <= 0) return 'El peso por unidad debe ser un numero mayor a 0'
       peso = n
@@ -138,7 +149,13 @@ const Ingredientes = () => {
       if (!Number.isFinite(n) || n < 0) return 'Los valores nutricionales deben ser numeros mayores o iguales a 0'
       nutricion[key] = n
     }
-    return { peso, nutricion }
+
+    // Advertencia (no bloquea): nutricion por gramos sin equivalencia de peso
+    let aviso: string | undefined
+    if (unidadUsaPeso(formUnidad) && peso === undefined && nutricion.unidadBase === 'gr') {
+      aviso = `Este ingrediente tiene informacion nutricional por gramos, pero falta indicar cuanto pesa aproximadamente 1 ${formUnidad.trim()}`
+    }
+    return { peso, nutricion, aviso }
   }
 
   const handleSave = async () => {
@@ -147,6 +164,9 @@ const Ingredientes = () => {
     if (typeof formulario === 'string') {
       addToast(formulario, 'warning')
       return
+    }
+    if (formulario.aviso) {
+      addToast(formulario.aviso, 'warning')
     }
     if (editingId !== null) {
       await updateIngrediente(editingId, { nombre: formNombre, unidad: formUnidad, pesoPorUnidad: formulario.peso, nutricion: formulario.nutricion })
@@ -260,19 +280,24 @@ const Ingredientes = () => {
             ))}
           </select>
 
-          {formUnidad.trim().toLowerCase() === 'unidad' && (
+          {unidadUsaPeso(formUnidad) && (
             <div className="mb-3">
+              <label className="text-[11px] text-gray-500 mb-1 block">
+                Peso aproximado de 1 {formUnidad.trim()} (g)
+              </label>
               <input
                 type="number"
                 min="0"
                 step="any"
                 inputMode="decimal"
-                placeholder="Peso aproximado por unidad (g)"
+                placeholder="Ej: 3"
                 value={formPeso}
                 onChange={(e) => setFormPeso(e.target.value)}
                 className="bg-gray-100 rounded-lg px-4 py-3 w-full border border-gray-300 outline-none text-dark"
               />
-              <p className="text-[11px] text-gray-400 mt-1">Opcional. Ej: Brocoli = 600. Se usa solo para el calculo nutricional.</p>
+              <p className="text-[11px] text-gray-400 mt-1">
+                Opcional. Ej: 1 diente de ajo = 3, 1 rama de apio = 40, 1 manojo de espinaca = 100. Solo se usa para el calculo nutricional.
+              </p>
             </div>
           )}
 

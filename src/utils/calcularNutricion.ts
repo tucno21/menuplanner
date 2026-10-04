@@ -36,8 +36,9 @@ export interface LineaReceta {
   cantidad: number
   unidad: string
   nutricion?: NutricionIngrediente | null
-  // Gramos que pesa 1 'unidad' del ingrediente. Solo se usa cuando la unidad
-  // de la linea es 'unidad' y la nutricion esta expresada en 'gr'.
+  // Gramos que pesa 1 unidad de la unidad de la linea (unidad, diente, rama,
+  // manojo, lata...). Solo se usa cuando la nutricion esta expresada en 'gr'
+  // y la unidad no tiene conversion directa (kg->gr, L->ml, etc.).
   pesoPorUnidad?: number | null
 }
 
@@ -48,7 +49,10 @@ export interface ResultadoCalculo {
   total: Nutricion | null
   porPorcion: Nutricion | null
   porciones: number | null
+  // A) Ingredientes sin informacion nutricional
   faltantes: string[]
+  // B) Ingredientes CON nutricion pero sin equivalencia de peso para su unidad
+  sinEquivalencia: string[]
 }
 
 function redondear(n: Nutricion): Nutricion {
@@ -62,17 +66,18 @@ function redondear(n: Nutricion): Nutricion {
 }
 
 // Factor de conversion de una linea completa.
-// Ademas de las conversiones exactas (factorConversion), resuelve la
-// equivalencia fisica opcional: 1 'unidad' del ingrediente = pesoPorUnidad gramos.
+// 1) Conversiones exactas (factorConversion): kg->gr, L->ml, identidad, etc.
+// 2) Equivalencia fisica opcional definida EN el ingrediente (pesoPorUnidad):
+//    1 [unidad de la linea] = pesoPorUnidad gramos. Aplica a cualquier unidad
+//    contable sin conversion directa (unidad, diente, rama, hoja, manojo,
+//    ramillete, cabeza, rodaja, trozo, lata...) cuando la nutricion esta en 'gr'.
 // Nunca asume pesos: si no hay equivalencia, devuelve null (linea sin datos).
 function factorLinea(linea: LineaReceta): number | null {
   const nutricion = linea.nutricion as NutricionIngrediente
   const factor = factorConversion(linea.unidad, nutricion.unidadBase)
   if (factor !== null) return factor
 
-  const desdeNorm = String(linea.unidad ?? '').trim().toLowerCase()
   if (
-    desdeNorm === 'unidad' &&
     nutricion.unidadBase === 'gr' &&
     typeof linea.pesoPorUnidad === 'number' &&
     Number.isFinite(linea.pesoPorUnidad) &&
@@ -91,6 +96,7 @@ function factorLinea(linea: LineaReceta): number | null {
 // - porPorcion solo se calcula si porciones > 0
 export function calcularNutricionReceta(lineas: LineaReceta[], porciones?: number): ResultadoCalculo {
   const nombresFaltantes = new Set<string>()
+  const sinEquivalencia = new Set<string>()
   const total = crearNutricionVacia()
   let conDatos = false
 
@@ -101,7 +107,9 @@ export function calcularNutricionReceta(lineas: LineaReceta[], porciones?: numbe
     }
     const factor = factorLinea(linea)
     if (factor === null) {
-      nombresFaltantes.add(linea.nombre)
+      // Tiene nutricion pero su unidad no tiene conversion hacia la base:
+      // falta la equivalencia de peso definida en el ingrediente
+      sinEquivalencia.add(`${linea.nombre} (${linea.unidad})`)
       continue
     }
     const coef = (linea.cantidad * factor) / linea.nutricion.base
@@ -129,7 +137,7 @@ export function calcularNutricionReceta(lineas: LineaReceta[], porciones?: numbe
 
   const estado: EstadoCalculo = !conDatos
     ? 'sin-informacion'
-    : nombresFaltantes.size > 0
+    : nombresFaltantes.size > 0 || sinEquivalencia.size > 0
       ? 'parcial'
       : 'calculado'
 
@@ -139,6 +147,7 @@ export function calcularNutricionReceta(lineas: LineaReceta[], porciones?: numbe
     porPorcion,
     porciones: porcionesValidas,
     faltantes: [...nombresFaltantes],
+    sinEquivalencia: [...sinEquivalencia],
   }
 }
 
